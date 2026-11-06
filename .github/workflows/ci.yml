@@ -69,7 +69,7 @@ jobs:
       # Visual baselines are per platform. Until Linux baselines are committed, CI
       # writes them on the first run (uploaded below) instead of failing.
       - run: pnpm test:e2e --update-snapshots=missing
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright
