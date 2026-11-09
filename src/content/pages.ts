@@ -15,7 +15,7 @@ export const homePage = {
     primary: { label: "Start a project", href: "/start" } satisfies Action,
     secondary: { label: "See how a project runs", href: "/process" } satisfies Action,
     /** Three commitments in a few words each, beside the hero buttons. */
-    proof: ["Scope and price in writing", "Weekly demos", "You own everything"],
+    proof: ["Scope and price in writing", "Weekly demos", "Accounts in your name"],
   },
   services: { title: "Five things we build, all of them yours to keep" },
   process: {
@@ -104,7 +104,7 @@ export const contactPage = {
   bookCall: "Book a call",
   /** Shown above the form as a short reassurance line. */
   formNote:
-    "No sales call required. Fill in the form and we reply by email with a direct answer.",
+    "You do not need a sales call to get an answer. Fill in the form and we reply by email.",
 } as const;
 
 export const startPage = {

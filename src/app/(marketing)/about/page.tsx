@@ -149,7 +149,7 @@ export default function AboutPage() {
             />
             <Reveal
               as="ul"
-              className="mt-12 grid gap-5 sm:grid-cols-3"
+              className="mt-12 grid gap-5 lg:grid-cols-3"
               style={{ "--n": problemBeats.length } as CSSProperties}
             >
               {problemBeats.map((beat, i) => (
@@ -159,7 +159,7 @@ export default function AboutPage() {
                   className="flex flex-col rounded-[20px] border border-line bg-card p-6 shadow-soft"
                 >
                   <span
-                    className="mb-4 self-start rounded-full bg-accent-soft px-3 py-1 font-display text-xs font-extrabold tracking-widest text-accent"
+                    className="mb-4 self-start rounded-full bg-accent-soft px-3 py-1 font-display text-xs font-extrabold tracking-widest text-ink"
                     aria-hidden="true"
                   >
                     {String(i + 1).padStart(2, "0")}
@@ -183,7 +183,7 @@ export default function AboutPage() {
                       </dd>
                     </div>
                     <div className="rounded-[12px] bg-accent-soft p-3">
-                      <dt className="text-xs font-bold uppercase tracking-widest text-accent">
+                      <dt className="text-xs font-bold uppercase tracking-widest text-ink">
                         How we fix it
                       </dt>
                       <dd className="mt-1 text-[0.9375rem] font-medium leading-relaxed text-ink">
@@ -204,7 +204,7 @@ export default function AboutPage() {
           <SectionIntro
             id="beliefs-title"
             title={aboutPage.beliefsTitle}
-            lead="Four practices we hold to on every project. Not aspirational - they are in the contract."
+            lead="Four practices we hold to on every project."
           />
           <ul className="mt-12 grid gap-5 sm:grid-cols-2">
             {commitments.map((commitment, position) => {
@@ -240,9 +240,9 @@ export default function AboutPage() {
             <SectionIntro
               id="founders-title"
               title="Meet the founders"
-              lead="The people behind GetWithUs."
+              lead="The people behind GetwithUs."
             />
-            <ul className="mt-12 grid gap-6 lg:grid-cols-3">
+            <ul className="mt-12 grid gap-6 md:grid-cols-3">
               {team.map((member, i) => (
                 <FounderTiltCard key={member.name} member={member} index={i} />
               ))}
@@ -277,7 +277,8 @@ export default function AboutPage() {
                   </Button>
                 </div>
               </div>
-              <ul className="grid gap-3 sm:grid-cols-2">
+              {/* An odd last card spans both columns instead of sitting alone. */}
+              <ul className="grid gap-3 sm:grid-cols-2 sm:[&>li:last-child:nth-child(odd)]:col-span-2">
                 {serviceLines.map((service) => {
                   const ServiceIcon = serviceIcons[service.slug];
                   const color = serviceColors[service.slug];
@@ -475,7 +476,7 @@ export default function AboutPage() {
               title="How we prove it"
               lead="We do not publish numbers we cannot back up or quotes we do not have permission to use. Here is what we do instead."
             />
-            <ul className="mt-10 grid gap-5 sm:grid-cols-3">
+            <ul className="mt-10 grid gap-5 md:grid-cols-3">
               {[
                 {
                   heading: "Staging from week one",

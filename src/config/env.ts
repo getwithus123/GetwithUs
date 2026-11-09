@@ -31,7 +31,7 @@ export const env = createEnv({
     EMAIL_TRANSPORT: z.enum(["resend", "console", "smtp"]).default("resend"),
     RESEND_API_KEY: z.string().optional(),
     SMTP_HOST: z.string().optional(),
-    SMTP_PORT: z.coerce.number().optional(),
+    SMTP_PORT: z.coerce.number().int().min(1).max(65535).optional(),
     SMTP_USER: z.string().optional(),
     SMTP_PASS: z.string().optional(),
     SMTP_SECURE: z.enum(["true", "false"]).optional(),
@@ -107,6 +107,13 @@ export const env = createEnv({
           code: "custom",
           path: ["SMTP_HOST"],
           message: "SMTP_HOST is required when EMAIL_TRANSPORT is smtp.",
+        });
+      }
+      if (isServer && value.SMTP_USER && !value.SMTP_PASS) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["SMTP_PASS"],
+          message: "SMTP_PASS is required when SMTP_USER is set.",
         });
       }
     }),

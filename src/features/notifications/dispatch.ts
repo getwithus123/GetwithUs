@@ -18,7 +18,6 @@ import type {
 import { isAppError } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import { ok, type Result } from "@/lib/result";
-import { absoluteUrl } from "@/lib/seo";
 
 type DispatchOptions = { requestId?: string; channels?: Channel[] };
 
@@ -112,6 +111,14 @@ function adminPath(lead: Lead): string {
   return `/admin/leads/${lead.id}`;
 }
 
+/**
+ * The admin page on the deployment that took the lead. A preview or local copy
+ * has its own database, so its links must not point at the production admin.
+ */
+function deploymentUrl(path: string): string {
+  return new URL(path, env.NEXT_PUBLIC_SITE_URL).href;
+}
+
 /** Tells the team about a newly verified lead: in-app, email, and Slack or WhatsApp when configured. */
 export function notifyLeadVerified(
   lead: Lead,
@@ -126,7 +133,7 @@ export function notifyLeadVerified(
       kind: "lead_verified",
       title,
       body,
-      adminUrl: absoluteUrl(href),
+      adminUrl: deploymentUrl(href),
       lead,
       details: leadDetails(lead, "team"),
     },
@@ -152,7 +159,7 @@ export function notifyLeadStatusChanged(
       kind: "lead_status_changed",
       title,
       body,
-      adminUrl: absoluteUrl(href),
+      adminUrl: deploymentUrl(href),
       lead,
       details: leadDetails(lead, "team"),
     },

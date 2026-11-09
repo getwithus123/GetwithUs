@@ -19,7 +19,7 @@ export const site = {
   tagline: siteContent.tagline,
   url: siteContent.url,
   description:
-    "Websites, mobile apps, WhatsApp bots and calling agents, and the marketing that fills them. Scoped in writing, shipped in weekly demos, and handed over with you owning every account.",
+    "Websites, mobile apps, WhatsApp bots, calling agents, and the marketing that fills them. Scoped in writing, shown in weekly demos, built in accounts you own.",
   footerDescription: "Websites, apps, agents, and marketing for businesses that need them to work.",
   contact: {
     email: siteContent.email,
@@ -34,8 +34,8 @@ export const site = {
   whatsAppMessage: "Hi GetwithUs, I would like to talk about a project.",
   payment: {
     schedule: "50% on signing, 50% on delivery",
-    currency: "INR and USD",
-    tax: "Prices exclude GST where applicable.",
+    currency: "INR or USD",
+    tax: "Prices exclude GST where applicable",
     methods: "bank transfer, UPI, and card",
   },
   copyrightYear: 2026,

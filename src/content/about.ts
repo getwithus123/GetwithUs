@@ -10,7 +10,7 @@
 
 // ---------------------------------------------------------------------------
 // Our story
-// Two paragraphs explaining why GetWithUs exists.
+// Two paragraphs explaining why GetwithUs exists.
 // Leave both as empty strings to hide the section entirely.
 // [OWNER: write two short paragraphs - why you started the business, what
 // problem you kept seeing, and the specific way you set out to fix it]
@@ -41,7 +41,7 @@ export type ProblemBeat = {
   problem: string;
   /** One sentence on the knock-on effect that hurts the business. */
   effect: string;
-  /** One sentence on how GetWithUs removes it. */
+  /** One sentence on how GetwithUs removes it. */
   solution: string;
 };
 

@@ -27,7 +27,8 @@ export default function LoginForm({ next, authError }: { next?: string; authErro
         <div>
           <h2 className="type-h4">Check your email</h2>
           <p className="mt-1 text-body">
-            If that address is on the team list, a link is on its way.
+            If that address is on the team list, a link is on its way. If nothing arrives
+            in a few minutes, try again.
           </p>
         </div>
       </div>

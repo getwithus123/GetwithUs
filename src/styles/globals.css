@@ -234,10 +234,10 @@
 }
 
 /*
- * Section reveals (Modern Engineering, ADR 0012). RevealObserver marks each
- * .reveal block: "static" when it was on screen at load (never hidden),
- * "waiting" below the fold, "shown" once it enters, which plays the rise once.
- * Unmarked blocks (no JavaScript, reduced motion) are simply visible. Never on a hero.
+ * Section reveals (Reveal.tsx). Each .reveal block renders "pending" (visible),
+ * becomes "static" when it was on screen at load (never hidden), "waiting" when
+ * it is still below the fold after mount, and "shown" once it enters, which plays
+ * the rise once. Without JavaScript or under reduced motion every block is visible.
  */
 @media (prefers-reduced-motion: no-preference) {
   .reveal[data-enter="waiting"] {
@@ -383,25 +383,6 @@
   background-color: color-mix(in srgb, var(--accent) 8%, var(--bg-soft));
 }
 
-/* "Co-founder" pill */
-.founder-pill {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 30;
-  transform: translateZ(var(--z, 0px));
-  padding: 4px 11px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  background: color-mix(in srgb, var(--card) 88%, transparent);
-  backdrop-filter: blur(6px);
-  color: var(--accent);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
-
 /* Radial sheen */
 .founder-sheen {
   position: absolute;
@@ -468,7 +449,7 @@
 }
 
 /* Pill link shared style */
-.founder-link-pill {
+.link-pill {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -486,12 +467,12 @@
     background-color 150ms,
     color 150ms;
 }
-.founder-link-pill:hover {
+.link-pill:hover {
   border-color: var(--accent);
   background: var(--accent-soft);
   color: var(--accent);
 }
-.founder-link-pill:focus-visible {
+.link-pill:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }

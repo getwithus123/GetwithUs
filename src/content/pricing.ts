@@ -56,7 +56,7 @@ export const pricingCards: readonly PricingCard[] = [
   },
   {
     slug: "agentic-automation",
-    name: "WhatsApp or calling agent",
+    name: "WhatsApp bot or calling agent",
     price: [
       { before: "setup from ", value: "[OWNER: setup price for an agent]" },
       { before: "then ", value: "[OWNER: monthly fee for an agent]", after: " per month" },

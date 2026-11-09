@@ -43,7 +43,7 @@ export const agenticAutomation: ServiceContent = {
   ],
   note: {
     title: "What agents should not do",
-    body: "They should not make refunds, legal commitments, or medical and financial decisions on their own. We design the limits with you, write them down, and test them before anything goes live.",
+    body: "They should not issue refunds, legal commitments, or medical and financial decisions on their own. We design the limits with you, write them down, and test them before anything goes live.",
     placement: "afterWhatYouGet",
   },
   howWeWork: [

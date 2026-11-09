@@ -41,7 +41,7 @@ export const processSteps: readonly ProcessStep[] = [
   {
     title: "Launch",
     short:
-      "Domain, hosting, analytics, and monitoring in accounts you own. We run a launch checklist and stay on call launch day.",
+      "Domain, hosting, analytics, and monitoring in accounts you own. We run a launch checklist and stay on call on launch day.",
     detail:
       "Launch is a checklist, not a coin-flip. We set up the domain, hosting, analytics, error monitoring, and automated backups in accounts registered to you, not to us. We run through the list together, fix anything that needs fixing, and are reachable for the whole of launch day. The fix window starts the moment the site goes live.",
     needFromYou: [
@@ -101,8 +101,8 @@ export const workingTogether: readonly {
   },
   {
     icon: "key",
-    title: "You own everything",
-    text: "Domain, hosting, analytics, source code, and third-party accounts are all registered in your name from day one. We work in your accounts, not ours.",
+    title: "Your accounts, your code",
+    text: "Domain, hosting, analytics, the code repository, and third-party accounts are registered in your name from day one. We work in your accounts, not ours, and the code is yours once the project is paid for.",
   },
   {
     icon: "clock",
@@ -112,7 +112,7 @@ export const workingTogether: readonly {
   {
     icon: "shield",
     title: "A fix window in writing",
-    text: `Every project ships with a ${site.fixWindow} fix window. Anything we built that breaks after launch gets fixed at no extra charge. In writing, in the contract.`,
+    text: `Every project ships with a ${site.fixWindow} fix window. Anything we built that breaks after launch gets fixed at no extra charge. In writing, in your project agreement.`,
   },
 ];
 
@@ -130,7 +130,7 @@ export const sampleWeek: readonly { day: string; label: string; text: string }[]
   {
     day: "Tue",
     label: "Build",
-    text: "Building starts. Questions go to your named contact and come back the same day.",
+    text: "Building starts. Questions go to your named contact and are answered within a business day.",
   },
   {
     day: "Wed",
@@ -151,7 +151,7 @@ export const sampleWeek: readonly { day: string; label: string; text: string }[]
 
 /** Headline stats shown above the steps section. */
 export const processStats: readonly { value: string; label: string }[] = [
-  { value: "4", label: "Steps, the same every project" },
+  { value: "4", label: "Steps, the same on every project" },
   { value: "1 week", label: "From agreement to first staging link" },
   { value: "Written", label: "Scope, price, and every change" },
   { value: "Yours", label: "Every account, from day one" },

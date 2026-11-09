@@ -5,6 +5,9 @@
 export const siteContent = {
   name: "GetwithUs",
   tagline: "Build with us. Grow with us.",
+  // The canonical production address, used for canonicals, the sitemap and
+  // structured data on every deployment. Links that must reach the deployment
+  // itself (such as admin links in lead notifications) use NEXT_PUBLIC_SITE_URL.
   url: "https://getwithus.in",
   email: "connect@getwithus.in",
   description:

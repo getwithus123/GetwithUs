@@ -34,8 +34,11 @@ function paymentLines(): string[] {
   return lines.filter((line): line is string => Boolean(line));
 }
 
-/** One pricing card; the featured one is dark. Also used alone on each service page. */
-export function PriceCard({ card }: { card: PricingCard }) {
+/**
+ * One pricing card; the featured one is dark. Also used alone on each service
+ * page, which already states the pricing model beside it, so it can hide it.
+ */
+export function PriceCard({ card, showModel = true }: { card: PricingCard; showModel?: boolean }) {
   const price = priceText(card);
   const timeline = known(card.timeline);
   const dark = card.featured === true;
@@ -57,9 +60,11 @@ export function PriceCard({ card }: { card: PricingCard }) {
       >
         {price ?? card.fallback}
       </p>
-      <p className={cn("mt-3 text-[0.94rem]", dark ? "text-cta-body" : "text-body")}>
-        {card.model}
-      </p>
+      {showModel ? (
+        <p className={cn("mt-3 text-[0.94rem]", dark ? "text-cta-body" : "text-body")}>
+          {card.model}
+        </p>
+      ) : null}
       <ul className="mt-6 grid gap-3 text-[0.94rem]">
         {card.included.map((item) => (
           <li key={item} className="flex gap-2.5">
