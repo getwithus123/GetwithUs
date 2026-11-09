@@ -1,4 +1,11 @@
-import { ArrowRight, CheckCircle2, FileCheck, KeyRound, LockOpen, MonitorPlay } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  FileCheck,
+  KeyRound,
+  LockOpen,
+  MonitorPlay,
+} from "lucide-react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import FounderTiltCard from "@/components/founders/FounderTiltCard";
@@ -160,7 +167,7 @@ export default function AboutPage() {
                   <h3 className="type-h4 text-ink">{beat.label}</h3>
                   <dl className="mt-4 grid gap-3">
                     <div>
-                      <dt className="text-xs font-bold tracking-widest text-muted uppercase">
+                      <dt className="text-xs font-bold uppercase tracking-widest text-muted">
                         The problem
                       </dt>
                       <dd className="mt-1 text-[0.9375rem] leading-relaxed text-body">
@@ -168,7 +175,7 @@ export default function AboutPage() {
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-xs font-bold tracking-widest text-muted uppercase">
+                      <dt className="text-xs font-bold uppercase tracking-widest text-muted">
                         The effect
                       </dt>
                       <dd className="mt-1 text-[0.9375rem] leading-relaxed text-body">
@@ -176,10 +183,10 @@ export default function AboutPage() {
                       </dd>
                     </div>
                     <div className="rounded-[12px] bg-accent-soft p-3">
-                      <dt className="text-xs font-bold tracking-widest text-accent uppercase">
+                      <dt className="text-xs font-bold uppercase tracking-widest text-accent">
                         How we fix it
                       </dt>
-                      <dd className="mt-1 text-[0.9375rem] leading-relaxed font-medium text-ink">
+                      <dd className="mt-1 text-[0.9375rem] font-medium leading-relaxed text-ink">
                         {beat.solution}
                       </dd>
                     </div>
@@ -246,7 +253,10 @@ export default function AboutPage() {
 
       {/* What we build - service lines */}
       {showServices ? (
-        <section aria-labelledby="services-title" className="border-t border-line py-20 md:py-24">
+        <section
+          aria-labelledby="services-title"
+          className="border-t border-line py-20 md:py-24"
+        >
           <Container>
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
               <div>
@@ -257,8 +267,8 @@ export default function AboutPage() {
                   className="type-h2 text-ink"
                 />
                 <p className="mt-4 max-w-[34ch] text-[1.0625rem] leading-relaxed text-body">
-                  Five lines of work, delivered the same way: a written scope, weekly staging demos,
-                  and accounts in your name.
+                  Five lines of work, delivered the same way: a written scope, weekly staging
+                  demos, and accounts in your name.
                 </p>
                 <div className="mt-8">
                   <Button href="/services" variant="secondary">
@@ -303,10 +313,7 @@ export default function AboutPage() {
 
       {/* How we work - 4-step summary */}
       {showProcess ? (
-        <section
-          aria-labelledby="how-title"
-          className="border-t border-line bg-bg-soft py-20 md:py-24"
-        >
+        <section aria-labelledby="how-title" className="border-t border-line bg-bg-soft py-20 md:py-24">
           <Container>
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
               <div>
@@ -334,7 +341,7 @@ export default function AboutPage() {
                     className="flex flex-col gap-3 rounded-[18px] border border-line bg-card p-5 shadow-soft"
                   >
                     <span
-                      className="font-display text-3xl leading-none font-extrabold text-accent"
+                      className="font-display text-3xl font-extrabold leading-none text-accent"
                       aria-hidden="true"
                     >
                       {i + 1}
@@ -353,7 +360,10 @@ export default function AboutPage() {
 
       {/* Who we work with */}
       {showClients ? (
-        <section aria-labelledby="clients-title" className="border-t border-line py-20 md:py-24">
+        <section
+          aria-labelledby="clients-title"
+          className="border-t border-line py-20 md:py-24"
+        >
           <Container>
             <SectionIntro
               id="clients-title"
@@ -417,7 +427,7 @@ export default function AboutPage() {
                     key={fig.label}
                     className="flex flex-col gap-1 rounded-[18px] border border-line bg-card p-6 shadow-soft"
                   >
-                    <dt className="font-display text-[2.25rem] leading-none font-extrabold tracking-tight text-accent">
+                    <dt className="font-display text-[2.25rem] font-extrabold leading-none tracking-tight text-accent">
                       {fig.value}
                     </dt>
                     <dd className="text-sm font-semibold text-body">{fig.label}</dd>
@@ -505,7 +515,11 @@ export default function AboutPage() {
           className="border-t border-line py-20 md:py-24"
         >
           <Container>
-            <SectionIntro id="about-contact-title" title={aboutPage.contactTitle} align="left" />
+            <SectionIntro
+              id="about-contact-title"
+              title={aboutPage.contactTitle}
+              align="left"
+            />
             <div className="mt-10 max-w-xl">
               <ContactDetails showBooking />
             </div>

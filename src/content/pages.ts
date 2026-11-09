@@ -103,7 +103,8 @@ export const contactPage = {
   detailsTitle: "Other ways to reach us",
   bookCall: "Book a call",
   /** Shown above the form as a short reassurance line. */
-  formNote: "No sales call required. Fill in the form and we reply by email with a direct answer.",
+  formNote:
+    "No sales call required. Fill in the form and we reply by email with a direct answer.",
 } as const;
 
 export const startPage = {

@@ -28,7 +28,8 @@ function WordChips({ ringRef }: { ringRef: React.RefObject<Group | null> }) {
   useEffect(() => {
     const canvas = gl.domElement;
     const container = document.createElement("div");
-    container.style.cssText = "position:absolute;inset:0;pointer-events:none;overflow:hidden;";
+    container.style.cssText =
+      "position:absolute;inset:0;pointer-events:none;overflow:hidden;";
     canvas.parentElement?.appendChild(container);
     chipsRef.current = container;
 

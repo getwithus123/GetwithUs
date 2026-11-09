@@ -48,8 +48,10 @@ export type ProblemBeat = {
 export const problemBeats: readonly ProblemBeat[] = [
   {
     label: "Unclear pricing",
-    problem: "Most agency quotes are estimates. The real number appears on the final invoice.",
-    effect: "Budgets overrun, finance teams push back, and the scope gets cut to fit what is left.",
+    problem:
+      "Most agency quotes are estimates. The real number appears on the final invoice.",
+    effect:
+      "Budgets overrun, finance teams push back, and the scope gets cut to fit what is left.",
     solution:
       "Every project starts with a written scope and a fixed price. Changes are priced before they are built.",
   },
@@ -57,7 +59,8 @@ export const problemBeats: readonly ProblemBeat[] = [
     label: "No visibility",
     problem:
       "Progress is reported as a percentage. You do not see the actual work until it is finished.",
-    effect: "Problems surface late, revisions pile up, and the launch date moves.",
+    effect:
+      "Problems surface late, revisions pile up, and the launch date moves.",
     solution:
       "Every Friday you get a staging link and a written note of what changed. You can open it on your own phone.",
   },
@@ -65,7 +68,8 @@ export const problemBeats: readonly ProblemBeat[] = [
     label: "Lock-in",
     problem:
       "Code, domain, and hosting live in the agency accounts. Leaving means starting from scratch.",
-    effect: "You are tied to the relationship even when it stops working.",
+    effect:
+      "You are tied to the relationship even when it stops working.",
     solution:
       "Every account is in your name from day one. Documentation and a handover session are part of every project.",
   },
@@ -142,3 +146,4 @@ export type ResultFigure = {
 };
 
 export const resultFigures: readonly ResultFigure[] = [];
+

@@ -97,7 +97,11 @@ function TickList({ items }: { items: readonly string[] }) {
 /** "How we work": numbered steps on a track that fills as it enters. */
 function MiniStepper({ steps }: { steps: readonly string[] }) {
   return (
-    <Reveal as="ol" className="mini-steps" style={{ "--n": steps.length } as CSSProperties}>
+    <Reveal
+      as="ol"
+      className="mini-steps"
+      style={{ "--n": steps.length } as CSSProperties}
+    >
       {steps.map((step, index) => (
         <li
           key={step}

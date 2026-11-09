@@ -330,7 +330,9 @@
 /* Card wrapper: drives entrance via CSS variables set from JS */
 .founder-card {
   opacity: var(--card-opacity, 1);
-  transform: perspective(900px) translateY(var(--card-translateY, 0px))
+  transform:
+    perspective(900px)
+    translateY(var(--card-translateY, 0px))
     rotateX(var(--card-rotateX, 0deg));
   transition:
     opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -351,7 +353,9 @@
   background: var(--card);
   box-shadow: var(--shadow);
   transform-style: preserve-3d;
-  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform:
+    rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
   transition:
     transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 200ms,
@@ -503,9 +507,7 @@
   animation: rotate-cube 12s linear infinite;
 }
 @keyframes rotate-cube {
-  to {
-    transform: rotateX(360deg) rotateY(360deg);
-  }
+  to { transform: rotateX(360deg) rotateY(360deg); }
 }
 
 .face {
@@ -514,24 +516,12 @@
   border: 1.5px solid color-mix(in srgb, var(--accent) 70%, transparent);
   background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
-.face-front {
-  transform: translateZ(40%);
-}
-.face-back {
-  transform: translateZ(-40%) rotateY(180deg);
-}
-.face-left {
-  transform: rotateY(-90deg) translateZ(40%);
-}
-.face-right {
-  transform: rotateY(90deg) translateZ(40%);
-}
-.face-top {
-  transform: rotateX(90deg) translateZ(40%);
-}
-.face-bottom {
-  transform: rotateX(-90deg) translateZ(40%);
-}
+.face-front  { transform: translateZ(40%); }
+.face-back   { transform: translateZ(-40%) rotateY(180deg); }
+.face-left   { transform: rotateY(-90deg) translateZ(40%); }
+.face-right  { transform: rotateY(90deg) translateZ(40%); }
+.face-top    { transform: rotateX(90deg) translateZ(40%); }
+.face-bottom { transform: rotateX(-90deg) translateZ(40%); }
 
 /* Gyroscope */
 .motif-gyroscope {
@@ -547,34 +537,15 @@
   border: 1.5px solid color-mix(in srgb, var(--accent) 65%, transparent);
   background: transparent;
 }
-.ring-x {
-  animation: ring-spin-x 9s linear infinite;
-}
-.ring-y {
-  animation: ring-spin-y 13s linear infinite;
-}
-.ring-z {
-  animation: ring-spin-z 16s linear infinite;
-}
-@keyframes ring-spin-x {
-  to {
-    transform: rotateX(360deg);
-  }
-}
-@keyframes ring-spin-y {
-  to {
-    transform: rotateY(360deg);
-  }
-}
-@keyframes ring-spin-z {
-  to {
-    transform: rotateZ(360deg);
-  }
-}
+.ring-x { animation: ring-spin-x 9s linear infinite; }
+.ring-y { animation: ring-spin-y 13s linear infinite; }
+.ring-z { animation: ring-spin-z 16s linear infinite; }
+@keyframes ring-spin-x { to { transform: rotateX(360deg); } }
+@keyframes ring-spin-y { to { transform: rotateY(360deg); } }
+@keyframes ring-spin-z { to { transform: rotateZ(360deg); } }
 .gyro-dot {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   width: 12%;
   height: 12%;
   border-radius: 50%;
@@ -593,9 +564,7 @@
   transform: rotateX(30deg) rotateZ(20deg);
 }
 @keyframes plates-spin {
-  to {
-    transform: rotateX(30deg) rotateZ(20deg) rotateY(360deg);
-  }
+  to { transform: rotateX(30deg) rotateZ(20deg) rotateY(360deg); }
 }
 .plate {
   position: absolute;
@@ -606,15 +575,9 @@
   border: 1.5px solid color-mix(in srgb, var(--accent) 60%, transparent);
   background: color-mix(in srgb, var(--accent) 10%, transparent);
 }
-.plate-1 {
-  top: 10%;
-}
-.plate-2 {
-  top: 39%;
-}
-.plate-3 {
-  top: 68%;
-}
+.plate-1 { top: 10%; }
+.plate-2 { top: 39%; }
+.plate-3 { top: 68%; }
 
 /* Reduced motion: freeze all motif animations, show cards immediately */
 @media (prefers-reduced-motion: reduce) {

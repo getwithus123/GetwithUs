@@ -41,12 +41,8 @@ export const site = {
   copyrightYear: 2026,
   // Real profile URLs only. Empty means no social links are rendered anywhere.
   social: [
-    ...(siteContent.social.instagram
-      ? [{ label: "Instagram", href: siteContent.social.instagram }]
-      : []),
-    ...(siteContent.social.linkedin
-      ? [{ label: "LinkedIn", href: siteContent.social.linkedin }]
-      : []),
+    ...(siteContent.social.instagram ? [{ label: "Instagram", href: siteContent.social.instagram }] : []),
+    ...(siteContent.social.linkedin ? [{ label: "LinkedIn", href: siteContent.social.linkedin }] : []),
   ] as SocialLink[],
   schedulingUrl: publicEnv.schedulingUrl,
 } as const;

@@ -57,15 +57,19 @@ export default function PhoneScreens() {
         </group>
         <group ref={(group) => void (screens.current[1] = group)} visible={false}>
           {bar(-0.2, 0.85, 0.7, 0.1, palette.ink)}
-          {[0, 1, 2, 3, 4, 5].map((index) => (
+          {[0, 1, 2, 3, 4, 5].map((index) =>
             <mesh
               key={index}
-              position={[-0.34 + (index % 3) * 0.34, 0.45 - Math.floor(index / 3) * 0.34, 0]}
+              position={[
+                -0.34 + (index % 3) * 0.34,
+                0.45 - Math.floor(index / 3) * 0.34,
+                0,
+              ]}
             >
               <boxGeometry args={[0.28, 0.26, 0.02]} />
               <meshStandardMaterial color={index === 4 ? palette.accent : palette.line} />
             </mesh>
-          ))}
+          )}
           {bar(0, -0.5, 1.05, 0.28, palette.accent)}
         </group>
         <group ref={(group) => void (screens.current[2] = group)} visible={false}>

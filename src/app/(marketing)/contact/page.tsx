@@ -111,6 +111,7 @@ export default function ContactPage() {
 
           {/* Sidebar */}
           <aside className="grid gap-6 lg:sticky lg:top-[calc(var(--header-h)+24px)]">
+
             {/* What happens next */}
             <div className="rounded-[20px] border border-line bg-card p-6 shadow-soft">
               <h2 className="type-h4 text-ink">What happens after you send</h2>
@@ -197,7 +198,10 @@ export default function ContactPage() {
             {email ? (
               <p className="mt-8 text-sm text-muted">
                 Prefer email?{" "}
-                <a href={`mailto:${email}`} className="link-draw font-semibold text-accent">
+                <a
+                  href={`mailto:${email}`}
+                  className="link-draw font-semibold text-accent"
+                >
                   {email}
                 </a>
               </p>

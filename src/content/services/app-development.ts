@@ -36,7 +36,8 @@ export const appDevelopment: ServiceContent = {
     "Firebase Cloud Messaging",
     "Sentry",
   ],
-  pricing: "Fixed price for a defined scope. Retainer for ongoing changes.",
+  pricing:
+    "Fixed price for a defined scope. Retainer for ongoing changes.",
   faqs: [
     {
       question: "Native or cross-platform?",
