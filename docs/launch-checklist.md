@@ -9,7 +9,7 @@ Target: Vercel for the app, Neon for Postgres, Resend for email. Another Postgre
 - [ ] Team members added or confirmed empty (`src/content/team.ts`).
 - [ ] Case studies added with written client permission, or `/work` confirmed to launch empty.
 - [ ] Social profile URLs added to `site.social`, or confirmed none.
-- [ ] Analytics choice made: Plausible (`NEXT_PUBLIC_PLAUSIBLE_DOMAIN`), Vercel Analytics, or none.
+- [ ] Analytics: PostHog project key set in Vercel (`NEXT_PUBLIC_POSTHOG_KEY`, Production only) and cookieless tracking turned on in the PostHog project settings, or left unset for none.
 - [ ] Admin allowlist (`ADMIN_EMAILS`) and team notification addresses (`TEAM_NOTIFY_EMAILS`) decided.
 - [ ] Slack and WhatsApp at launch: yes or no. For WhatsApp, the template in [notifications.md](notifications.md) submitted and approved.
 - [ ] Retention period for closed leads decided and written into the privacy policy.

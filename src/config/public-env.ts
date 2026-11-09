@@ -11,6 +11,7 @@ export const publicEnv = {
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://getwithus.in",
   siteName: blankToUndefined(process.env.NEXT_PUBLIC_SITE_NAME) ?? "GetwithUs",
   turnstileSiteKey: blankToUndefined(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY),
-  plausibleDomain: blankToUndefined(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN),
+  posthogKey: blankToUndefined(process.env.NEXT_PUBLIC_POSTHOG_KEY),
+  posthogRegion: process.env.NEXT_PUBLIC_POSTHOG_REGION === "eu" ? ("eu" as const) : ("us" as const),
   schedulingUrl: blankToUndefined(process.env.NEXT_PUBLIC_SCHEDULING_URL),
 } as const;

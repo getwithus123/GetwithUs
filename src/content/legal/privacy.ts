@@ -61,6 +61,10 @@ export const privacyPolicy: LegalDocument = {
           type: "p",
           text: "Our hosting provider also keeps short-lived server logs, including IP addresses, for security and troubleshooting.",
         },
+        {
+          type: "p",
+          text: "We measure how the website is used with PostHog analytics, without cookies or browser storage: the pages you view, the links and buttons you click, page speed, the site that referred you, your browser and device type, and the choices you make in our forms (such as the services, budget range, and timeline you pick). We never send PostHog what you type, such as your name, email, phone number, or message. PostHog counts visitors with a one-way hash of your IP address and browser details that changes every day, and does not keep your IP address.",
+        },
       ],
     },
     {
@@ -128,7 +132,7 @@ export const privacyPolicy: LegalDocument = {
         },
         {
           type: "p",
-          text: "The providers that process enquiries sent through this website are Vercel (hosting), Neon (database), and Hostinger (email delivery). If we turn on team notifications through Slack or WhatsApp, a summary of each new enquiry is sent there as well. If we turn on Cloudflare Turnstile to block spam, Cloudflare checks technical details of your browser when you submit a form.",
+          text: "The providers that process information from this website are Vercel (hosting), Neon (database), Hostinger (email delivery), and PostHog (analytics, hosted in the United States). If we turn on team notifications through Slack or WhatsApp, a summary of each new enquiry is sent there as well. If we turn on Cloudflare Turnstile to block spam, Cloudflare checks technical details of your browser when you submit a form.",
         },
         {
           type: "p",
@@ -142,7 +146,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "The public website does not set advertising or tracking cookies. It stores your light or dark theme choice in your browser's local storage, and keeps campaign tags in session storage until you close the tab so they can be sent with a form. Signing in to our team admin area sets a session cookie.",
+          text: "The public website does not set advertising or tracking cookies, and our analytics works without cookies. It stores your light or dark theme choice in your browser's local storage, and keeps campaign tags in session storage until you close the tab so they can be sent with a form. Signing in to our team admin area sets a session cookie.",
         },
         {
           type: "p",

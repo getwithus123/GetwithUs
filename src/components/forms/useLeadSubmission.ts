@@ -2,9 +2,11 @@
 
 import { useRef, useState } from "react";
 import { errorCopy } from "@/content/forms";
+import { submissionFacts } from "@/features/leads/analytics";
 import { readUtm, submitLeadRequest } from "@/features/leads/client";
 import type { SubmitLeadResult } from "@/features/leads/service";
 import { useFormToken } from "@/hooks/useFormToken";
+import { track } from "@/lib/analytics";
 
 type FieldErrors = Record<string, string[] | undefined>;
 
@@ -36,7 +38,10 @@ export function useLeadSubmission() {
       turnstileToken: turnstileToken ?? undefined,
       utm: readUtm(),
     });
-    if (result.ok) return result.data;
+    if (result.ok) {
+      track("lead_submitted", submissionFacts(fields));
+      return result.data;
+    }
 
     const { code, details, message } = result.error;
     if (code === "VALIDATION_ERROR" && details?.fieldErrors)

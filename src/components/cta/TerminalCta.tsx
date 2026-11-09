@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import { allServices } from "@/content/services/catalog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/cn";
 import { useBriefStore } from "@/stores/brief.store";
 
@@ -182,6 +183,7 @@ export default function TerminalCta({ responseTime }: TerminalCtaProps) {
       await type(`✓ saved: ${needs.join(", ")}`, "ok", false);
       await type("opening the project brief…", "muted", false);
       if (!reduce) await sleep(400, signal);
+      track("terminal_brief_handoff", { services });
       router.push("/start");
     } catch {
       // Restarted or unmounted.

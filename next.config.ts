@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { ANALYTICS_PATH, posthogHosts } from "./src/config/analytics";
 import { env } from "./src/config/env";
 import { flags } from "./src/config/flags";
 import { siteContent } from "./src/content/site";
@@ -6,13 +7,13 @@ import { siteContent } from "./src/content/site";
 const TURNSTILE_ORIGIN = "https://challenges.cloudflare.com";
 /** The canonical production address (no www). */
 const CANONICAL = new URL(siteContent.url);
-const PLAUSIBLE_ORIGIN = "https://plausible.io";
 
 /**
  * One static Content-Security-Policy for every route. A per-request nonce would
  * force every marketing page to render dynamically, so scripts use 'unsafe-inline'
  * (needed for the inline scripts Next.js emits) and nothing else is loosened.
- * See docs/decisions/0002-security-headers.md.
+ * Analytics needs nothing here: PostHog is loaded and reached through
+ * ANALYTICS_PATH on this origin. See docs/decisions/0002-security-headers.md.
  */
 function contentSecurityPolicy(): string {
   const isDev = env.NODE_ENV === "development";
@@ -26,10 +27,6 @@ function contentSecurityPolicy(): string {
     scriptSrc.push(TURNSTILE_ORIGIN);
     connectSrc.push(TURNSTILE_ORIGIN);
     frameSrc.push(TURNSTILE_ORIGIN);
-  }
-  if (flags.analytics) {
-    scriptSrc.push(PLAUSIBLE_ORIGIN);
-    connectSrc.push(PLAUSIBLE_ORIGIN);
   }
 
   const directives = [
@@ -63,13 +60,18 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // PostHog calls paths that end in "/" (such as /e/), which the automatic redirect that
+  // removes trailing slashes would break. redirects() below keeps that redirect for every
+  // page, so /about/ still goes to /about; only the analytics path is left alone.
+  skipTrailingSlashRedirect: true,
   // Inline every public variable from the validated env, including unset ones as "", so client
   // code never falls back to a runtime `process.env` lookup (which ships a process polyfill).
   env: {
     NEXT_PUBLIC_SITE_URL: env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_SITE_NAME: env.NEXT_PUBLIC_SITE_NAME,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "",
-    NEXT_PUBLIC_PLAUSIBLE_DOMAIN: env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? "",
+    NEXT_PUBLIC_POSTHOG_KEY: env.NEXT_PUBLIC_POSTHOG_KEY ?? "",
+    NEXT_PUBLIC_POSTHOG_REGION: env.NEXT_PUBLIC_POSTHOG_REGION,
     NEXT_PUBLIC_SCHEDULING_URL: env.NEXT_PUBLIC_SCHEDULING_URL ?? "",
     NEXT_PUBLIC_TEST_HOOKS: env.NEXT_PUBLIC_TEST_HOOKS ?? "",
   },
@@ -81,15 +83,33 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  // One address for search engines and links: www redirects to the canonical apex domain.
   async redirects() {
     return [
+      // One address for search engines and links: www redirects to the canonical apex domain.
       {
         source: "/:path*",
         has: [{ type: "host", value: `www.${CANONICAL.host}` }],
         destination: `${CANONICAL.origin}/:path*`,
         permanent: true,
       },
+      // The trailing slash redirect Next.js would do (see skipTrailingSlashRedirect), minus the analytics path.
+      {
+        source: `/:path((?!${ANALYTICS_PATH.slice(1)}/).+)/`,
+        destination: "/:path",
+        permanent: true,
+      },
+    ];
+  },
+  // Analytics goes through this site to PostHog, so ad blockers that block PostHog's
+  // domains do not drop it. Vercel passes the visitor's IP on (x-forwarded-for), which
+  // PostHog needs for its cookieless visitor count. Only while analytics is on.
+  async rewrites() {
+    if (!flags.analytics) return [];
+    const hosts = posthogHosts(env.NEXT_PUBLIC_POSTHOG_REGION);
+    return [
+      { source: `${ANALYTICS_PATH}/static/:path*`, destination: `${hosts.assets}/static/:path*` },
+      { source: `${ANALYTICS_PATH}/array/:path*`, destination: `${hosts.assets}/array/:path*` },
+      { source: `${ANALYTICS_PATH}/:path*`, destination: `${hosts.ingest}/:path*` },
     ];
   },
   async headers() {

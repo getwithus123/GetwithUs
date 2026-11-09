@@ -7,6 +7,7 @@ import CodeInput from "@/components/ui/CodeInput";
 import Field from "@/components/ui/Field";
 import { errorCopy, formCopy } from "@/content/forms";
 import { resendLeadCode, verifyLeadCode } from "@/features/leads/client";
+import { track } from "@/lib/analytics";
 import { useCountdown } from "@/hooks/useCountdown";
 
 type VerifyCodeStepProps = {
@@ -59,6 +60,7 @@ export default function VerifyCodeStep({
     const result = await verifyLeadCode(leadId, value);
     if (result.ok) {
       setStatus({ name: "verified" });
+      track("lead_email_verified", { form: subject === "brief" ? "brief" : "contact" });
       // Let the boxes turn green before the success state replaces them.
       window.setTimeout(onVerified, 400);
       return;

@@ -11,6 +11,7 @@ import VerifyCodeStep from "@/components/forms/VerifyCodeStep";
 import Skeleton from "@/components/ui/Skeleton";
 import { formCopy } from "@/content/forms";
 import { serviceSlugs } from "@/content/services/catalog";
+import { track } from "@/lib/analytics";
 import { useBriefStore } from "@/stores/brief.store";
 
 /**
@@ -54,6 +55,16 @@ export default function BriefWizard() {
   const finish = useBriefStore((state) => state.finish);
   const panel = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
+  const lastStep = useRef<number | null>(null);
+
+  // Each step moved past counts once for the funnel. A draft restored at a later step does not.
+  useEffect(() => {
+    if (!hydrated) return;
+    if (lastStep.current !== null && step > lastStep.current) {
+      track("brief_step_completed", { step: lastStep.current });
+    }
+    lastStep.current = step;
+  }, [hydrated, step]);
 
   // After the first frame, every step change moves focus to the new step's heading.
   useEffect(() => {

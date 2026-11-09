@@ -1,4 +1,6 @@
 allowBuilds:
+  # core-js only prints a donation message on install.
+  core-js: false
   esbuild: true
   sharp: false
   unrs-resolver: false
