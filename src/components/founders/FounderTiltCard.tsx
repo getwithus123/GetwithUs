@@ -18,13 +18,7 @@
  */
 
 import Image from "next/image";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { GlobeIcon, InstagramIcon, LinkedInIcon } from "@/components/icons/BrandIcons";
 import type { TeamMember } from "@/content/types";
 
@@ -50,9 +44,9 @@ function MotifCube() {
 function MotifGyroscope() {
   return (
     <div className="motif-gyroscope" aria-hidden="true">
-      <span className="ring ring-x" />
-      <span className="ring ring-y" />
-      <span className="ring ring-z" />
+      <span className="ring-x ring" />
+      <span className="ring-y ring" />
+      <span className="ring-z ring" />
       <span className="gyro-dot" />
     </div>
   );
@@ -69,7 +63,11 @@ function MotifPlates() {
   );
 }
 
-const MOTIFS: ReactNode[] = [<MotifCube key="cube" />, <MotifGyroscope key="gyro" />, <MotifPlates key="plates" />];
+const MOTIFS: ReactNode[] = [
+  <MotifCube key="cube" />,
+  <MotifGyroscope key="gyro" />,
+  <MotifPlates key="plates" />,
+];
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -90,13 +88,7 @@ const TILT_MAX = 8; // degrees
 // Main component
 // ---------------------------------------------------------------------------
 
-export default function FounderTiltCard({
-  member,
-  index,
-}: {
-  member: TeamMember;
-  index: number;
-}) {
+export default function FounderTiltCard({ member, index }: { member: TeamMember; index: number }) {
   const cardRef = useRef<HTMLLIElement>(null);
   const rafRef = useRef<number | null>(null);
   const entered = useRef(false);
@@ -218,7 +210,6 @@ export default function FounderTiltCard({
     >
       {/* The tilt rig - perspective wrapper */}
       <div className="founder-card-inner">
-
         {/* Portrait panel */}
         <div className="founder-portrait">
           {/* "Co-founder" pill */}
@@ -231,7 +222,11 @@ export default function FounderTiltCard({
 
           {/* 3D motif */}
           <div
-            className={member.photo ? "founder-motif founder-motif--corner" : "founder-motif founder-motif--centre"}
+            className={
+              member.photo
+                ? "founder-motif founder-motif--corner"
+                : "founder-motif founder-motif--centre"
+            }
             style={{ "--z": "50px" } as CSSProperties}
             aria-hidden="true"
           >
@@ -262,9 +257,7 @@ export default function FounderTiltCard({
         <div className="founder-info" style={{ "--z": "34px" } as CSSProperties}>
           <h3 className="type-h4 text-ink">{member.name}</h3>
           <p className="mt-0.5 text-sm font-semibold text-muted">{member.role}</p>
-          {member.focus?.trim() ? (
-            <p className="mt-1 text-sm text-body">{member.focus}</p>
-          ) : null}
+          {member.focus?.trim() ? <p className="mt-1 text-sm text-body">{member.focus}</p> : null}
           {(member.shortBio ?? member.bio)?.trim() ? (
             <p className="mt-2 text-[0.9375rem] leading-relaxed text-body">
               {member.shortBio ?? member.bio}

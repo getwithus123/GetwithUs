@@ -25,12 +25,7 @@ import Icon from "@/components/ui/Icon";
 import SectionIntro from "@/components/ui/SectionIntro";
 import { isFilled, known, site } from "@/config/site";
 import { processPage } from "@/content/pages";
-import {
-  processStats,
-  processSteps,
-  sampleWeek,
-  workingTogether,
-} from "@/content/process";
+import { processStats, processSteps, sampleWeek, workingTogether } from "@/content/process";
 import { pageMetadata } from "@/lib/seo";
 import type { LucideIcon } from "lucide-react";
 
@@ -61,7 +56,7 @@ const DAY_COLORS: Record<string, string> = {
 function CheckList({ title, items }: { title: string; items: readonly string[] }) {
   return (
     <div>
-      <p className="mb-3 text-xs font-bold uppercase tracking-widest text-muted">{title}</p>
+      <p className="mb-3 text-xs font-bold tracking-widest text-muted uppercase">{title}</p>
       <ul className="grid gap-2.5">
         {items.filter(isFilled).map((item) => (
           <li key={item} className="flex gap-2.5 text-[0.9375rem] text-body">
@@ -93,7 +88,7 @@ function StepDetail({
       <p className="max-w-[60ch] text-[1.0625rem] leading-relaxed text-body">{step.detail}</p>
       <div className="mt-6 grid gap-5 rounded-[14px] border border-line bg-bg-soft p-5 sm:grid-cols-2">
         <CheckList title={needFromYouTitle} items={step.needFromYou} />
-        <div className="hidden sm:block w-px bg-line self-stretch" aria-hidden="true" />
+        <div className="hidden w-px self-stretch bg-line sm:block" aria-hidden="true" />
         <CheckList title={youGetTitle} items={step.youGet} />
       </div>
     </>
@@ -108,7 +103,7 @@ function StatStrip() {
         <dl className="grid grid-cols-2 gap-6 lg:grid-cols-4">
           {processStats.map((stat) => (
             <div key={stat.label} className="flex flex-col gap-1">
-              <dt className="font-display text-[2.25rem] font-extrabold leading-none tracking-tight text-accent">
+              <dt className="font-display text-[2.25rem] leading-none font-extrabold tracking-tight text-accent">
                 {stat.value}
               </dt>
               <dd className="text-sm font-semibold text-body">{stat.label}</dd>
@@ -216,15 +211,12 @@ export default function ProcessPage() {
                     className="relative z-10 mb-4 flex size-[42px] items-center justify-center rounded-full border-2 border-[var(--day-c)] bg-card"
                     aria-hidden="true"
                   >
-                    <span
-                      className="text-xs font-extrabold"
-                      style={{ color: "var(--day-c)" }}
-                    >
+                    <span className="text-xs font-extrabold" style={{ color: "var(--day-c)" }}>
                       {day.day}
                     </span>
                   </div>
                   <p
-                    className="mb-1.5 text-[0.6875rem] font-bold uppercase tracking-[0.1em]"
+                    className="mb-1.5 text-[0.6875rem] font-bold tracking-[0.1em] uppercase"
                     style={{ color: "var(--day-c)" }}
                   >
                     {day.label}
@@ -277,14 +269,13 @@ export default function ProcessPage() {
       <section aria-labelledby="written-title" className="border-t border-line py-20 md:py-24">
         <Container>
           <div className="mx-auto max-w-[720px]">
-            <h2
-              id="written-title"
-              className="type-h2 text-ink"
-            >
+            <h2 id="written-title" className="type-h2 text-ink">
               Everything that matters is in writing
             </h2>
             <p className="mt-4 max-w-[54ch] type-lead text-body">
-              Before any work starts you have a document with the scope, timeline, price, and payment schedule. Every change, every addition, every fix window is added to that document, not agreed verbally and forgotten.
+              Before any work starts you have a document with the scope, timeline, price, and
+              payment schedule. Every change, every addition, every fix window is added to that
+              document, not agreed verbally and forgotten.
             </p>
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
               {[

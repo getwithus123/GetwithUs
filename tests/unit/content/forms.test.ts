@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { known, site } from "@/config/site";
 import { errorCopy } from "@/content/forms";
 
 describe("errorCopy (spec section 13 table)", () => {
@@ -24,15 +25,13 @@ describe("errorCopy (spec section 13 table)", () => {
     );
   });
 
-  it("offers another try when sending fails or anything else breaks, never a placeholder address", () => {
-    // The contact email is still an owner placeholder here, so the direct address is left out;
-    // once it is filled in, the message reads "Try again, or email us directly at …".
-    expect(errorCopy("EMAIL_ERROR")).toBe(
-      "We could not send the email right now. Try again in a few minutes.",
-    );
-    expect(errorCopy("DB_ERROR")).toBe(
-      "Something went wrong on our side. Try again in a few minutes.",
-    );
+  it("offers another try when sending fails, with the contact email once it is known", () => {
+    const email = known(site.contact.email);
+    const fallback = email
+      ? `Try again, or email us directly at ${email}.`
+      : "Try again in a few minutes.";
+    expect(errorCopy("EMAIL_ERROR")).toBe(`We could not send the email right now. ${fallback}`);
+    expect(errorCopy("DB_ERROR")).toBe(`Something went wrong on our side. ${fallback}`);
     expect(errorCopy("INTERNAL")).toBe(errorCopy("DB_ERROR"));
     expect(errorCopy("EMAIL_ERROR")).not.toContain("[OWNER");
   });

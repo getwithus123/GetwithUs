@@ -55,7 +55,11 @@ export async function requestMagicLink(
 
   if (isAllowlisted(email)) {
     try {
-      const resultUrl = await signIn("resend", { email, redirect: false, redirectTo: safeNext(next) });
+      const resultUrl = await signIn("resend", {
+        email,
+        redirect: false,
+        redirectTo: safeNext(next),
+      });
       if (typeof resultUrl === "string" && resultUrl.includes("error=")) {
         return {
           status: "error",

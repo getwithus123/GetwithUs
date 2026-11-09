@@ -111,7 +111,6 @@ export default function ContactPage() {
 
           {/* Sidebar */}
           <aside className="grid gap-6 lg:sticky lg:top-[calc(var(--header-h)+24px)]">
-
             {/* What happens next */}
             <div className="rounded-[20px] border border-line bg-card p-6 shadow-soft">
               <h2 className="type-h4 text-ink">What happens after you send</h2>
@@ -119,7 +118,7 @@ export default function ContactPage() {
                 {NEXT_STEPS.map((item) => (
                   <li key={item.step} className="flex gap-4">
                     <span
-                      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft font-display text-xs font-extrabold text-accent"
+                      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft font-display text-xs font-extrabold text-ink"
                       aria-hidden="true"
                     >
                       {item.step}
@@ -198,10 +197,7 @@ export default function ContactPage() {
             {email ? (
               <p className="mt-8 text-sm text-muted">
                 Prefer email?{" "}
-                <a
-                  href={`mailto:${email}`}
-                  className="link-draw font-semibold text-accent"
-                >
+                <a href={`mailto:${email}`} className="link-draw font-semibold text-accent">
                   {email}
                 </a>
               </p>

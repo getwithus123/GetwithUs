@@ -47,7 +47,7 @@ export default function Footer() {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="link-draw font-semibold text-accent hover:text-accent-hover type-small"
+                      className="link-draw hover:text-accent-hover type-small font-semibold text-accent"
                       aria-label={`${site.name} on ${item.label}`}
                     >
                       {item.label}

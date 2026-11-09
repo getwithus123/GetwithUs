@@ -37,8 +37,7 @@ export const webDevelopment: ServiceContent = {
     "Sanity or Payload",
     "Plausible or GA4",
   ],
-  pricing:
-    "Fixed price for a defined scope. Retainer for ongoing changes.",
+  pricing: "Fixed price for a defined scope. Retainer for ongoing changes.",
   faqs: [
     {
       question: "Can you work on our existing site?",

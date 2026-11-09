@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { site } from "@/config/site";
 import type { Lead } from "@/features/leads/types";
 
 const repository = vi.hoisted(() => ({
@@ -105,7 +106,7 @@ describe("notifyLeadVerified", () => {
       "Test Lead",
       "Example Co",
       "App development",
-      `http://localhost:3000/admin/leads/${lead.id}`,
+      `${site.url}/admin/leads/${lead.id}`,
     ]);
   });
 

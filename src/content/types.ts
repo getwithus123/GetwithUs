@@ -113,7 +113,7 @@ export type Commitment = {
   expanded: string;
 };
 
-export type FounderLinks = {
+type FounderLinks = {
   readonly linkedin?: string;
   readonly portfolio?: string;
   readonly instagram?: string;

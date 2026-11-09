@@ -65,7 +65,7 @@ export default function ClosingCta({
               </h2>
               <p className="mt-[18px] max-w-[30em] text-lg text-cta-body">{closingCta.text}</p>
               {founderNote ? (
-                <p className="mt-4 max-w-[30em] border-t border-white/10 pt-4 text-base italic text-cta-body">
+                <p className="mt-4 max-w-[30em] border-t border-white/10 pt-4 text-base text-cta-body italic">
                   {founderNote}
                 </p>
               ) : null}
