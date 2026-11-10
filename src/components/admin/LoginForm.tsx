@@ -1,7 +1,7 @@
 "use client";
 
 import { MailCheck } from "lucide-react";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import FormAlert from "@/components/forms/FormAlert";
 import Button from "@/components/ui/Button";
 import Field from "@/components/ui/Field";
@@ -21,6 +21,15 @@ export default function LoginForm({ next, authError }: { next?: string; authErro
   });
   // "Send another link" hides this confirmation; the next submission returns a new state and shows it again.
   const [dismissed, setDismissed] = useState<LoginState | null>(null);
+  // The address last sent, so the form comes back filled in (and keeps it after an error).
+  const [lastEmail, setLastEmail] = useState("");
+  const emailInput = useRef<HTMLInputElement>(null);
+  const returning = dismissed !== null && dismissed === state;
+
+  // The button that was focused is gone once the form returns; put focus in the email field.
+  useEffect(() => {
+    if (returning) emailInput.current?.focus();
+  }, [returning]);
 
   if (state.status === "sent" && state !== dismissed) {
     return (
@@ -53,11 +62,25 @@ export default function LoginForm({ next, authError }: { next?: string; authErro
         : null;
 
   return (
-    <form action={action} className="grid gap-5">
+    <form
+      action={action}
+      onSubmit={(event) =>
+        setLastEmail(String(new FormData(event.currentTarget).get("email") ?? ""))
+      }
+      className="grid gap-5"
+    >
       <input type="hidden" name="next" value={next ?? ""} />
       <Field label="Work email">
         {(control) => (
-          <Input {...control} name="email" type="email" autoComplete="email" required />
+          <Input
+            {...control}
+            ref={emailInput}
+            name="email"
+            type="email"
+            autoComplete="email"
+            defaultValue={lastEmail}
+            required
+          />
         )}
       </Field>
       <FormAlert message={message} />
