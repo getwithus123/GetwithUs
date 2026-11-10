@@ -5,7 +5,7 @@ function linear(channel: number): number {
 }
 
 /** Relative luminance of a `#RRGGBB` colour, per WCAG 2.2. */
-export function luminance(hex: string): number {
+function luminance(hex: string): number {
   const match = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex.trim());
   if (!match) throw new Error(`Expected a #RRGGBB colour, got "${hex}"`);
   const [r, g, b] = match.slice(1).map((part) => linear(parseInt(part, 16)));
@@ -16,11 +16,4 @@ export function luminance(hex: string): number {
 export function contrastRatio(foreground: string, background: string): number {
   const [light, dark] = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
   return (light + 0.05) / (dark + 0.05);
-}
-
-/** The WCAG 2.2 level a ratio reaches for normal text (large text needs 3 for AA, 4.5 for AAA). */
-export function contrastLevel(ratio: number, large = false): "AAA" | "AA" | "Fail" {
-  if (ratio >= (large ? 4.5 : 7)) return "AAA";
-  if (ratio >= (large ? 3 : 4.5)) return "AA";
-  return "Fail";
 }

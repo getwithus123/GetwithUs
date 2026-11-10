@@ -27,6 +27,19 @@ for (const theme of ["light", "dark"] as const) {
       await page.goto(path);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       await page.waitForLoadState("networkidle");
+      // Reveal hides blocks below the fold until they scroll into view, and axe skips
+      // what it cannot see. Scroll the whole page first so every block is checked as a
+      // visitor sees it, then let the last rise animations finish.
+      await page.evaluate(async () => {
+        const step = Math.round(window.innerHeight * 0.6);
+        for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise((done) => setTimeout(done, 120));
+        }
+        window.scrollTo(0, 0);
+      });
+      await expect(page.locator('.reveal[data-enter="waiting"]')).toHaveCount(0);
+      await page.waitForTimeout(1200);
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
         .exclude("[data-decorative]")

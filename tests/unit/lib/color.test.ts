@@ -1,5 +1,7 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { contrastLevel, contrastRatio, luminance } from "@/lib/color";
+import { contrastRatio } from "@/lib/color";
 
 describe("contrastRatio", () => {
   it("matches the WCAG reference values", () => {
@@ -13,27 +15,77 @@ describe("contrastRatio", () => {
   });
 
   it("rejects anything but #RRGGBB", () => {
-    expect(() => luminance("blue")).toThrow();
+    expect(() => contrastRatio("blue", "#FFFFFF")).toThrow();
   });
 });
 
-describe("contrastLevel", () => {
-  it("applies the normal and large text thresholds", () => {
-    expect(contrastLevel(7.1)).toBe("AAA");
-    expect(contrastLevel(4.6)).toBe("AA");
-    expect(contrastLevel(3.2)).toBe("Fail");
-    expect(contrastLevel(3.2, true)).toBe("AA");
+/*
+ * The real colour tokens, read from tokens.css, so changing a colour cannot slip
+ * past these checks. Translucent tokens such as --accent-soft are composited over
+ * the surfaces they sit on.
+ */
+const css = readFileSync(resolve(process.cwd(), "src/styles/tokens.css"), "utf8");
+
+function tokens(selector: string): Record<string, string> {
+  const start = css.indexOf(`${selector} {`);
+  if (start < 0) throw new Error(`No "${selector}" block in tokens.css`);
+  const block = css.slice(start, css.indexOf("}", start));
+  return Object.fromEntries(
+    [...block.matchAll(/--([\w-]+):\s*([^;]+);/g)].map(([, name, value]) => [name, value.trim()]),
+  );
+}
+
+const hex = (value: string) => {
+  if (!/^#[0-9a-f]{6}$/i.test(value)) throw new Error(`Expected #RRGGBB, got "${value}"`);
+  return value;
+};
+
+/** An `rgb(r g b / a)` token laid over an opaque `#RRGGBB` surface, as the browser paints it. */
+function over(translucent: string, surface: string): string {
+  const match = /^rgb\((\d+) (\d+) (\d+) \/ ([\d.]+)\)$/.exec(translucent);
+  if (!match) throw new Error(`Expected rgb(r g b / a), got "${translucent}"`);
+  const [r, g, b, alpha] = match.slice(1).map(Number);
+  const base = [1, 3, 5].map((i) => parseInt(hex(surface).slice(i, i + 2), 16));
+  return `#${[r, g, b]
+    .map((channel, i) => Math.round(channel * alpha + base[i] * (1 - alpha)))
+    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+const AA = 4.5;
+
+for (const [theme, selector] of [
+  ["light", ":root"],
+  ["dark", ':root[data-theme="dark"]'],
+] as const) {
+  describe(`${theme} theme tokens`, () => {
+    const t = tokens(selector);
+    const surfaces = { card: hex(t.card), "bg-soft": hex(t["bg-soft"]) };
+
+    it("keeps body text and accent links readable on every surface", () => {
+      for (const surface of Object.values(surfaces)) {
+        expect(contrastRatio(hex(t.ink), surface)).toBeGreaterThanOrEqual(AA);
+        expect(contrastRatio(hex(t.body), surface)).toBeGreaterThanOrEqual(AA);
+        expect(contrastRatio(hex(t.muted), surface)).toBeGreaterThanOrEqual(AA);
+        expect(contrastRatio(hex(t.accent), surface)).toBeGreaterThanOrEqual(AA);
+      }
+    });
+
+    it("keeps button text readable on the accent", () => {
+      expect(contrastRatio(hex(t["accent-ink"]), hex(t.accent))).toBeGreaterThanOrEqual(AA);
+    });
+
+    it("keeps ink text readable on the accent tint", () => {
+      for (const surface of Object.values(surfaces)) {
+        expect(contrastRatio(hex(t.ink), over(t["accent-soft"], surface))).toBeGreaterThanOrEqual(AA);
+      }
+    });
   });
-});
+}
 
-describe("the light theme's accent tint (tokens.css)", () => {
-  // --accent-soft is the accent at 10 percent over white.
-  const ACCENT = "#0E7C86";
-  const ACCENT_SOFT = "#E7F2F3";
-  const INK = "#0F1B2D";
-
-  it("does not carry accent text: text on the tint must be ink", () => {
-    expect(contrastLevel(contrastRatio(ACCENT, ACCENT_SOFT))).toBe("Fail");
-    expect(contrastLevel(contrastRatio(INK, ACCENT_SOFT))).toBe("AAA");
+describe("the light accent tint", () => {
+  it("is too weak for accent text, so text on it is ink (see .link-pill:hover and /about)", () => {
+    const t = tokens(":root");
+    expect(contrastRatio(hex(t.accent), over(t["accent-soft"], hex(t.card)))).toBeLessThan(AA);
   });
 });

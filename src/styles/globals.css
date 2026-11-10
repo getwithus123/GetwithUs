@@ -467,10 +467,11 @@
     background-color 150ms,
     color 150ms;
 }
+/* Ink text on the tint: teal on its own 10 percent tint is 4.33:1, under the 4.5:1 minimum. */
 .link-pill:hover {
   border-color: var(--accent);
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--ink);
 }
 .link-pill:focus-visible {
   outline: 2px solid var(--accent);
