@@ -1,7 +1,7 @@
 "use client";
 
 import { MailCheck } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import FormAlert from "@/components/forms/FormAlert";
 import Button from "@/components/ui/Button";
 import Field from "@/components/ui/Field";
@@ -19,17 +19,27 @@ export default function LoginForm({ next, authError }: { next?: string; authErro
   const [state, action, pending] = useActionState<LoginState, FormData>(requestMagicLink, {
     status: "idle",
   });
+  // "Send another link" hides this confirmation; the next submission returns a new state and shows it again.
+  const [dismissed, setDismissed] = useState<LoginState | null>(null);
 
-  if (state.status === "sent") {
+  if (state.status === "sent" && state !== dismissed) {
     return (
       <div className="flex items-start gap-3" role="status">
         <Icon icon={MailCheck} size={24} className="mt-0.5 text-ok" />
         <div>
           <h2 className="type-h4">Check your email</h2>
           <p className="mt-1 text-body">
-            If that address is on the team list, a link is on its way. If nothing arrives
-            in a few minutes, try again.
+            If that address is on the team list, a link is on its way. If nothing arrives in a few
+            minutes, send another.
           </p>
+          <Button
+            type="button"
+            variant="secondary"
+            className="mt-4"
+            onClick={() => setDismissed(state)}
+          >
+            Send another link
+          </Button>
         </div>
       </div>
     );

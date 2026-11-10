@@ -45,7 +45,9 @@ export const env = createEnv({
     WHATSAPP_NOTIFY_TO: z.string().optional(),
     WHATSAPP_TEMPLATE_NAME: z.string().optional(),
     TURNSTILE_SECRET_KEY: z.string().optional(),
-    // Set by Vercel. Preview deployments accept form posts from their own URLs.
+    // Set by Vercel. Preview deployments accept form posts from their own URLs, and
+    // VERCEL_ENV tells a preview from production (see src/lib/deployment.ts).
+    VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),
     VERCEL_URL: z.string().optional(),
     VERCEL_BRANCH_URL: z.string().optional(),
     VERCEL_GIT_COMMIT_SHA: z.string().optional(),
@@ -82,6 +84,7 @@ export const env = createEnv({
     WHATSAPP_NOTIFY_TO: process.env.WHATSAPP_NOTIFY_TO,
     WHATSAPP_TEMPLATE_NAME: process.env.WHATSAPP_TEMPLATE_NAME,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
     VERCEL_BRANCH_URL: process.env.VERCEL_BRANCH_URL,
     VERCEL_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA,
@@ -109,7 +112,8 @@ export const env = createEnv({
           message: "SMTP_HOST is required when EMAIL_TRANSPORT is smtp.",
         });
       }
-      if (isServer && value.SMTP_USER && !value.SMTP_PASS) {
+      // Only when SMTP sends the email: an old SMTP_USER left in Vercel must not fail a Resend build.
+      if (isServer && value.EMAIL_TRANSPORT === "smtp" && value.SMTP_USER && !value.SMTP_PASS) {
         ctx.addIssue({
           code: "custom",
           path: ["SMTP_PASS"],

@@ -11,6 +11,18 @@ test.describe("admin", () => {
     await expect(page.getByRole("button", { name: "Email me a sign-in link" })).toBeVisible();
   });
 
+  test("sign-in answers the same for any address and offers to send another link", async ({
+    page,
+  }) => {
+    await page.goto("/admin/login");
+    // Not on the team list: the answer must not reveal that.
+    await page.getByLabel("Work email").fill(`not.on.the.list.${Date.now()}@example.com`);
+    await page.getByRole("button", { name: "Email me a sign-in link" }).click();
+    await expect(page.getByRole("heading", { name: "Check your email" })).toBeVisible();
+    await page.getByRole("button", { name: "Send another link" }).click();
+    await expect(page.getByRole("button", { name: "Email me a sign-in link" })).toBeVisible();
+  });
+
   test("a signed-in admin sees the lead and a status change writes an event", async ({
     page,
     context,

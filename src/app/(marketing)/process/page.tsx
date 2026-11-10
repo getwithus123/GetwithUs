@@ -294,7 +294,7 @@ export default function ProcessPage() {
                 },
                 {
                   q: "Who owns the code and accounts when we finish?",
-                  a: "You do, once the project is paid for. Code goes into a repository in your name from day one, and third-party accounts are opened or transferred to you before launch, not after.",
+                  a: "You do, once the project is paid for. Code goes into a repository in your name from day one, and every other account, such as the domain, hosting, and analytics, is opened in your name, never ours.",
                 },
                 {
                   q: "What does the fix window cover?",

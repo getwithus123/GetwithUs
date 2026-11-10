@@ -82,6 +82,7 @@ const nextConfig: NextConfig = {
     },
   },
   // One address for search engines and links: www redirects to the canonical apex domain.
+  // Never also redirect the apex to www in Vercel, or the two loop (docs/launch-checklist.md, step 5).
   async redirects() {
     return [
       {

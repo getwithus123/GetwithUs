@@ -8,7 +8,9 @@ import { cn } from "@/lib/cn";
  * reduced motion and while off screen.
  */
 export default function RotatingSeal({
-  text = "shipped weekly · you own the code · ",
+  // Accounts, not code: the code becomes the client's once the project is paid for (the Terms).
+  // Keep the length at 36 characters so the words stay evenly spaced around the circle.
+  text = "shipped weekly · in your accounts · ",
   id = "seal-path",
   className,
 }: {

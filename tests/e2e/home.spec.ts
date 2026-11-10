@@ -7,7 +7,7 @@ test.describe("home", () => {
     const orbit = page.getByRole("list", { name: "Services" });
     await expect(orbit.getByRole("link")).toHaveCount(7);
     for (const title of [
-      "Five things we build, all of them yours to keep",
+      "Five things we build, all in accounts you own",
       "See it working",
       "Real code, in your repo, from week one",
       "The stack behind your project",
