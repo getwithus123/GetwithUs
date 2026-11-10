@@ -15,9 +15,9 @@ export const homePage = {
     primary: { label: "Start a project", href: "/start" } satisfies Action,
     secondary: { label: "See how a project runs", href: "/process" } satisfies Action,
     /** Three commitments in a few words each, beside the hero buttons. */
-    proof: ["Scope and price in writing", "Weekly demos", "You own everything"],
+    proof: ["Scope and price in writing", "Weekly demos", "Accounts in your name"],
   },
-  services: { title: "Five things we build, all of them yours to keep" },
+  services: { title: "Five things we build, all in accounts you own" },
   process: {
     title: "How a project runs",
     link: { label: "The process in detail", href: "/process" },
@@ -82,7 +82,7 @@ export const aboutPage = {
   updated: "2026-11-06",
   title: `About ${site.name}`,
   description:
-    "Meet the founders of GetwithUs (getwithus.in): Priyanshu Bansal, Pranav Maheshwari, and Rajat Sisodia. Scope and price in writing, weekly demos, and accounts you own.",
+    "Meet the founders of GetwithUs: Priyanshu Bansal, Pranav Maheshwari, and Rajat Sisodia. Scope and price in writing, weekly demos, and accounts you own.",
   /** Shown once the owner writes it; until then the page uses `leadFallback`. */
   lead: "GetwithUs is a software development agency built by three founders who work directly on every project. We build websites, apps, AI agents, and the marketing that fills them.",
   leadFallback: site.footerDescription,
@@ -104,7 +104,7 @@ export const contactPage = {
   bookCall: "Book a call",
   /** Shown above the form as a short reassurance line. */
   formNote:
-    "No sales call required. Fill in the form and we reply by email with a direct answer.",
+    "You do not need a sales call to get an answer. Fill in the form and we reply by email.",
 } as const;
 
 export const startPage = {

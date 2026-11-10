@@ -91,9 +91,9 @@ function StepDetail({
   return (
     <>
       <p className="max-w-[60ch] text-[1.0625rem] leading-relaxed text-body">{step.detail}</p>
-      <div className="mt-6 grid gap-5 rounded-[14px] border border-line bg-bg-soft p-5 sm:grid-cols-2">
+      <div className="mt-6 grid gap-5 rounded-[14px] border border-line bg-bg-soft p-5 sm:grid-cols-[1fr_1px_1fr]">
         <CheckList title={needFromYouTitle} items={step.needFromYou} />
-        <div className="hidden sm:block w-px bg-line self-stretch" aria-hidden="true" />
+        <div className="hidden w-px self-stretch bg-line sm:block" aria-hidden="true" />
         <CheckList title={youGetTitle} items={step.youGet} />
       </div>
     </>
@@ -294,7 +294,7 @@ export default function ProcessPage() {
                 },
                 {
                   q: "Who owns the code and accounts when we finish?",
-                  a: "You do, from day one. Code goes into a repository in your name. Third-party accounts are opened or transferred to you before launch, not after.",
+                  a: "You do, once the project is paid for. Code goes into a repository in your name from day one, and every other account, such as the domain, hosting, and analytics, is opened in your name, never ours.",
                 },
                 {
                   q: "What does the fix window cover?",

@@ -15,7 +15,7 @@ export const webDevelopment: ServiceContent = {
   ],
   whatYouGet: [
     "A design system and responsive layouts designed in the browser, reviewed on a staging link",
-    "A Next.js build with server rendering, caching, and image optimization",
+    "A Next.js build with server rendering, caching, and image optimisation",
     "A CMS your team can use (Sanity, Payload, or the one you already have)",
     "Forms, transactional email, and third-party integrations",
     "Hosting, domain, DNS, and analytics set up in your accounts",
@@ -47,7 +47,7 @@ export const webDevelopment: ServiceContent = {
     },
     {
       question: "Who owns the code?",
-      answer: "You do. The repository, hosting, and domain are in your accounts from day one.",
+      answer: "You do, once the project is paid for. The repository, hosting, and domain are in your accounts from day one.",
     },
     {
       question: "Do you build on WordPress?",

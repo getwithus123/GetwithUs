@@ -10,7 +10,7 @@
 
 // ---------------------------------------------------------------------------
 // Our story
-// Two paragraphs explaining why GetWithUs exists.
+// Two paragraphs explaining why GetwithUs exists.
 // Leave both as empty strings to hide the section entirely.
 // [OWNER: write two short paragraphs - why you started the business, what
 // problem you kept seeing, and the specific way you set out to fix it]
@@ -41,7 +41,7 @@ export type ProblemBeat = {
   problem: string;
   /** One sentence on the knock-on effect that hurts the business. */
   effect: string;
-  /** One sentence on how GetWithUs removes it. */
+  /** One sentence on how GetwithUs removes it. */
   solution: string;
 };
 
@@ -147,37 +147,3 @@ export type ResultFigure = {
 
 export const resultFigures: readonly ResultFigure[] = [];
 
-// ---------------------------------------------------------------------------
-// Founder note for the closing CTA
-// One or two sentences from the founder or team to make the CTA personal.
-// ---------------------------------------------------------------------------
-export const founderNote: string =
-  "Priyanshu, Pranav, and Rajat read every message. Reach us directly at connect@getwithus.in.";
-
-// ---------------------------------------------------------------------------
-// Founder entries for JSON-LD (structured data only, not rendered on the page)
-// Person entries with sameAs set to their LinkedIn URLs.
-// ---------------------------------------------------------------------------
-export type FounderEntry = {
-  name: string;
-  /** Optional - the founder public profile URL used as sameAs in JSON-LD. */
-  url?: string;
-  /** LinkedIn URL - used as sameAs in the Person node. */
-  linkedin?: string;
-};
-
-export const founders: readonly FounderEntry[] = [
-  {
-    name: "Priyanshu Bansal",
-    url: "https://priyanshubansal.netlify.app/",
-    linkedin: "https://www.linkedin.com/in/priyanshu-bansal-2926512b8/",
-  },
-  {
-    name: "Pranav Maheshwari",
-    linkedin: "https://www.linkedin.com/in/pranavm0494/",
-  },
-  {
-    name: "Rajat Sisodia",
-    linkedin: "https://www.linkedin.com/in/rajatsisodia/",
-  },
-];

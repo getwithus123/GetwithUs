@@ -21,11 +21,24 @@ function resendClient(): Resend {
   return resend;
 }
 
+/**
+ * SMTP over implicit TLS (SMTP_SECURE=true, or port 465 when SMTP_SECURE is unset)
+ * or STARTTLS on 587. requireTLS refuses to continue if the server does not upgrade, so the
+ * password, codes and sign-in links are never sent in the clear. The timeouts
+ * keep a stuck server from holding a form submission for minutes.
+ */
 function smtpClient(): Transporter {
+  // Port 465 always speaks TLS from the first byte, so it is secure unless SMTP_SECURE says otherwise.
+  const secure =
+    env.SMTP_SECURE === undefined ? env.SMTP_PORT === 465 : env.SMTP_SECURE === "true";
   smtpTransport ??= nodemailer.createTransport({
     host: env.SMTP_HOST,
-    port: env.SMTP_PORT ?? 587,
-    secure: env.SMTP_SECURE === "true",
+    port: env.SMTP_PORT ?? (secure ? 465 : 587),
+    secure,
+    requireTLS: !secure,
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
     auth:
       env.SMTP_USER && env.SMTP_PASS
         ? { user: env.SMTP_USER, pass: env.SMTP_PASS }

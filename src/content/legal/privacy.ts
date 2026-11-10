@@ -3,8 +3,8 @@ import type { LegalDocument } from "@/content/types";
 export const privacyPolicy: LegalDocument = {
   title: "Privacy policy",
   description:
-    "How GetWithUs collects, uses, stores, and protects the information you share with us through our website and services.",
-  updated: "2026-11-06",
+    "How GetwithUs collects, uses, stores, and protects the information you share with us through our website and services.",
+  updated: "2026-11-09",
   sections: [
     {
       id: "introduction",
@@ -12,7 +12,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "Welcome to GetWithUs. GetWithUs is a software development and IT services company providing custom digital solutions, including mobile application development, Android and iOS development, website development, software engineering, UI/UX design, backend development, and other technology-related services.",
+          text: "GetwithUs is a software development and digital technology agency. We build websites and web apps, Android and iOS apps, custom software and cloud systems, and agentic automation (WhatsApp bots, calling agents, and workflow automation), and we run digital marketing.",
         },
         {
           type: "p",
@@ -38,22 +38,28 @@ export const privacyPolicy: LegalDocument = {
         },
         {
           type: "p",
+          text: "Enquiry details from our contact form and project brief: the services you are interested in, your message, budget range, timeline, the address of an existing website, and how you heard about us.",
+        },
+        {
+          type: "p",
           text: "Project information: project requirements and descriptions, technical specifications, business requirements, files and documents shared for development, and project-related communication and feedback.",
         },
         {
           type: "p",
-          text: "Technical information collected automatically when you visit our website:",
+          text: "Technical information stored with a form submission:",
         },
         {
           type: "ul",
           items: [
-            "IP address.",
-            "Browser type and version.",
-            "Device information.",
-            "Operating system.",
-            "Website usage information.",
-            "Cookies and similar technologies, where applicable.",
+            "A one-way hash of your IP address that changes every day. We do not store the address itself.",
+            "Your browser's user agent (browser, version, and operating system).",
+            "Your browser's preferred language.",
+            "Campaign tags (UTM parameters) from the link that brought you to the site.",
           ],
+        },
+        {
+          type: "p",
+          text: "Our hosting provider also keeps short-lived server logs, including IP addresses, for security and troubleshooting.",
         },
       ],
     },
@@ -85,7 +91,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "GetWithUs understands that clients may share confidential business information, source code, credentials, documents, and other sensitive project materials. We will:",
+          text: "GetwithUs understands that clients may share confidential business information, source code, credentials, documents, and other sensitive project materials. We will:",
         },
         {
           type: "ul",
@@ -122,6 +128,10 @@ export const privacyPolicy: LegalDocument = {
         },
         {
           type: "p",
+          text: "The providers that process enquiries sent through this website are Vercel (hosting), Neon (database), and Hostinger (email delivery). If we turn on team notifications through Slack or WhatsApp, a summary of each new enquiry is sent there as well. If we turn on Cloudflare Turnstile to block spam, Cloudflare checks your browser when you submit a form and receives your IP address, both from your browser and from us when we confirm the check.",
+        },
+        {
+          type: "p",
           text: "Third-party providers may process information according to their own privacy policies and contractual obligations.",
         },
       ],
@@ -132,11 +142,11 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "Our website may use cookies and similar technologies to improve website functionality, understand website traffic and visitor behaviour, remember user preferences, and improve the overall user experience.",
+          text: "The public website does not set advertising or tracking cookies. It stores your light or dark theme choice in your browser's local storage. Session storage, which your browser clears when you close the tab, holds the campaign tags from the link that brought you to the site, so they can be sent with a form, and the project brief while you fill it in, including your name, email address, phone number, company, and message, so a refresh does not lose your answers. The brief is cleared from it once you confirm your email address. Signing in to our team admin area sets a session cookie.",
         },
         {
           type: "p",
-          text: "You may control cookies through your browser settings. Disabling certain cookies may affect website functionality.",
+          text: "You can clear this storage through your browser settings at any time. The site works without it.",
         },
       ],
     },
@@ -170,7 +180,11 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "We retain personal and project information only for as long as reasonably necessary to provide our services, complete contractual obligations, maintain business and financial records, resolve disputes, and meet applicable legal requirements.",
+          text: "Form submissions whose email address is never confirmed are deleted automatically after 7 days. Verification codes are deleted a day after they are used or expire.",
+        },
+        {
+          type: "p",
+          text: "We retain other personal and project information only for as long as reasonably necessary to provide our services, complete contractual obligations, maintain business and financial records, resolve disputes, and meet applicable legal requirements.",
         },
         {
           type: "p",
@@ -208,7 +222,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "Our website or software products may contain links to third-party websites, APIs, payment gateways, or external services. GetWithUs does not control the privacy practices of these third parties. Users are encouraged to review their respective privacy policies before using their services.",
+          text: "Our website or software products may contain links to third-party websites, APIs, payment gateways, or external services. GetwithUs does not control the privacy practices of these third parties. Users are encouraged to review their respective privacy policies before using their services.",
         },
       ],
     },

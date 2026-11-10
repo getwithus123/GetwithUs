@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 import { env } from "./src/config/env";
 import { flags } from "./src/config/flags";
+import { siteContent } from "./src/content/site";
 
 const TURNSTILE_ORIGIN = "https://challenges.cloudflare.com";
+/** The canonical production address (no www). */
+const CANONICAL = new URL(siteContent.url);
 const PLAUSIBLE_ORIGIN = "https://plausible.io";
 
 /**
@@ -15,11 +18,14 @@ function contentSecurityPolicy(): string {
   const isDev = env.NODE_ENV === "development";
   const scriptSrc = ["'self'", "'unsafe-inline'"];
   const connectSrc = ["'self'"];
+  // Turnstile draws its challenge in an iframe; without this the widget is blocked and every form fails.
+  const frameSrc: string[] = [];
 
   if (isDev) scriptSrc.push("'unsafe-eval'");
   if (flags.turnstile) {
     scriptSrc.push(TURNSTILE_ORIGIN);
     connectSrc.push(TURNSTILE_ORIGIN);
+    frameSrc.push(TURNSTILE_ORIGIN);
   }
   if (flags.analytics) {
     scriptSrc.push(PLAUSIBLE_ORIGIN);
@@ -34,7 +40,7 @@ function contentSecurityPolicy(): string {
     "font-src 'self'",
     `connect-src ${connectSrc.join(" ")}`,
     "worker-src 'self' blob:",
-    "frame-src 'none'",
+    frameSrc.length ? `frame-src ${frameSrc.join(" ")}` : "frame-src 'none'",
     "frame-ancestors 'none'",
     "object-src 'none'",
     "base-uri 'self'",
@@ -74,6 +80,18 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  // One address for search engines and links: www redirects to the canonical apex domain.
+  // Never also redirect the apex to www in Vercel, or the two loop (docs/launch-checklist.md, step 5).
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: `www.${CANONICAL.host}` }],
+        destination: `${CANONICAL.origin}/:path*`,
+        permanent: true,
+      },
+    ];
   },
   async headers() {
     return [

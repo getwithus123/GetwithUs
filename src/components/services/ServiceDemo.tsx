@@ -47,7 +47,8 @@ function ProductPreviews({ page }: { page: ServicePage }) {
     },
   ] as const;
   return (
-    <ul className="mt-10 grid gap-6 md:grid-cols-2">
+    // Three across on wide screens; at tablet width an odd last card spans both columns.
+    <ul className="mt-10 grid gap-6 md:grid-cols-2 md:[&>li:last-child:nth-child(odd)]:col-span-2 lg:grid-cols-3 lg:[&>li:last-child:nth-child(odd)]:col-span-1">
       {(page.products ?? []).map((product, index) => {
         const preview = previews[index];
         return (
