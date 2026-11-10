@@ -43,10 +43,10 @@ import { pageMetadata } from "@/lib/seo";
 
 export const instant = false;
 
+// The tab title is just "About" (the site name is added); aboutPage.title is the page heading.
 export const metadata = pageMetadata({
   title: "About",
-  description:
-    "Meet the founders of GetwithUs: Priyanshu Bansal, Pranav Maheshwari, and Rajat Sisodia. Scope and price in writing, weekly demos, and accounts you own.",
+  description: aboutPage.description,
   path: aboutPage.path,
 });
 
