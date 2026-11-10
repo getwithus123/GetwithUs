@@ -14,13 +14,17 @@ test.describe("admin", () => {
   test("sign-in answers the same for any address and offers to send another link", async ({
     page,
   }) => {
+    const email = `not.on.the.list.${Date.now()}@example.com`;
     await page.goto("/admin/login");
     // Not on the team list: the answer must not reveal that.
-    await page.getByLabel("Work email").fill(`not.on.the.list.${Date.now()}@example.com`);
+    await page.getByLabel("Work email").fill(email);
     await page.getByRole("button", { name: "Email me a sign-in link" }).click();
     await expect(page.getByRole("heading", { name: "Check your email" })).toBeVisible();
     await page.getByRole("button", { name: "Send another link" }).click();
     await expect(page.getByRole("button", { name: "Email me a sign-in link" })).toBeVisible();
+    // Focus and the address come back with the form, so a keyboard user can send again at once.
+    await expect(page.getByLabel("Work email")).toBeFocused();
+    await expect(page.getByLabel("Work email")).toHaveValue(email);
   });
 
   test("a signed-in admin sees the lead and a status change writes an event", async ({
