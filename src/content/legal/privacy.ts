@@ -132,7 +132,7 @@ export const privacyPolicy: LegalDocument = {
         },
         {
           type: "p",
-          text: "The providers that process information from this website are Vercel (hosting), Neon (database), Hostinger (email delivery), and PostHog (analytics, hosted in the United States). If we turn on team notifications through Slack or WhatsApp, a summary of each new enquiry is sent there as well. If we turn on Cloudflare Turnstile to block spam, Cloudflare checks technical details of your browser when you submit a form.",
+          text: "The providers that process information from this website are Vercel (hosting), Neon (database), Hostinger (email delivery), and PostHog (analytics, hosted in the United States). If we turn on team notifications through Slack or WhatsApp, a summary of each new enquiry is sent there as well. If we turn on Cloudflare Turnstile to block spam, Cloudflare checks your browser when you submit a form and receives your IP address, both from your browser and from us when we confirm the check.",
         },
         {
           type: "p",
@@ -146,7 +146,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "The public website does not set advertising or tracking cookies, and our analytics works without cookies. It stores your light or dark theme choice in your browser's local storage, and keeps campaign tags in session storage until you close the tab so they can be sent with a form. Signing in to our team admin area sets a session cookie.",
+          text: "The public website does not set advertising or tracking cookies, and our analytics works without cookies. It stores your light or dark theme choice in your browser's local storage. Session storage, which your browser clears when you close the tab, holds the campaign tags from the link that brought you to the site, so they can be sent with a form, and the project brief while you fill it in, including your name, email address, phone number, company, and message, so a refresh does not lose your answers. The brief is cleared from it once you confirm your email address. Signing in to our team admin area sets a session cookie.",
         },
         {
           type: "p",

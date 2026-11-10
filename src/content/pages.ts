@@ -17,7 +17,7 @@ export const homePage = {
     /** Three commitments in a few words each, beside the hero buttons. */
     proof: ["Scope and price in writing", "Weekly demos", "Accounts in your name"],
   },
-  services: { title: "Five things we build, all of them yours to keep" },
+  services: { title: "Five things we build, all in accounts you own" },
   process: {
     title: "How a project runs",
     link: { label: "The process in detail", href: "/process" },

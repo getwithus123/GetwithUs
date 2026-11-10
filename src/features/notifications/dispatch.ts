@@ -15,6 +15,7 @@ import type {
   NotificationKind,
   NotificationPayload,
 } from "@/features/notifications/types";
+import { deploymentOrigin } from "@/lib/deployment";
 import { isAppError } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import { ok, type Result } from "@/lib/result";
@@ -113,10 +114,10 @@ function adminPath(lead: Lead): string {
 
 /**
  * The admin page on the deployment that took the lead. A preview or local copy
- * has its own database, so its links must not point at the production admin.
+ * may have its own database, so its links must not point at the production admin.
  */
 function deploymentUrl(path: string): string {
-  return new URL(path, env.NEXT_PUBLIC_SITE_URL).href;
+  return new URL(path, deploymentOrigin(env)).href;
 }
 
 /** Tells the team about a newly verified lead: in-app, email, and Slack or WhatsApp when configured. */

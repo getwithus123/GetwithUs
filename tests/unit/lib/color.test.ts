@@ -77,11 +77,19 @@ for (const [theme, selector] of [
 
     it("keeps ink text readable on the accent tint", () => {
       for (const surface of Object.values(surfaces)) {
-        expect(contrastRatio(hex(t.ink), over(t["accent-soft"], surface))).toBeGreaterThanOrEqual(AA);
+        expect(contrastRatio(hex(t.ink), over(t["accent-soft"], surface))).toBeGreaterThanOrEqual(
+          AA,
+        );
       }
     });
   });
 }
+
+describe("the two dark blocks", () => {
+  it("hold the same values, so visitors on system dark mode without JavaScript see the checked colours", () => {
+    expect(tokens(':root:not([data-theme="light"])')).toEqual(tokens(':root[data-theme="dark"]'));
+  });
+});
 
 describe("the light accent tint", () => {
   it("is too weak for accent text, so text on it is ink (see .link-pill:hover and /about)", () => {
