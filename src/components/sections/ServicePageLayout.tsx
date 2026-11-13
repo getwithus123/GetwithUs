@@ -24,6 +24,34 @@ import { toolsIn } from "@/content/tools";
 import type { ServicePage, ServiceSlug } from "@/content/types";
 import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/json-ld";
 import { cn } from "@/lib/cn";
+import AnimatedGif from "@/components/ui/AnimatedGif";
+
+/**
+ * Per-slug GIFs shown inside the service page content.
+ * whatYouGet = shown after the tick list, howWeWork = shown after the stepper.
+ * Only slugs that have a GIF get one; others render nothing.
+ */
+const SERVICE_GIFS: Partial<Record<ServiceSlug, {
+  whatYouGet?: { src: string; caption: string };
+  howWeWork?: { src: string; caption: string };
+}>> = {
+  "web-development": {
+    whatYouGet: {
+      src: "/animations/01-code-to-live-page.gif",
+      caption: "From written code to a live, indexed website.",
+    },
+    howWeWork: {
+      src: "/animations/02-responsive-design.gif",
+      caption: "Every layout tested across desktop, tablet and mobile.",
+    },
+  },
+  "app-development": {
+    whatYouGet: {
+      src: "/animations/04-ui-components.gif",
+      caption: "Buttons, toggles, cards: every component built and tested.",
+    },
+  },
+};
 
 /** Each service's signature model in the page header. */
 const MODELS: Record<ServiceSlug, ModelKey> = {
@@ -209,6 +237,7 @@ export default function ServicePageLayout({ page }: { page: ServicePage }) {
   const faqs = page.faqs.filter((faq) => isFilled(faq.question) && isFilled(faq.answer));
   const model = MODELS[page.slug];
   const startHref = `/start?service=${page.slug}`;
+  const gifConfig = SERVICE_GIFS[page.slug];
 
   return (
     <>
@@ -233,10 +262,28 @@ export default function ServicePageLayout({ page }: { page: ServicePage }) {
       <ServiceDemo page={page} />
       <Block id="what-you-get" title="What you get">
         <TickList items={page.whatYouGet.filter(isFilled)} />
+        {gifConfig?.whatYouGet ? (
+          <AnimatedGif
+            src={gifConfig.whatYouGet.src}
+            width={960}
+            height={540}
+            caption={gifConfig.whatYouGet.caption}
+            className="mt-10 mx-auto max-w-[640px]"
+          />
+        ) : null}
       </Block>
       {page.note?.placement === "afterWhatYouGet" ? <Note page={page} /> : null}
       <Block id="how-we-work" title="How we work on this" soft>
         <MiniStepper steps={page.howWeWork.filter(isFilled)} />
+        {gifConfig?.howWeWork ? (
+          <AnimatedGif
+            src={gifConfig.howWeWork.src}
+            width={960}
+            height={540}
+            caption={gifConfig.howWeWork.caption}
+            className="mt-10 mx-auto max-w-[640px]"
+          />
+        ) : null}
       </Block>
       <Block id="tools" title="Tools we use">
         <ToolChips items={page.tools} />

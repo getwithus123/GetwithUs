@@ -14,6 +14,7 @@ export function organizationJsonLd(): Thing {
   const legalName = known(site.legalEntity);
   const email = known(site.contact.email);
   const telephone = known(site.contact.phone);
+  const address = known(site.contact.address);
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -21,6 +22,17 @@ export function organizationJsonLd(): Thing {
     ...(legalName ? { legalName } : {}),
     url: site.url,
     logo: absoluteUrl("/icon.svg"),
+    ...(address
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: address,
+            addressLocality: "Dehradun",
+            addressRegion: "Uttarakhand",
+            addressCountry: "IN",
+          },
+        }
+      : {}),
     ...(email || telephone
       ? {
           contactPoint: {

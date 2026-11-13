@@ -56,6 +56,7 @@ export default function BriefWizard() {
   const panel = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
   const lastStep = useRef<number | null>(null);
+  const started = useRef(false);
 
   // Each step moved past counts once for the funnel. A draft restored at a later step does not.
   useEffect(() => {
@@ -105,7 +106,16 @@ export default function BriefWizard() {
   );
 
   return (
-    <div ref={panel} className="grid gap-10 rounded-panel border border-line bg-card p-6 md:p-10">
+    <div
+      ref={panel}
+      className="grid gap-10 rounded-panel border border-line bg-card p-6 md:p-10"
+      // The first focus inside the brief counts as starting it, once per page load.
+      onFocus={() => {
+        if (started.current || !hydrated) return;
+        started.current = true;
+        track("form_started", { form: "brief" });
+      }}
+    >
       <BriefProgress step={hydrated ? step : 1} done={done} />
       {body}
     </div>

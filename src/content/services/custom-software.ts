@@ -3,7 +3,7 @@ import type { ServiceContent } from "@/content/types";
 export const customSoftware: ServiceContent = {
   slug: "custom-software",
   seoDescription:
-    "Internal tools, integrations, data pipelines, and the cloud setup underneath them, for work that does not fit a category.",
+    "Custom software development in India: internal tools, system integrations, cloud setup on AWS, Google Cloud, or Azure. Fixed scope.",
   lead: "Internal tools, integrations, data pipelines, and the cloud setup underneath them. For the work that does not fit a category but still needs to ship.",
   summary:
     "Internal tools, integrations, data pipelines, and the cloud setup underneath them. For the work that does not fit a category but still needs to ship.",

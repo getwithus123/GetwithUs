@@ -3,7 +3,7 @@ import type { ServiceContent } from "@/content/types";
 export const appDevelopment: ServiceContent = {
   slug: "app-development",
   seoDescription:
-    "iOS and Android apps from one codebase, with the backend, sign-in, payments, and push they need, and store releases handled.",
+    "Mobile app development in India for iOS and Android. React Native and Flutter apps with backend, payments, and store release. Fixed price.",
   lead: "iOS and Android apps from one codebase, with the backend, sign-in, payments, and push notifications they need, and the store releases handled from first TestFlight build to public release.",
   summary:
     "iOS and Android apps from one codebase, with the backend, sign-in, payments, and notifications they need, and the store releases handled.",

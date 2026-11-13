@@ -1,7 +1,9 @@
 import { ArrowRight, CalendarDays, MessageSquare } from "lucide-react";
 import type { CSSProperties } from "react";
+import AnimatedGif from "@/components/ui/AnimatedGif";
 import DeferredForm from "@/components/forms/DeferredForm";
 import FormPreview from "@/components/forms/FormPreview";
+import TrackedLink from "@/components/layout/TrackedLink";
 import ContactDetails, { hasContactDetails } from "@/components/sections/ContactDetails";
 import PageHero from "@/components/sections/PageHero";
 import ModelStill from "@/components/three/ModelStill";
@@ -115,6 +117,12 @@ export default function ContactPage() {
             {/* What happens next */}
             <div className="rounded-[20px] border border-line bg-card p-6 shadow-soft">
               <h2 className="type-h4 text-ink">What happens after you send</h2>
+              <AnimatedGif
+                src="/animations/05-visitor-uses-website.gif"
+                width={960}
+                height={540}
+                className="mt-5 mb-1"
+              />
               <ol className="mt-5 grid gap-5">
                 {NEXT_STEPS.map((item) => (
                   <li key={item.step} className="flex gap-4">
@@ -198,12 +206,13 @@ export default function ContactPage() {
             {email ? (
               <p className="mt-8 text-sm text-muted">
                 Prefer email?{" "}
-                <a
+                <TrackedLink
+                  kind="email"
                   href={`mailto:${email}`}
                   className="link-draw font-semibold text-accent"
                 >
                   {email}
-                </a>
+                </TrackedLink>
               </p>
             ) : null}
           </div>

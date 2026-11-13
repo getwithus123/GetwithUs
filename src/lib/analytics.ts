@@ -4,10 +4,12 @@ import { publicEnv } from "@/config/public-env";
 
 /** The product events the site sends. Pageviews, clicks, and page speed are captured automatically. */
 export type AnalyticsEvent =
+  | "form_started"
   | "brief_step_completed"
   | "lead_submitted"
   | "lead_email_verified"
-  | "terminal_brief_handoff";
+  | "terminal_brief_handoff"
+  | "contact_clicked";
 
 /** Facts about what someone chose, never what they typed. */
 type EventProperties = Record<string, string | number | boolean | readonly string[]>;

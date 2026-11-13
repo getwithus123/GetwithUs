@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import { InstagramIcon, LinkedInIcon } from "@/components/icons/BrandIcons";
 import Container from "@/components/ui/Container";
 import Logo from "@/components/ui/Logo";
+import TrackedLink from "@/components/layout/TrackedLink";
 import { known, site, visibleNav } from "@/config/site";
 import { serviceLines } from "@/content/services/catalog";
 import { getPublishedCaseStudies } from "@/features/case-studies/getPublishedCaseStudies";
@@ -21,6 +22,7 @@ const headingClasses = "mb-4 text-sm font-bold text-ink";
 export default function Footer() {
   const email = known(site.contact.email);
   const phone = known(site.contact.phone);
+  const address = known(site.contact.address);
   const city = known(site.contact.city);
   const owner = known(site.legalEntity) ?? site.name;
   const companyLinks = [
@@ -37,15 +39,15 @@ export default function Footer() {
             <Logo />
             <p className="font-display text-lg font-bold text-ink">{site.tagline}</p>
             <p className="max-w-[36ch]">{site.footerDescription}</p>
-            {email || phone || city ? (
+            {email || phone || address || city ? (
               <address className="grid type-small not-italic sm:gap-1">
                 {email ? (
-                  <a href={`mailto:${email}`} className={linkClasses}>
+                  <TrackedLink kind="email" href={`mailto:${email}`} className={linkClasses}>
                     {email}
-                  </a>
+                  </TrackedLink>
                 ) : null}
                 {phone ? <span>{phone}</span> : null}
-                {city ? <span>Based in {city}</span> : null}
+                {address ? <span>{address}</span> : city ? <span>Based in {city}</span> : null}
               </address>
             ) : null}
             {site.social.length ? (

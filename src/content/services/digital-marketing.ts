@@ -3,7 +3,7 @@ import type { ServiceContent } from "@/content/types";
 export const digitalMarketing: ServiceContent = {
   slug: "digital-marketing",
   seoDescription:
-    "Search, paid, content, and email work tied to conversions you can see in your own analytics. Measurement first, then spend.",
+    "Digital marketing services in India: SEO, Google Ads, Meta Ads, and content. Measured in your own analytics. Monthly retainer.",
   lead: "Search, paid, content, and email work tied to conversions you can see in your own analytics. We set up measurement first, then spend.",
   summary:
     "Search, paid, content, and email work measured in your own analytics. We set up tracking first, then spend.",

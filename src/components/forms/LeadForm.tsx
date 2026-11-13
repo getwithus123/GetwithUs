@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import FormAlert from "@/components/forms/FormAlert";
 import Honeypot from "@/components/forms/Honeypot";
@@ -17,6 +17,7 @@ import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import { formCopy } from "@/content/forms";
 import { contactFieldsSchema } from "@/features/leads/schema";
+import { track } from "@/lib/analytics";
 
 type Phase =
   | { name: "editing" }
@@ -32,6 +33,7 @@ const fieldNames = ["name", "email", "company", "services", "message"] as const;
 export default function LeadForm() {
   const [phase, setPhase] = useState<Phase>({ name: "editing" });
   const { submit, honeypot, onTurnstileToken, formError } = useLeadSubmission();
+  const started = useRef(false);
   const form = useForm({
     resolver: zodResolver(contactFieldsSchema),
     defaultValues: { name: "", email: "", company: "", services: [], message: "" },
@@ -66,7 +68,17 @@ export default function LeadForm() {
   if (phase.name === "done") return <SuccessStep message={formCopy.success.contact(phase.email)} />;
 
   return (
-    <form onSubmit={onSubmit} noValidate className="relative grid gap-6">
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      className="relative grid gap-6"
+      // The first focus inside the form counts as starting it, once per page load.
+      onFocus={() => {
+        if (started.current) return;
+        started.current = true;
+        track("form_started", { form: "contact" });
+      }}
+    >
       <Field label={formCopy.fields.name} error={errors.name?.message}>
         {(control) => <Input {...control} {...form.register("name")} autoComplete="name" />}
       </Field>

@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import FounderTiltCard from "@/components/founders/FounderTiltCard";
+import AnimatedGif from "@/components/ui/AnimatedGif";
 import JsonLd from "@/components/layout/JsonLd";
 import Reveal from "@/components/motion/Reveal";
 import RevealText from "@/components/motion/RevealText";
@@ -230,9 +231,21 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      {/* Developer GIF - bridges beliefs section and founders */}
+      <div className="border-t border-line bg-bg-soft py-14" aria-hidden="true">
+        <Container>
+          <AnimatedGif
+            src="/animations/06-developer-builds-website.gif"
+            width={960}
+            height={540}
+            caption="Every project is built by the people you talk to."
+            className="mx-auto max-w-[680px]"
+          />
+        </Container>
+      </div>
+
       {/* Meet the founders - always rendered when team is populated */}
-      {showFounders ? (
-        <section
+      {showFounders ? (        <section
           aria-labelledby="founders-title"
           className="border-t border-line bg-bg-soft py-20 md:py-24"
         >

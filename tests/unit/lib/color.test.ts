@@ -75,11 +75,11 @@ for (const [theme, selector] of [
       expect(contrastRatio(hex(t["accent-ink"]), hex(t.accent))).toBeGreaterThanOrEqual(AA);
     });
 
-    it("keeps ink text readable on the accent tint", () => {
+    it("keeps ink and accent text readable on the accent tint", () => {
       for (const surface of Object.values(surfaces)) {
-        expect(contrastRatio(hex(t.ink), over(t["accent-soft"], surface))).toBeGreaterThanOrEqual(
-          AA,
-        );
+        const tint = over(t["accent-soft"], surface);
+        expect(contrastRatio(hex(t.ink), tint)).toBeGreaterThanOrEqual(AA);
+        expect(contrastRatio(hex(t.accent), tint)).toBeGreaterThanOrEqual(AA);
       }
     });
   });
@@ -88,12 +88,5 @@ for (const [theme, selector] of [
 describe("the two dark blocks", () => {
   it("hold the same values, so visitors on system dark mode without JavaScript see the checked colours", () => {
     expect(tokens(':root:not([data-theme="light"])')).toEqual(tokens(':root[data-theme="dark"]'));
-  });
-});
-
-describe("the light accent tint", () => {
-  it("is too weak for accent text, so text on it is ink (see .link-pill:hover and /about)", () => {
-    const t = tokens(":root");
-    expect(contrastRatio(hex(t.accent), over(t["accent-soft"], hex(t.card)))).toBeLessThan(AA);
   });
 });

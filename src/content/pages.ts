@@ -8,7 +8,7 @@ type Action = { label: string; href: string };
  */
 export const homePage = {
   path: "/",
-  updated: "2026-10-31",
+  updated: "2026-11-06",
   hero: {
     title: "We build the software your business runs on.",
     lead: "Websites, mobile apps, WhatsApp bots and calling agents, and the marketing that fills them. Scoped in writing, shipped in weekly demos, and handed over with you owning every account.",
@@ -42,10 +42,10 @@ export const closingCta = {
 
 export const servicesPage = {
   path: "/services",
-  updated: "2026-10-31",
-  title: "Services",
+  updated: "2026-11-06",
+  title: "Software Development Services",
   description:
-    "Web development, app development, agentic automation, digital marketing, and custom software. A written scope, weekly demos, and accounts you own.",
+    "Website development, mobile app development, WhatsApp bots, AI automation, digital marketing and custom software in India. Fixed price, weekly demos.",
   lead: "Five lines of work, one way of working: a written scope, weekly demos, and accounts you own.",
   listTitle: "Service lines",
   processTitle: "How a project runs",
@@ -56,7 +56,7 @@ export const processPage = {
   updated: "2026-11-06",
   title: "How a project runs",
   description:
-    "Four steps on every project: scope, build, launch, run. Written scope and price, weekly staging demos, and accounts in your name from day one.",
+    "How GetwithUs delivers software projects: written scope, fixed price, weekly staging demos, and accounts in your name. Four steps, no surprises.",
   lead: "The same four steps on every project, written down, priced in advance, and visible from day one. No surprises.",
   needFromYouTitle: "What we need from you",
   youGetTitle: "What you get",
@@ -65,11 +65,10 @@ export const processPage = {
 
 export const workPage = {
   path: "/work",
-  updated: "2026-10-31",
+  updated: "2026-11-06",
   title: "Selected work",
-  description: "Projects we have permission to show. Ask us for a walkthrough of the rest.",
+  description: "Software projects built by GetwithUs. Case studies published with client permission. Ask us for a walkthrough of recent work.",
   lead: "Work we have permission to show. Ask us for a walkthrough of the rest.",
-  /** The lead while there are no case studies, so it does not promise work above an empty list. */
   emptyLead:
     "Case studies appear here once clients agree to them being shown. Ask us for a walkthrough of recent work.",
   emptyTitle: "No published case studies yet",
@@ -82,7 +81,7 @@ export const aboutPage = {
   updated: "2026-11-06",
   title: `About ${site.name}`,
   description:
-    "Meet the founders of GetwithUs: Priyanshu Bansal, Pranav Maheshwari, and Rajat Sisodia. Scope and price in writing, weekly demos, and accounts you own.",
+    "GetwithUs is a software development agency in India, founded by Priyanshu Bansal, Pranav Maheshwari, and Rajat Sisodia. Websites, apps, AI agents, marketing.",
   /** Shown once the owner writes it; until then the page uses `leadFallback`. */
   lead: "GetwithUs is a software development agency built by three founders who work directly on every project. We build websites, apps, AI agents, and the marketing that fills them.",
   leadFallback: site.footerDescription,
@@ -94,25 +93,24 @@ export const aboutPage = {
 export const contactPage = {
   path: "/contact",
   updated: "2026-11-06",
-  title: "Contact",
+  title: "Contact GetwithUs",
   description:
-    "Tell us what you are building. We read every message and reply with next steps and, where possible, a price range.",
+    "Start a software project with GetwithUs. Tell us what you are building and we reply with next steps and a price range. connect@getwithus.in",
   lead: RESPONSE_TIME
     ? `Tell us what you are working on. We read every message and reply within ${RESPONSE_TIME} with next steps and, where possible, a price range.`
     : "Tell us what you are working on. We read every message and reply with next steps and, where possible, a price range.",
   detailsTitle: "Other ways to reach us",
   bookCall: "Book a call",
-  /** Shown above the form as a short reassurance line. */
   formNote:
     "You do not need a sales call to get an answer. Fill in the form and we reply by email.",
 } as const;
 
 export const startPage = {
   path: "/start",
-  updated: "2026-10-31",
+  updated: "2026-11-06",
   title: "Start a project",
   description:
-    "Four short steps about your project, then a code to confirm your email. We read every brief and reply with next steps and, where possible, a price range.",
+    "Start a software project with GetwithUs. Four short steps, then confirm your email. We reply with next steps and a price range.",
   lead: RESPONSE_TIME
     ? `Four short steps, then confirm your email. We read every brief and reply within ${RESPONSE_TIME}.`
     : "Four short steps, then confirm your email. We read every brief and reply with next steps.",

@@ -1,4 +1,5 @@
 import { MessageCircle } from "lucide-react";
+import TrackedLink from "@/components/layout/TrackedLink";
 import Icon from "@/components/ui/Icon";
 import { known, site } from "@/config/site";
 import { cn } from "@/lib/cn";
@@ -25,7 +26,8 @@ export default function WhatsAppFab({ preview = false }: { preview?: boolean }) 
   if (!digits) return null;
   const href = `https://wa.me/${digits}?text=${encodeURIComponent(site.whatsAppMessage)}`;
   return (
-    <a
+    <TrackedLink
+      kind="whatsapp"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
@@ -36,6 +38,6 @@ export default function WhatsAppFab({ preview = false }: { preview?: boolean }) 
       )}
     >
       {content}
-    </a>
+    </TrackedLink>
   );
 }

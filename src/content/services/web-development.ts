@@ -4,7 +4,7 @@ import type { ServiceContent } from "@/content/types";
 export const webDevelopment: ServiceContent = {
   slug: "web-development",
   seoDescription:
-    "Marketing sites, web apps, and online stores on Next.js and React. Fast on real phones, accessible by default, and editable by your team.",
+    "Website development in India on Next.js and React. Marketing sites, web apps, and online stores. Fast, accessible, SEO-ready. Fixed price, weekly demos.",
   lead: "Marketing sites, web apps, and online stores built on Next.js and React. Fast on real phones, accessible by default, indexable by search engines, and editable by your team after launch.",
   summary:
     "Marketing sites, web apps, and online stores on Next.js. Fast on real phones, accessible by default, indexable by search engines, and editable by your team after launch.",

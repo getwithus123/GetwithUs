@@ -10,6 +10,8 @@ export const siteContent = {
   // itself (such as admin links in lead notifications) use NEXT_PUBLIC_SITE_URL.
   url: "https://getwithus.in",
   email: "connect@getwithus.in",
+  address: "Gokul Enclave, Oghal Bhatta, Subhash Nagar, Dehradun",
+  city: "Dehradun, India",
   description:
     "Software development and digital technology agency. Websites, mobile apps, custom software, and agentic automation built by real engineers.",
   social: {

@@ -23,6 +23,7 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Icon from "@/components/ui/Icon";
 import SectionIntro from "@/components/ui/SectionIntro";
+import AnimatedGif from "@/components/ui/AnimatedGif";
 import { isFilled, known, site } from "@/config/site";
 import { processPage } from "@/content/pages";
 import {
@@ -176,6 +177,19 @@ export default function ProcessPage() {
             steps={steps}
             label={processPage.title}
             className="mt-14 [&_.stepper-detail]:max-w-[900px]"
+          />
+        </Container>
+      </section>
+
+      {/* Build-test-deploy GIF: illustrates the weekly cycle */}
+      <section aria-hidden="true" className="border-b border-line py-14 md:py-16">
+        <Container>
+          <AnimatedGif
+            src="/animations/03-build-test-deploy.gif"
+            width={960}
+            height={540}
+            caption="Build, test, and deploy: every week, on a staging link you can open."
+            className="mx-auto max-w-[720px]"
           />
         </Container>
       </section>
