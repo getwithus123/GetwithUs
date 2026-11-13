@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Motion and 3D primitives of the final design (docs/design.md, Motion).
  * Every loop here pauses off screen (OnScreen sets data-paused) and every
  * primitive has a still, complete state under reduced motion.

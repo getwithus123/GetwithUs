@@ -583,3 +583,21 @@
     display: none;
   }
 }
+
+/* 3D splash screen pre-mount masking & instant backdrop */
+html.gwu-splash-active {
+  overflow: hidden !important;
+}
+
+html.gwu-splash-active #gwu-splash-placeholder {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: radial-gradient(90% 70% at 50% 40%, #17304a 0%, #0f1a2b 55%, #0a1220 100%);
+  pointer-events: auto;
+}
+
+html.gwu-splash-active body > *:not(#gwu-splash-placeholder):not([role="status"]) {
+  visibility: hidden !important;
+}
+

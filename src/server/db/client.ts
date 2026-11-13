@@ -12,7 +12,16 @@ const globalForDb = globalThis as unknown as { sql?: ReturnType<typeof postgres>
  * such as Neon's pooled connection string.
  */
 const sql =
-  globalForDb.sql ?? postgres(env.DATABASE_URL, { max: 10, prepare: false, idle_timeout: 20 });
+  globalForDb.sql ??
+  postgres(env.DATABASE_URL, {
+    max: 10,
+    prepare: false,
+    idle_timeout: 20,
+    // Neon free-tier computes suspend after inactivity and need a few seconds
+    // to wake. A short connect_timeout lets us detect that fast and retry
+    // instead of hanging for 20+ seconds until the OS TCP timeout fires.
+    connect_timeout: 10,
+  });
 if (env.NODE_ENV !== "production") globalForDb.sql = sql;
 
 /** The Drizzle client. Only repositories import it. */

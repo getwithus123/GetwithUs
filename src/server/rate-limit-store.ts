@@ -5,14 +5,31 @@ import { db } from "@/server/db/client";
 import { rateLimits } from "@/server/db/schema";
 import type { RateLimitStore } from "@/server/rate-limit";
 
+/** Returns true for connection-level errors that may resolve after a Neon cold-start wakeup. */
+function isConnectionError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const code = (error as NodeJS.ErrnoException).code;
+  return (
+    code === "ETIMEDOUT" ||
+    code === "ECONNREFUSED" ||
+    code === "ECONNRESET" ||
+    error.message.includes("connect") ||
+    error.message.includes("timeout")
+  );
+}
+
+/** Waits `ms` milliseconds. */
+const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 /** Rate-limit counters in Postgres: one upsert per hit, resetting the window when it has passed. */
 export const dbRateLimitStore: RateLimitStore = {
   async increment(key, windowSeconds, now) {
     // ISO strings with an explicit cast: Date objects inside a raw sql template are not serialized for Postgres.
     const cutoff = sql`${new Date(now.getTime() - windowSeconds * 1000).toISOString()}::timestamptz`;
     const start = sql`${now.toISOString()}::timestamptz`;
-    try {
-      const [row] = await db
+
+    const attempt = async () =>
+      db
         .insert(rateLimits)
         .values({ key, windowStart: now, count: 1 })
         .onConflictDoUpdate({
@@ -23,9 +40,23 @@ export const dbRateLimitStore: RateLimitStore = {
           },
         })
         .returning({ count: rateLimits.count, windowStart: rateLimits.windowStart });
+
+    try {
+      const [row] = await attempt();
       return ok(row);
-    } catch (error) {
-      return err(dbError(error));
+    } catch (firstError) {
+      // On a connection error (e.g. Neon compute waking from suspend), wait
+      // briefly and try once more before giving up.
+      if (isConnectionError(firstError)) {
+        await wait(2000);
+        try {
+          const [row] = await attempt();
+          return ok(row);
+        } catch (retryError) {
+          return err(dbError(retryError));
+        }
+      }
+      return err(dbError(firstError));
     }
   },
 };
