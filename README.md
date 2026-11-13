@@ -90,7 +90,7 @@ Every variable is validated at build and at startup by `src/config/env.ts`; the 
 | `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`                                            | no, both together     | Turn on Cloudflare Turnstile on the forms                                             |
 | `NEXT_PUBLIC_SITE_URL`                                                                              | yes                   | Public URL, no trailing slash. Metadata, sitemap, emails, and the Origin check use it |
 | `NEXT_PUBLIC_SITE_NAME`                                                                             | no (`GetwithUs`)      | Brand name in titles and emails                                                       |
-| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`                                                                      | no                    | Turns on cookieless Plausible analytics                                               |
+| `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_REGION`                                             | no (`us`)             | Turn on PostHog analytics and the cookie banner (see docs/launch-checklist.md)        |
 | `NEXT_PUBLIC_SCHEDULING_URL`                                                                        | no                    | Shows a "Book a call" link on `/contact`                                              |
 | `NEXT_PUBLIC_TEST_HOOKS`                                                                            | no                    | `1` only for test builds: full console emails (codes and links) in production mode    |
 

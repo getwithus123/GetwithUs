@@ -17,7 +17,8 @@ export default function SuccessStep({ message }: { message: string }) {
     <div className="grid gap-5">
       <div className="flex items-start gap-3">
         <Icon icon={CircleCheck} size={24} className="mt-0.5 text-ok" />
-        <h2 ref={heading} tabIndex={-1} className="max-w-[48ch] type-h4 outline-none">
+        {/* data-private: the contact form's message repeats the visitor's email. */}
+        <h2 ref={heading} tabIndex={-1} data-private className="max-w-[48ch] type-h4 outline-none">
           {message}
         </h2>
       </div>

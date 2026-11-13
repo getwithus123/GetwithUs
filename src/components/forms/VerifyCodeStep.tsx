@@ -99,7 +99,8 @@ export default function VerifyCodeStep({
   };
 
   return (
-    <form onSubmit={onSubmit} noValidate className="grid gap-6">
+    // data-private: the intro repeats the visitor's email, which recordings must not show.
+    <form onSubmit={onSubmit} noValidate data-private className="grid gap-6">
       {/* Focus lands on the first code box; the intro is its description, so it is read out there. */}
       <h2 className="type-h3">{formCopy.verify.title}</h2>
       <Field

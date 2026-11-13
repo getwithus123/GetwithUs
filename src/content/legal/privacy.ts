@@ -4,7 +4,7 @@ export const privacyPolicy: LegalDocument = {
   title: "Privacy policy",
   description:
     "How GetwithUs collects, uses, stores, and protects the information you share with us through our website and services.",
-  updated: "2026-11-09",
+  updated: "2026-11-13",
   sections: [
     {
       id: "introduction",
@@ -63,7 +63,15 @@ export const privacyPolicy: LegalDocument = {
         },
         {
           type: "p",
-          text: "We measure how the website is used with PostHog analytics, without cookies or browser storage: the pages you view, the links and buttons you click, page speed, the site that referred you, your browser and device type, and the choices you make in our forms (such as the services, budget range, and timeline you pick). We never send PostHog what you type, such as your name, email, phone number, or message. PostHog counts visitors with a one-way hash of your IP address and browser details that changes every day, and does not keep your IP address.",
+          text: "We measure how the website is used with PostHog analytics: the pages you view, the links and buttons you click, page speed, the site that referred you, your browser and device type, and the choices you make in our forms (such as the services, budget range, and timeline you pick). Unless you accept cookies, this works without cookies or browser storage, and PostHog counts visitors with a one-way hash of your IP address and browser details that changes every day.",
+        },
+        {
+          type: "p",
+          text: "If you accept cookies in the banner on our website, PostHog also sets a cookie so it can recognise your later visits, records your visits as session recordings (what the page showed, and your scrolling, mouse movements, and clicks), and works out your approximate location (city and country) from your IP address. Anything you type in a form is hidden from recordings, and so is your email address where the site shows it back to you. If you then send us a form, your visits are linked to your enquiry by a random reference number, not your name or email address. Recordings are deleted after 30 days.",
+        },
+        {
+          type: "p",
+          text: "Either way, we never send PostHog what you type, such as your name, email, phone number, or message, and PostHog does not keep your IP address.",
         },
       ],
     },
@@ -132,7 +140,7 @@ export const privacyPolicy: LegalDocument = {
         },
         {
           type: "p",
-          text: "The providers that process information from this website are Vercel (hosting), Neon (database), Hostinger (email delivery), and PostHog (analytics, hosted in the United States). If we turn on team notifications through Slack or WhatsApp, a summary of each new enquiry is sent there as well. If we turn on Cloudflare Turnstile to block spam, Cloudflare checks your browser when you submit a form and receives your IP address, both from your browser and from us when we confirm the check.",
+          text: "The providers that process information from this website are Vercel (hosting), Neon (database), Hostinger (email delivery), and PostHog (analytics and session recordings, hosted in the United States). If we turn on team notifications through Slack or WhatsApp, a summary of each new enquiry is sent there as well. If we turn on Cloudflare Turnstile to block spam, Cloudflare checks your browser when you submit a form and receives your IP address, both from your browser and from us when we confirm the check.",
         },
         {
           type: "p",
@@ -146,7 +154,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "The public website does not set advertising or tracking cookies, and our analytics works without cookies. It stores your light or dark theme choice in your browser's local storage. Session storage, which your browser clears when you close the tab, holds the campaign tags from the link that brought you to the site, so they can be sent with a form, and the project brief while you fill it in, including your name, email address, phone number, company, and message, so a refresh does not lose your answers. The brief is cleared from it once you confirm your email address. Signing in to our team admin area sets a session cookie.",
+          text: "The public website does not set advertising cookies. PostHog's analytics cookie, and its data in your browser's local storage, are set only if you accept cookies in the banner. If you decline, local storage keeps only that choice, and if your browser sends a Do Not Track signal, we treat it as declining. You can change your choice at any time with Cookie settings at the bottom of every page. The site also stores your light or dark theme choice in local storage. Session storage, which your browser clears when you close the tab, holds the campaign tags from the link that brought you to the site, so they can be sent with a form, and the project brief while you fill it in, including your name, email address, phone number, company, and message, so a refresh does not lose your answers. The brief is cleared from it once you confirm your email address. Signing in to our team admin area sets a session cookie.",
         },
         {
           type: "p",

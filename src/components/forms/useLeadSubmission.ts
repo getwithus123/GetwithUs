@@ -6,7 +6,7 @@ import { submissionFacts } from "@/features/leads/analytics";
 import { readUtm, submitLeadRequest } from "@/features/leads/client";
 import type { SubmitLeadResult } from "@/features/leads/service";
 import { useFormToken } from "@/hooks/useFormToken";
-import { track } from "@/lib/analytics";
+import { identifyLead, track } from "@/lib/analytics";
 
 type FieldErrors = Record<string, string[] | undefined>;
 
@@ -40,6 +40,7 @@ export function useLeadSubmission() {
     });
     if (result.ok) {
       track("lead_submitted", submissionFacts(fields));
+      identifyLead(result.data.leadId);
       return result.data;
     }
 
