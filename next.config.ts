@@ -7,8 +7,6 @@ const TURNSTILE_ORIGIN = "https://challenges.cloudflare.com";
 /** The canonical production address (no www). */
 const CANONICAL = new URL(siteContent.url);
 const PLAUSIBLE_ORIGIN = "https://plausible.io";
-const GA_ORIGIN = "https://www.googletagmanager.com";
-const GA_COLLECT = "https://www.google-analytics.com";
 
 /**
  * One static Content-Security-Policy for every route. A per-request nonce would

@@ -38,7 +38,8 @@ export default function SplashScreen() {
     }
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!seen && !reduce) {
-      setVisible(true);
+      // Defer to avoid calling setState synchronously inside useEffect
+      setTimeout(() => setVisible(true), 0);
       document.body.style.overflow = "hidden";
     } else {
       document.documentElement.classList.remove("gwu-splash-active");
