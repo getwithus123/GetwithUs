@@ -19,7 +19,7 @@ export default function SplashWrapper() {
     }
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!seen && !reduce) {
-      setShouldMount(true);
+      setTimeout(() => setShouldMount(true), 0);
     }
   }, []);
 
