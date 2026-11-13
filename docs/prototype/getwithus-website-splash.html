@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GetwithUs: software your business runs on</title>
+<style>
+:root{--bg:#fff;--ink:#0f1a2b;--mut:#4a5668;--teal:#0e7f89;--line:#e3e8ef;--btn:#0f1a2b;--btn-ink:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1220;--ink:#f2f6fa;--mut:#9aa7b8;--teal:#19a5b0;--line:#1e2a3d;--btn:#19a5b0;--btn-ink:#06121f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1220;--ink:#f2f6fa;--mut:#9aa7b8;--teal:#19a5b0;--line:#1e2a3d;--btn:#19a5b0;--btn-ink:#06121f;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+body.lock{overflow:hidden}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,5vw,56px);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.02em}.logo b{color:var(--teal)}
+nav{display:flex;gap:22px;align-items:center;font-size:15px;color:var(--mut)}
+nav a{color:inherit;text-decoration:none}
+.cta{background:var(--btn);color:var(--btn-ink)!important;padding:10px 18px;border-radius:999px;font-weight:600}
+main{padding:clamp(40px,9vw,110px) clamp(18px,5vw,56px);max-width:1100px}
+h1{font-size:clamp(32px,6vw,68px);line-height:1.05;letter-spacing:-.03em;margin:0 0 20px}
+h1 em{font-style:normal;color:var(--teal)}
+p{font-size:clamp(16px,2vw,20px);color:var(--mut);max-width:640px;line-height:1.5;margin:0 0 28px}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row a{padding:12px 22px;border-radius:999px;font-weight:600;text-decoration:none;border:1px solid var(--line);color:var(--ink)}
+.row a.p{background:var(--btn);color:var(--btn-ink);border-color:transparent}
+ul{display:flex;gap:22px;flex-wrap:wrap;list-style:none;padding:0;margin:36px 0 0;color:var(--mut);font-size:15px}
+li::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--teal);margin-right:8px}
+@media (max-width:640px){nav a:not(.cta){display:none}}
+
+#splash{position:fixed;inset:0;z-index:50;background:radial-gradient(90% 70% at 50% 40%,#17304a 0%,#0f1a2b 55%,#0a1220 100%);transition:opacity .8s ease,visibility .8s;touch-action:none}
+#splash.out{opacity:0;visibility:hidden}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block}
+.brand{position:absolute;left:0;right:0;top:63%;text-align:center;color:#fff;pointer-events:none}
+.word{font-size:clamp(34px,6vw,60px);font-weight:800;letter-spacing:-.02em;opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .8s ease}
+.word b{color:#19a5b0;font-weight:800}
+.tag{margin-top:10px;font-size:clamp(14px,2vw,18px);color:#a9b8cc;opacity:0;transition:opacity .8s ease .25s}
+.show .word,.show .tag{opacity:1;transform:none}
+.bar{position:absolute;left:50%;bottom:9%;width:min(240px,50vw);transform:translateX(-50%);height:3px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#19a5b0}
+#skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 14px);background:rgba(255,255,255,.1);color:#cfe0f0;border:0;border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer}
+#replay{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:20;background:var(--btn);color:var(--btn-ink);border:0;border-radius:999px;padding:10px 18px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+</style>
+</head>
+<body class="lock">
+<header>
+  <div class="logo">Get<b>with</b>Us</div>
+  <nav><a href="#">Services</a><a href="#">Process</a><a href="#">About</a><a href="#">Contact</a><a class="cta" href="#">Start a project</a></nav>
+</header>
+<main>
+  <h1>We build <em>websites, mobile apps, WhatsApp bots, calling agents</em>, and software your business runs on.</h1>
+  <p>Scoped in writing, shipped in weekly demos, and handed over with you owning every account.</p>
+  <div class="row"><a class="p" href="#">Start a project</a><a href="#">See how a project runs</a></div>
+  <ul><li>Scope and price in writing</li><li>Weekly demos</li><li>Accounts in your name</li></ul>
+</main>
+
+<div id="splash" role="status" aria-label="Loading GetwithUs">
+  <canvas id="c"></canvas>
+  <div class="brand"><div class="word">Get<b>with</b>Us</div><div class="tag">Build with us. Grow with us.</div></div>
+  <div class="bar"><i id="fill"></i></div>
+  <button id="skip" type="button">Skip</button>
+</div>
+<button id="replay" type="button">Replay splash</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var splash=document.getElementById('splash'),canvas=document.getElementById('c'),fill=document.getElementById('fill');
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+var scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,0.1,50);camera.position.set(0,0,8);
+scene.add(new THREE.AmbientLight(0xffffff,0.55));
+var key=new THREE.DirectionalLight(0xffffff,1);key.position.set(3,4,6);scene.add(key);
+var rim=new THREE.PointLight(0x19a5b0,1.2,20);rim.position.set(-4,-2,3);scene.add(rim);
+var glow=new THREE.PointLight(0x19c0cc,0,8);glow.position.set(0.4,-0.3,1.6);scene.add(glow);
+var root=new THREE.Group();root.position.y=0.95;scene.add(root);
+var spin=new THREE.Group();root.add(spin);
+
+var R=1,ri=0.51,a0=Math.PI/4,gs=new THREE.Shape();
+gs.moveTo(Math.cos(a0)*R,Math.sin(a0)*R);gs.absarc(0,0,R,a0,Math.PI*2,false);gs.lineTo(ri,0);gs.absarc(0,0,ri,Math.PI*2,a0,true);gs.closePath();
+var gGeo=new THREE.ExtrudeGeometry(gs,{depth:0.32,bevelEnabled:true,bevelThickness:0.05,bevelSize:0.04,bevelSegments:4,curveSegments:72});
+gGeo.translate(0,0,-0.16);
+var gMesh=new THREE.Mesh(gGeo,new THREE.MeshStandardMaterial({color:0xf6f9fc,roughness:0.32,metalness:0.12}));spin.add(gMesh);
+
+var h=0.3,rr=0.13,qs=new THREE.Shape();
+qs.moveTo(-h+rr,-h);qs.lineTo(h-rr,-h);qs.quadraticCurveTo(h,-h,h,-h+rr);qs.lineTo(h,h-rr);qs.quadraticCurveTo(h,h,h-rr,h);
+qs.lineTo(-h+rr,h);qs.quadraticCurveTo(-h,h,-h,h-rr);qs.lineTo(-h,-h+rr);qs.quadraticCurveTo(-h,-h,-h+rr,-h);
+var qGeo=new THREE.ExtrudeGeometry(qs,{depth:0.3,bevelEnabled:true,bevelThickness:0.05,bevelSize:0.04,bevelSegments:4,curveSegments:16});
+qGeo.translate(0,0,-0.15);
+var qMat=new THREE.MeshStandardMaterial({color:0x0e7f89,roughness:0.28,metalness:0.1,emissive:0x0a5a62,emissiveIntensity:0.5});
+var cube=new THREE.Mesh(qGeo,qMat),CX=0.35,CY=-0.3,CZ=0.12;cube.position.set(CX,CY+3.2,CZ);spin.add(cube);
+
+var ring=new THREE.Mesh(new THREE.RingGeometry(0.95,1,96),new THREE.MeshBasicMaterial({color:0x19c0cc,transparent:true,opacity:0,side:THREE.DoubleSide}));
+ring.position.set(CX,CY,-0.3);root.add(ring);
+
+var N=90,pos=new Float32Array(N*3),seed=[];
+for(var i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*14;pos[i*3+1]=(Math.random()-.5)*9;pos[i*3+2]=(Math.random()-.5)*4-1;seed.push(Math.random()*6.28)}
+var pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+var pts=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x6fd3db,size:0.05,transparent:true,opacity:0.55,depthWrite:false}));scene.add(pts);
+
+function clamp(x){return Math.max(0,Math.min(1,x))}
+function outCubic(x){return 1-Math.pow(1-x,3)}
+function outBack(x){var c=1.70158;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)}
+function bounce(x){var n=7.5625,d=2.75;if(x<1/d)return n*x*x;if(x<2/d)return n*(x-=1.5/d)*x+.75;if(x<2.5/d)return n*(x-=2.25/d)*x+.9375;return n*(x-=2.625/d)*x+.984375}
+
+var start=0,running=false,shown=false,drag=false,lx=0,ly=0,ry=0,rx=0,DONE=3.7;
+function resize(){var w=splash.clientWidth,hh=splash.clientHeight;renderer.setSize(w,hh,false);camera.aspect=w/hh;camera.updateProjectionMatrix()}
+window.addEventListener('resize',resize);
+function finish(){running=false;splash.classList.add('out');document.body.classList.remove('lock')}
+function play(){splash.classList.remove('out','show');document.body.classList.add('lock');resize();shown=false;fill.style.width='0';start=performance.now();if(!running){running=true;requestAnimationFrame(frame)}}
+splash.addEventListener('pointerdown',function(e){drag=true;lx=e.clientX;ly=e.clientY});
+window.addEventListener('pointermove',function(e){if(!drag)return;ry+=(e.clientX-lx)*0.012;rx=Math.max(-0.6,Math.min(0.6,rx+(e.clientY-ly)*0.008));lx=e.clientX;ly=e.clientY});
+window.addEventListener('pointerup',function(){drag=false});
+document.getElementById('skip').addEventListener('click',function(e){e.stopPropagation();finish()});
+document.getElementById('replay').addEventListener('click',play);
+
+function frame(now){
+  if(!running)return;
+  var t=(now-start)/1000;if(reduce)t=DONE;
+  var g=clamp((t-0.15)/1.25);
+  gMesh.scale.setScalar(Math.max(0.001,outBack(g)));
+  var intro=(1-outCubic(g))*-Math.PI*1.4;
+  var c=clamp((t-1.25)/0.85);
+  cube.position.y=CY+(1-bounce(c))*3.2;cube.rotation.z=(1-outCubic(c))*0.9;cube.rotation.y=(1-outCubic(c))*-0.6;
+  var p=clamp((t-1.75)/0.9);
+  ring.material.opacity=p>0&&p<1?0.7*(1-p):0;ring.scale.setScalar(0.5+outCubic(p)*2.3);
+  glow.intensity=p>0?2.2*Math.sin(Math.PI*Math.min(1,p*1.2))+0.5*clamp((t-2.6)/1):0;
+  qMat.emissiveIntensity=0.5+(p>0&&p<1?1.2*(1-p):0);
+  var idle=t>2.2?Math.sin(t*0.9)*0.18:0;
+  if(!drag){ry+=(0-ry)*0.045;rx+=(0-rx)*0.045}
+  spin.rotation.y=intro+ry+idle;spin.rotation.x=rx+(t>2.2?Math.cos(t*0.7)*0.05:0);
+  root.position.y=0.95+(t>2.2?Math.sin(t*1.3)*0.04:0);
+  var a=pGeo.attributes.position.array;
+  for(var i=0;i<N;i++){a[i*3+1]+=0.004+Math.sin(seed[i]+t)*0.0008;if(a[i*3+1]>4.6)a[i*3+1]=-4.6}
+  pGeo.attributes.position.needsUpdate=true;pts.rotation.y=t*0.04;
+  fill.style.width=(clamp((t-0.2)/(DONE-0.4))*100)+'%';
+  if(!shown&&t>2.3){shown=true;splash.classList.add('show')}
+  renderer.render(scene,camera);
+  if(t>DONE){finish();return}
+  requestAnimationFrame(frame);
+}
+play();
+})();
+</script>
+</body>
+</html>
