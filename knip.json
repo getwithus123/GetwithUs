@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["scripts/*.{mjs,ts}", "next.config.ts"],
+  "entry": ["scripts/*.{mjs,ts}", "next.config.ts", "src/lib/analytics.ts"],
   "project": [
     "src/**/*.{ts,tsx,css}",
     "scripts/**/*.{mjs,ts}",
