@@ -9,7 +9,7 @@ export const homeFaqs: readonly FaqItem[] = [
   {
     question: "Who owns the code and the accounts?",
     answer:
-      "You do. Code, repositories, domains, cloud, and ad accounts are in your name from day one. We work inside accounts you control, so nothing has to be transferred when the project ends.",
+      "You do, once the project is paid for. Repositories, domains, cloud, and ad accounts are in your name from day one, so the work already lives in accounts you control.",
   },
   {
     question: "Is the price really fixed?",

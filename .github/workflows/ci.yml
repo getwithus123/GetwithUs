@@ -26,9 +26,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -58,9 +58,9 @@ jobs:
       # The suite migrates and empties this database; see tests/e2e/support/env.ts.
       E2E_DATABASE_URL: postgres://getwithus:getwithus@localhost:5432/getwithus_test
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -69,7 +69,7 @@ jobs:
       # Visual baselines are per platform. Until Linux baselines are committed, CI
       # writes them on the first run (uploaded below) instead of failing.
       - run: pnpm test:e2e --update-snapshots=missing
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright

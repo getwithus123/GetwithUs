@@ -26,7 +26,8 @@ function safeNext(next: string | undefined): string {
 
 /**
  * Emails a sign-in link when the address is on the team allowlist. The answer
- * is the same either way, so the form cannot be used to discover who is on it.
+ * is the same either way, even when sending fails, so the form cannot be used
+ * to discover who is on it. A failed send is logged on the server instead.
  */
 export async function requestMagicLink(
   _previous: LoginState,
@@ -57,18 +58,12 @@ export async function requestMagicLink(
     try {
       const resultUrl = await signIn("resend", { email, redirect: false, redirectTo: safeNext(next) });
       if (typeof resultUrl === "string" && resultUrl.includes("error=")) {
-        return {
-          status: "error",
-          message: "Failed to send email. Check SMTP server logs and credentials.",
-        };
+        const code = new URL(resultUrl, "http://localhost").searchParams.get("error");
+        logger.error("Sign-in link not sent", { email: maskEmail(email), error: code });
       }
     } catch (error) {
       unstable_rethrow(error);
       logger.error("Sign-in link not sent", { email: maskEmail(email), error });
-      return {
-        status: "error",
-        message: "We could not send the email right now. Try again in a minute.",
-      };
     }
   }
   return { status: "sent" };

@@ -9,9 +9,15 @@ type RevealTag = "h2" | "ol" | "ul";
 type RevealProps = HTMLAttributes<HTMLElement> & { as: RevealTag };
 type EnterState = "pending" | "shown" | "static" | "waiting";
 
+/**
+ * A block that rises in once when it scrolls into view. It renders visible
+ * ("pending") on the server, so content shows without JavaScript and nothing on
+ * screen at load is ever hidden; only blocks still below the fold after mount
+ * are set to "waiting" (hidden, globals.css) until they enter.
+ */
 export default function Reveal({ as, children, className, ...props }: RevealProps) {
   const elementRef = useRef<HTMLElement>(null);
-  const [enterState, setEnterState] = useState<EnterState>("waiting");
+  const [enterState, setEnterState] = useState<EnterState>("pending");
 
   useEffect(() => {
     const element = elementRef.current;

@@ -7,9 +7,9 @@ export const commitments: readonly Commitment[] = [
     expanded: "You know what a change costs before you decide whether it is worth making.",
   },
   {
-    text: "You own everything: code, repositories, domains, cloud, and ad accounts, from day one.",
+    text: "Every account is in your name from day one: repositories, domains, cloud, and ad accounts.",
     expanded:
-      "We work inside accounts you control, so nothing has to be transferred when the project ends.",
+      "We work inside accounts you control, and the code we write for you is yours once the project is paid for.",
   },
   {
     text: "Weekly demos. If you have not seen it working on staging, it is not done.",

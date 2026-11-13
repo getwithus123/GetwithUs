@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { ComponentType } from "react";
+import { InstagramIcon, LinkedInIcon } from "@/components/icons/BrandIcons";
 import Container from "@/components/ui/Container";
 import Logo from "@/components/ui/Logo";
 import TrackedLink from "@/components/layout/TrackedLink";
@@ -6,7 +8,14 @@ import { known, site, visibleNav } from "@/config/site";
 import { serviceLines } from "@/content/services/catalog";
 import { getPublishedCaseStudies } from "@/features/case-studies/getPublishedCaseStudies";
 
-const linkClasses = "link-draw text-body transition-colors duration-150 ease-out hover:text-ink";
+// Taller tap targets on phones; the underline stays on the text (content box), not the padding.
+const linkClasses =
+  "link-draw inline-block bg-clip-content bg-origin-content py-2.5 text-body transition-colors duration-150 ease-out hover:text-ink sm:py-0";
+const listClasses = "grid type-small sm:gap-2";
+const socialIcons: Record<string, ComponentType<{ className?: string }>> = {
+  Instagram: InstagramIcon,
+  LinkedIn: LinkedInIcon,
+};
 const headingClasses = "mb-4 text-sm font-bold text-ink";
 
 /** Site footer: brand, tagline, and contact details (each only once known), then service, company, and legal links. */
@@ -31,31 +40,35 @@ export default function Footer() {
             <p className="font-display text-lg font-bold text-ink">{site.tagline}</p>
             <p className="max-w-[36ch]">{site.footerDescription}</p>
             {email || phone || address || city ? (
-              <address className="grid gap-1 type-small not-italic">
+              <address className="grid type-small not-italic sm:gap-1">
                 {email ? (
                   <TrackedLink kind="email" href={`mailto:${email}`} className={linkClasses}>
                     {email}
                   </TrackedLink>
                 ) : null}
                 {phone ? <span>{phone}</span> : null}
-                {address ? <span>{address}</span> : city ? <span>{city}</span> : null}
+                {address ? <span>{address}</span> : city ? <span>Based in {city}</span> : null}
               </address>
             ) : null}
             {site.social.length ? (
-              <ul className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
-                {site.social.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link-draw font-semibold text-accent hover:text-accent-hover type-small"
-                      aria-label={`${site.name} on ${item.label}`}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
+              <ul className="mt-1 flex flex-wrap gap-2">
+                {site.social.map((item) => {
+                  const SocialIcon = socialIcons[item.label];
+                  return (
+                    <li key={item.href}>
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-pill"
+                        aria-label={`${site.name} on ${item.label}`}
+                      >
+                        {SocialIcon ? <SocialIcon className="size-[1.0625rem] shrink-0" /> : null}
+                        {item.label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             ) : null}
           </div>
@@ -63,7 +76,7 @@ export default function Footer() {
             <h2 id="footer-services" className={headingClasses}>
               Services
             </h2>
-            <ul className="grid gap-2 type-small">
+            <ul className={listClasses}>
               {serviceLines.map((service) => (
                 <li key={service.slug}>
                   <Link href={service.href} className={linkClasses}>
@@ -77,7 +90,7 @@ export default function Footer() {
             <h2 id="footer-company" className={headingClasses}>
               Company
             </h2>
-            <ul className="grid gap-2 type-small">
+            <ul className={listClasses}>
               {companyLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className={linkClasses}>
@@ -91,7 +104,7 @@ export default function Footer() {
             <h2 id="footer-legal" className={headingClasses}>
               Legal
             </h2>
-            <ul className="grid gap-2 type-small">
+            <ul className={listClasses}>
               <li>
                 <Link href="/privacy" className={linkClasses}>
                   Privacy policy

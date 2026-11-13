@@ -25,7 +25,7 @@ export const metadata = pageMetadata({
 const NEXT_STEPS = [
   {
     step: "01",
-    heading: "We read it the same day",
+    heading: "We read every message",
     body: "Every message goes directly to the people who do the work. No sales team, no ticketing system.",
   },
   {
@@ -45,13 +45,13 @@ const NEXT_STEPS = [
 const FAQS = [
   {
     q: "What if I am not sure what I need yet?",
-    a: "That is fine. Describe the problem you want to solve and we will help you work out the scope on the call.",
+    a: "That is fine. Describe the problem you want to solve. We reply by email with questions, and if it helps, we work out the scope together on a short call.",
   },
   {
     q: "How quickly do you reply?",
     a: RESPONSE_TIME
-      ? `Within ${RESPONSE_TIME} on business days. We reply faster when things are quieter.`
-      : "We aim to reply on the same business day.",
+      ? `Within ${RESPONSE_TIME}. We reply faster when things are quieter.`
+      : "We reply by email as soon as we can.",
   },
   {
     q: "Do you work with clients outside India?",
@@ -126,7 +126,7 @@ export default function ContactPage() {
                 {NEXT_STEPS.map((item) => (
                   <li key={item.step} className="flex gap-4">
                     <span
-                      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft font-display text-xs font-extrabold text-accent"
+                      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft font-display text-xs font-extrabold text-ink"
                       aria-hidden="true"
                     >
                       {item.step}
@@ -142,7 +142,7 @@ export default function ContactPage() {
 
             {/* Other ways to reach us - only when facts are known */}
             {hasDetails ? (
-              <div
+              <section
                 aria-labelledby="contact-details-title"
                 className="rounded-[20px] border border-line bg-bg-soft p-6"
               >
@@ -152,7 +152,7 @@ export default function ContactPage() {
                 <div className="mt-5">
                   <ContactDetails showBooking />
                 </div>
-              </div>
+              </section>
             ) : null}
 
             {/* Prefer a brief? */}

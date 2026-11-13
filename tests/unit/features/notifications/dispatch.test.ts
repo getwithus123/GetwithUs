@@ -105,6 +105,7 @@ describe("notifyLeadVerified", () => {
       "Test Lead",
       "Example Co",
       "App development",
+      // The deployment that took the lead (vitest.config sets NEXT_PUBLIC_SITE_URL), not the canonical site.
       `http://localhost:3000/admin/leads/${lead.id}`,
     ]);
   });

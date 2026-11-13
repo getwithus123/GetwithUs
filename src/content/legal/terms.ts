@@ -3,8 +3,8 @@ import type { LegalDocument } from "@/content/types";
 export const termsOfService: LegalDocument = {
   title: "Terms and conditions",
   description:
-    "The terms that govern your use of the GetWithUs website and the software development services we provide.",
-  updated: "2026-11-06",
+    "The terms that govern your use of the GetwithUs website and the software development services we provide.",
+  updated: "2026-11-09",
   sections: [
     {
       id: "introduction",
@@ -12,22 +12,20 @@ export const termsOfService: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "Welcome to GetWithUs. These Terms and Conditions govern your access to and use of the GetWithUs website and the software development services we provide.",
+          text: "These Terms and Conditions govern your access to and use of the GetwithUs website and the software development services we provide.",
         },
         {
           type: "p",
-          text: "GetWithUs provides technology and software development services, including:",
+          text: "GetwithUs provides technology and software development services, including:",
         },
         {
           type: "ul",
           items: [
-            "Android and iOS application development.",
-            "Website and web application development.",
-            "Custom software development.",
-            "UI/UX design.",
-            "Backend and API development.",
-            "Database development and integration.",
-            "AI and ML-based solutions.",
+            "Website and web application development, including UI and UX design.",
+            "Android and iOS app development.",
+            "Custom software and cloud development, including backend, API, and database work.",
+            "Agentic automation, including WhatsApp bots, calling agents, and workflow automation.",
+            "Digital marketing.",
             "Software maintenance and technical support.",
           ],
         },
@@ -43,7 +41,7 @@ export const termsOfService: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "GetWithUs works with individuals, startups, businesses, and organisations to design, develop, test, and deliver customised digital solutions.",
+          text: "GetwithUs works with individuals, startups, businesses, and organisations to design, develop, test, and deliver customised digital solutions.",
         },
         {
           type: "p",
@@ -99,7 +97,7 @@ export const termsOfService: LegalDocument = {
         },
         {
           type: "p",
-          text: "GetWithUs reserves the right to pause development or withhold delivery of unpaid deliverables in the event of overdue payments, subject to the applicable agreement and law.",
+          text: "GetwithUs reserves the right to pause development or withhold delivery of unpaid deliverables in the event of overdue payments, subject to the applicable agreement and law.",
         },
       ],
     },
@@ -123,7 +121,7 @@ export const termsOfService: LegalDocument = {
         },
         {
           type: "p",
-          text: "GetWithUs will make reasonable efforts to meet agreed deadlines but cannot guarantee timelines where delays are caused by circumstances outside our reasonable control.",
+          text: "GetwithUs will make reasonable efforts to meet agreed deadlines but cannot guarantee timelines where delays are caused by circumstances outside our reasonable control.",
         },
       ],
     },
@@ -155,10 +153,10 @@ export const termsOfService: LegalDocument = {
           type: "ul",
           items: [
             "Upon receipt of full payment, ownership of the specifically commissioned final deliverables and custom source code will be transferred to the client, subject to the exclusions below.",
-            "Until full payment is received, GetWithUs retains ownership of unpaid deliverables and may restrict their use.",
-            "Pre-existing tools, libraries, frameworks, reusable components, development methods, and proprietary materials belonging to GetWithUs remain our property.",
+            "Until full payment is received, GetwithUs retains ownership of unpaid deliverables and may restrict their use.",
+            "Pre-existing tools, libraries, frameworks, reusable components, development methods, and proprietary materials belonging to GetwithUs remain our property.",
             "Third-party software, open-source libraries, APIs, and licensed assets remain subject to their respective licences and terms.",
-            "GetWithUs will not transfer rights that it does not own or have authority to transfer.",
+            "GetwithUs will not transfer rights that it does not own or have authority to transfer.",
           ],
         },
         {
@@ -173,7 +171,7 @@ export const termsOfService: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "Both GetWithUs and the client agree to take reasonable steps to protect confidential information shared during the project. Confidential information may include:",
+          text: "Both GetwithUs and the client agree to take reasonable steps to protect confidential information shared during the project. Confidential information may include:",
         },
         {
           type: "ul",
@@ -199,11 +197,11 @@ export const termsOfService: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "Clients are responsible for reviewing and testing delivered software within the acceptance period specified in the project agreement. Any defects that fall within the agreed scope should be reported with sufficient details.",
+          text: "Clients are responsible for reviewing and testing delivered software within the acceptance period specified in the project agreement. Any defects that fall within the agreed scope should be reported with sufficient detail.",
         },
         {
           type: "p",
-          text: "GetWithUs will address verified development defects in accordance with the agreed warranty or support terms. New features, enhancements, and changes to approved requirements will be treated as additional work unless otherwise agreed.",
+          text: "GetwithUs will address verified development defects in accordance with the agreed warranty or support terms. New features, enhancements, and changes to approved requirements will be treated as additional work unless otherwise agreed.",
         },
       ],
     },
@@ -227,7 +225,7 @@ export const termsOfService: LegalDocument = {
         },
         {
           type: "p",
-          text: "GetWithUs is not responsible for independent changes, outages, restrictions, pricing modifications, or policies imposed by third-party providers. Clients may be required to maintain their own third-party subscriptions and accounts.",
+          text: "GetwithUs is not responsible for independent changes, outages, restrictions, pricing modifications, or policies imposed by third-party providers. Clients may be required to maintain their own third-party subscriptions and accounts.",
         },
       ],
     },
@@ -242,7 +240,7 @@ export const termsOfService: LegalDocument = {
         {
           type: "ul",
           items: [
-            "GetWithUs shall not be responsible for indirect, incidental, or consequential losses arising from the use of our services.",
+            "GetwithUs shall not be responsible for indirect, incidental, or consequential losses arising from the use of our services.",
             "We shall not be responsible for losses caused by inaccurate information or materials supplied by clients.",
             "We shall not be responsible for failures arising from third-party services beyond our reasonable control.",
           ],
@@ -291,7 +289,7 @@ export const termsOfService: LegalDocument = {
         },
         {
           type: "p",
-          text: "GetWithUs reserves the right to refuse or discontinue services involving unlawful or prohibited activities.",
+          text: "GetwithUs reserves the right to refuse or discontinue services involving unlawful or prohibited activities.",
         },
       ],
     },
@@ -311,7 +309,7 @@ export const termsOfService: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "GetWithUs reserves the right to update these Terms when necessary. Updated Terms will be published on our website with a revised last updated date.",
+          text: "GetwithUs reserves the right to update these Terms when necessary. Updated Terms will be published on our website with a revised last updated date.",
         },
         {
           type: "p",

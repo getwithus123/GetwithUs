@@ -103,7 +103,8 @@ export default function AppFlowDemo({ marks }: { marks: readonly ReactNode[] }) 
         aria-hidden="true"
         className="grid items-center gap-10 md:grid-cols-[auto_minmax(0,1fr)]"
       >
-        <div className="relative mx-auto h-[460px] w-[230px] rounded-[38px] bg-ink p-3 shadow-lift">
+        {/* Always a dark device, like the code panels: bg-ink turns near white in the dark theme. */}
+        <div className="relative mx-auto h-[460px] w-[230px] rounded-[38px] bg-ed-bg p-3 shadow-lift ring-1 ring-white/10">
           <div className="relative h-full overflow-hidden rounded-[28px] bg-card">
             <div
               className={cn(

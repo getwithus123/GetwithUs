@@ -8,7 +8,9 @@ import { useThree } from "@react-three/fiber";
 import { useModelFrame, useModelPalette } from "@/components/three/models/context";
 
 /** The four commitments in a word or two, orbiting the cube. */
-const WORDS = ["Price in writing", "You own it", "Weekly demos", "No lock-in"];
+const WORDS = ["Price in writing", "Your accounts", "Weekly demos", "No lock-in"];
+/** Gap kept between a chip and the edge of the canvas. */
+const EDGE = 4;
 const RADIUS = 2.4;
 
 /**
@@ -63,6 +65,8 @@ function WordChips({ ringRef }: { ringRef: React.RefObject<Group | null> }) {
     const canvas = gl.domElement;
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
+    // Read every width before any write, so the frame does not force extra layouts.
+    const halves = Array.from(chips, (chip) => chip.offsetWidth / 2);
 
     angles.forEach((angle, i) => {
       const chip = chips[i];
@@ -73,7 +77,11 @@ function WordChips({ ringRef }: { ringRef: React.RefObject<Group | null> }) {
       _v.current.applyMatrix4(ring.matrixWorld);
       _v.current.project(camera);
 
-      const x = (_v.current.x * 0.5 + 0.5) * w;
+      // Keep the whole chip inside the canvas: on a narrow phone the ring is wider
+      // than the panel and a centred chip would be cut off at the edge.
+      const half = halves[i] ?? 0;
+      const projectedX = (_v.current.x * 0.5 + 0.5) * w;
+      const x = Math.min(Math.max(projectedX, half + EDGE), Math.max(half + EDGE, w - half - EDGE));
       const y = (1 - (_v.current.y * 0.5 + 0.5)) * h;
 
       // Hide chips that project behind the camera

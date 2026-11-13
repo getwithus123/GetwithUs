@@ -1,4 +1,5 @@
 import { Inbox } from "lucide-react";
+import type { Metadata } from "next";
 import TiltCard from "@/components/motion/TiltCard";
 import CaseStudyCard from "@/components/sections/CaseStudyCard";
 import ClosingCta from "@/components/sections/ClosingCta";
@@ -12,11 +13,16 @@ import { workPage } from "@/content/pages";
 import { getPublishedCaseStudies } from "@/features/case-studies/getPublishedCaseStudies";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata = pageMetadata({
-  title: workPage.title,
-  description: workPage.description,
-  path: workPage.path,
-});
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: workPage.title,
+    description: workPage.description,
+    path: workPage.path,
+  }),
+  // Until a case study is published the page is empty: kept out of search results,
+  // as it is already left out of the sitemap and the navigation.
+  ...(getPublishedCaseStudies().length > 0 ? {} : { robots: { index: false, follow: true } }),
+};
 
 /** /work: project folders that fan out (closed while there is nothing to show), and the case studies as tilting cards. */
 export default function WorkPage() {

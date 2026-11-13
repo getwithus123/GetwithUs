@@ -14,7 +14,7 @@ export const digitalMarketing: ServiceContent = {
   ],
   whatYouGet: [
     "Analytics, tag, and conversion tracking setup in your accounts",
-    "Technical and content SEO with a prioritized backlog",
+    "Technical and content SEO with a prioritised backlog",
     "Google Ads and Meta Ads management with spend paid directly by you",
     "Landing pages and conversion rate improvements",
     "Email and WhatsApp campaigns to opted-in lists",

@@ -297,8 +297,10 @@ export default function ServicePageLayout({ page }: { page: ServicePage }) {
             </Reveal>
             <p className="mt-5 max-w-[40em] type-lead text-body">{pricing}</p>
           </div>
-          {/* The home page features one card for show; on its own service page the card is plain like the others. */}
-          {card ? <PriceCard card={{ ...card, featured: false }} /> : null}
+          {/* The home page features one card for show; on its own service page the card is plain
+              like the others. The paragraph beside it states how the service is priced, so the
+              card leaves its pricing line out, unless the paragraph is empty (owner placeholders). */}
+          {card ? <PriceCard card={{ ...card, featured: false }} showModel={!pricing} /> : null}
         </Container>
       </section>
       {faqs.length ? (

@@ -45,7 +45,7 @@ export const home = {
   },
   stack: {
     title: "The stack behind your project",
-    lead: "Mainstream, well documented tools, so any developer you hire later can pick up where we left off. Choose a group to light it up.",
+    lead: "Mainstream, well-documented tools, so any developer you hire later can pick up where we left off. Choose a group to light it up.",
   },
   process: {
     lead: "Four steps, the same on every project. Select any step for detail.",

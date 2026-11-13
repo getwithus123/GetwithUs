@@ -34,8 +34,8 @@ export const site = {
   whatsAppMessage: "Hi GetwithUs, I would like to talk about a project.",
   payment: {
     schedule: "50% on signing, 50% on delivery",
-    currency: "INR and USD",
-    tax: "Prices exclude GST where applicable.",
+    currency: "INR or USD",
+    tax: "Prices exclude GST where applicable",
     methods: "bank transfer, UPI, and card",
   },
   copyrightYear: 2026,

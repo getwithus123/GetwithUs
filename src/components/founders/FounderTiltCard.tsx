@@ -221,11 +221,6 @@ export default function FounderTiltCard({
 
         {/* Portrait panel */}
         <div className="founder-portrait">
-          {/* "Co-founder" pill */}
-          <span className="founder-pill" style={{ "--z": "60px" } as CSSProperties}>
-            Co-founder
-          </span>
-
           {/* Radial sheen */}
           <div className="founder-sheen" aria-hidden="true" />
 
@@ -244,7 +239,7 @@ export default function FounderTiltCard({
               src={member.photo}
               alt={`Portrait of ${member.name}`}
               fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              sizes="(min-width: 1280px) 360px, (min-width: 768px) 33vw, 100vw"
               className="object-cover"
             />
           ) : (
@@ -280,7 +275,7 @@ export default function FounderTiltCard({
                   aria-label={`${member.name} on LinkedIn`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="founder-link-pill"
+                  className="link-pill"
                 >
                   <LinkedInIcon className="size-[1.0625rem] shrink-0" />
                   LinkedIn
@@ -292,7 +287,7 @@ export default function FounderTiltCard({
                   aria-label={`${member.name} portfolio`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="founder-link-pill"
+                  className="link-pill"
                 >
                   <GlobeIcon className="size-[1.0625rem] shrink-0" />
                   Portfolio
@@ -304,7 +299,7 @@ export default function FounderTiltCard({
                   aria-label={`${member.name} on Instagram`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="founder-link-pill"
+                  className="link-pill"
                 >
                   <InstagramIcon className="size-[1.0625rem] shrink-0" />
                   Instagram
