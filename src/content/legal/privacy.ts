@@ -4,7 +4,7 @@ export const privacyPolicy: LegalDocument = {
   title: "Privacy policy",
   description:
     "How GetwithUs collects, uses, stores, and protects the information you share with us through our website and services.",
-  updated: "2026-11-13",
+  updated: "2026-11-14",
   sections: [
     {
       id: "introduction",
@@ -154,7 +154,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         {
           type: "p",
-          text: "The public website does not set advertising cookies. PostHog's analytics cookie, and its data in your browser's local storage, are set only if you accept cookies in the banner. If you decline, local storage keeps only that choice, and if your browser sends a Do Not Track signal, we treat it as declining. You can change your choice at any time with Cookie settings at the bottom of every page. The site also stores your light or dark theme choice in local storage. Session storage, which your browser clears when you close the tab, holds the campaign tags from the link that brought you to the site, so they can be sent with a form, and the project brief while you fill it in, including your name, email address, phone number, company, and message, so a refresh does not lose your answers. The brief is cleared from it once you confirm your email address. Signing in to our team admin area sets a session cookie.",
+          text: "The public website does not set advertising cookies. PostHog's analytics cookie, and its data in your browser's local storage, are set only if you accept cookies in the banner. If you decline, local storage keeps only that choice. You can change your choice at any time with Cookie settings at the bottom of every page. If your browser sends a Do Not Track or Global Privacy Control signal (some browsers, such as Brave, send one by default), we treat it as declining, and the banner and Cookie settings do not appear. The site also stores your light or dark theme choice in local storage. Session storage, which your browser clears when you close the tab, holds the campaign tags from the link that brought you to the site, so they can be sent with a form, and the project brief while you fill it in, including your name, email address, phone number, company, and message, so a refresh does not lose your answers. The brief is cleared from it once you confirm your email address. Signing in to our team admin area sets a session cookie.",
         },
         {
           type: "p",

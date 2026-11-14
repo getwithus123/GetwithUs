@@ -1,4 +1,4 @@
-import { postJson } from "@/features/notifications/channels/http";
+import { postJson } from "@/server/post-json";
 import type { Channel } from "@/features/notifications/types";
 
 /** Slack incoming webhook with a Block Kit message: title, every field, and a button to the lead. */

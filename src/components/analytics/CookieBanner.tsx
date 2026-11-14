@@ -10,7 +10,8 @@ import { chooseConsent, getConsent, getServerConsent, subscribeConsent } from "@
  * PostHog has loaded and only while the visitor has not chosen (or has reopened
  * it from "Cookie settings"). Until then, and after "Decline", visits are only
  * counted anonymously without cookies. Not a dialog: the page stays usable and
- * focus is left where it is.
+ * focus is left where it is. On phones it sits above the WhatsApp button
+ * (56 px tall, 20 px up), which it would otherwise cover; wider, they sit side by side.
  */
 export default function CookieBanner() {
   const { status, open } = useSyncExternalStore(subscribeConsent, getConsent, getServerConsent);
@@ -19,7 +20,7 @@ export default function CookieBanner() {
   return (
     <section
       aria-labelledby="cookie-banner-title"
-      className="fixed inset-x-4 bottom-[calc(16px+env(safe-area-inset-bottom,0px))] z-[60] grid gap-4 rounded-panel border border-line bg-card p-5 shadow-lift sm:right-auto sm:left-5 sm:max-w-[26rem]"
+      className="fixed inset-x-4 bottom-[calc(88px+env(safe-area-inset-bottom,0px))] z-[60] grid gap-4 rounded-panel border border-line bg-card p-5 shadow-lift sm:right-auto sm:bottom-[calc(16px+env(safe-area-inset-bottom,0px))] sm:left-5 sm:max-w-[26rem]"
     >
       <h2 id="cookie-banner-title" className="font-display text-lg font-bold text-ink">
         Can we use cookies?

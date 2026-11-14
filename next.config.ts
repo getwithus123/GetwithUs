@@ -93,9 +93,11 @@ const nextConfig: NextConfig = {
         destination: `${CANONICAL.origin}/:path*`,
         permanent: true,
       },
-      // The trailing slash redirect Next.js would do (see skipTrailingSlashRedirect), minus the analytics path.
+      // The trailing slash redirect Next.js would do (see skipTrailingSlashRedirect), minus the
+      // analytics path. Like Next's own rule, every segment must be non-empty: "//evil.com/" must
+      // never become a redirect to "//evil.com", which browsers read as another site.
       {
-        source: `/:path((?!${ANALYTICS_PATH.slice(1)}/).+)/`,
+        source: `/:path((?!${ANALYTICS_PATH.slice(1)}/)(?:[^/]+/)*[^/]+)/`,
         destination: "/:path",
         permanent: true,
       },
@@ -103,7 +105,8 @@ const nextConfig: NextConfig = {
   },
   // Analytics goes through this site to PostHog, so ad blockers that block PostHog's
   // domains do not drop it. Vercel passes the visitor's IP on (x-forwarded-for), which
-  // PostHog needs for its cookieless visitor count. Only while analytics is on.
+  // PostHog needs for its cookieless visitor count; src/proxy.ts removes this site's
+  // cookies first, so no session cookie reaches PostHog. Only while analytics is on.
   async rewrites() {
     if (!flags.analytics) return [];
     const hosts = posthogHosts(env.NEXT_PUBLIC_POSTHOG_REGION);

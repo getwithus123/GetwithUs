@@ -7,7 +7,8 @@ import CodeInput from "@/components/ui/CodeInput";
 import Field from "@/components/ui/Field";
 import { errorCopy, formCopy } from "@/content/forms";
 import { resendLeadCode, verifyLeadCode } from "@/features/leads/client";
-import { track } from "@/lib/analytics";
+import { PRIVATE_CLASS, track } from "@/lib/analytics";
+import { cn } from "@/lib/cn";
 import { useCountdown } from "@/hooks/useCountdown";
 
 type VerifyCodeStepProps = {
@@ -99,8 +100,8 @@ export default function VerifyCodeStep({
   };
 
   return (
-    // data-private: the intro repeats the visitor's email, which recordings must not show.
-    <form onSubmit={onSubmit} noValidate data-private className="grid gap-6">
+    // PRIVATE_CLASS: the intro repeats the visitor's email, which must not reach analytics.
+    <form onSubmit={onSubmit} noValidate className={cn(PRIVATE_CLASS, "grid gap-6")}>
       {/* Focus lands on the first code box; the intro is its description, so it is read out there. */}
       <h2 className="type-h3">{formCopy.verify.title}</h2>
       <Field

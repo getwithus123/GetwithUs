@@ -1,6 +1,7 @@
 import { posthogHosts } from "@/config/analytics";
 import { env } from "@/config/env";
 import { logger } from "@/lib/logger";
+import { postJson } from "@/server/post-json";
 
 type ServerEventProperties = Record<string, string | number | boolean | readonly string[]>;
 
@@ -17,21 +18,16 @@ export async function captureServerEvent(
 ): Promise<void> {
   const key = env.NEXT_PUBLIC_POSTHOG_KEY;
   if (!key) return;
-  try {
-    const response = await fetch(`${posthogHosts(env.NEXT_PUBLIC_POSTHOG_REGION).ingest}/i/v0/e/`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        api_key: key,
-        event,
-        distinct_id: distinctId,
-        properties: { ...properties, $process_person_profile: false },
-        timestamp: new Date().toISOString(),
-      }),
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!response.ok) logger.warn("Analytics event not accepted", { event, status: response.status });
-  } catch (error) {
-    logger.warn("Analytics event not sent", { event, error: String(error) });
-  }
+  const sent = await postJson(
+    "PostHog",
+    `${posthogHosts(env.NEXT_PUBLIC_POSTHOG_REGION).ingest}/i/v0/e/`,
+    {
+      api_key: key,
+      event,
+      distinct_id: distinctId,
+      properties: { ...properties, $process_person_profile: false },
+      timestamp: new Date().toISOString(),
+    },
+  );
+  if (!sent.ok) logger.warn("Analytics event not sent", { event, error: sent.error });
 }

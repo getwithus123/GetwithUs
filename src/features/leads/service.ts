@@ -177,12 +177,16 @@ async function sendLeadConfirmation(lead: Lead, requestId: string): Promise<void
 /**
  * Work that follows a newly verified lead, run after the response is sent: the
  * client's confirmation email (not for API leads), the team notifications, and
- * the analytics event. Failures are logged and never reach the client.
+ * the analytics event. Failures are logged and never reach the client. The event
+ * is sent even if the emails or notifications throw, so the lead is still counted.
  */
 export async function handleLeadVerified(lead: Lead, requestId: string): Promise<void> {
-  if (lead.source !== "api") await sendLeadConfirmation(lead, requestId);
-  await notifyLeadVerified(lead, { requestId });
-  await captureServerEvent("lead_verified", lead.id, verifiedLeadFacts(lead));
+  try {
+    if (lead.source !== "api") await sendLeadConfirmation(lead, requestId);
+    await notifyLeadVerified(lead, { requestId });
+  } finally {
+    await captureServerEvent("lead_verified", lead.id, verifiedLeadFacts(lead));
+  }
 }
 
 /** Leads per page in the admin table. */

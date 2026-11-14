@@ -56,13 +56,17 @@ export default function BriefWizard() {
   const panel = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
   const lastStep = useRef<number | null>(null);
+  const counted = useRef(new Set<number>());
   const started = useRef(false);
 
-  // Each step moved past counts once for the funnel. A draft restored at a later step does not.
+  // Each step moved past counts once for the funnel, also after Back and Continue again.
+  // A draft restored at a later step does not count.
   useEffect(() => {
     if (!hydrated) return;
-    if (lastStep.current !== null && step > lastStep.current) {
-      track("brief_step_completed", { step: lastStep.current });
+    const from = lastStep.current;
+    if (from !== null && step > from && !counted.current.has(from)) {
+      counted.current.add(from);
+      track("brief_step_completed", { step: from });
     }
     lastStep.current = step;
   }, [hydrated, step]);

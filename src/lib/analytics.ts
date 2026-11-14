@@ -1,4 +1,4 @@
-import type { PostHog } from "posthog-js";
+import type { CaptureResult, PostHog } from "posthog-js";
 import { ANALYTICS_PATH, posthogHosts } from "@/config/analytics";
 import { publicEnv } from "@/config/public-env";
 
@@ -16,19 +16,26 @@ type EventProperties = Record<string, string | number | boolean | readonly strin
 
 /**
  * The visitor's cookie choice. "unavailable" until PostHog has loaded, and for
- * good when analytics is off, blocked, or the visitor sends Do Not Track (which
- * PostHog reads as "denied").
+ * good when analytics is off, blocked, or the browser sends Do Not Track or
+ * Global Privacy Control (which PostHog reads as "denied"): then there is no
+ * choice to offer, so neither the banner nor Cookie settings appears.
  */
 export type ConsentStatus = "unavailable" | "pending" | "granted" | "denied";
 export type ConsentView = { status: ConsentStatus; open: boolean };
 
-/** Elements whose text never appears in session recordings (typed details shown back, such as an email). */
-export const PRIVATE_TEXT = "[data-private]";
+/**
+ * Class for elements that show back what a visitor typed, such as their email.
+ * Recordings mask their text, and PostHog's click capture leaves their text and
+ * attributes out ("ph-sensitive" is PostHog's own marker for that).
+ */
+export const PRIVATE_CLASS = "ph-sensitive";
 
 let client: PostHog | null = null;
 let started = false;
-// Events from before PostHog has loaded; a handful at most, so the cap only guards against a loop.
-const queue: [AnalyticsEvent, EventProperties | undefined][] = [];
+// Events from before PostHog has loaded, with the page and time they happened on; a handful
+// at most, so the cap only guards against a loop.
+type QueuedEvent = { event: AnalyticsEvent; properties?: EventProperties; url: string; at: Date };
+const queue: QueuedEvent[] = [];
 const QUEUE_LIMIT = 20;
 
 const UNAVAILABLE: ConsentView = { status: "unavailable", open: false };
@@ -52,7 +59,9 @@ export const getServerConsent = (): ConsentView => UNAVAILABLE;
 export function track(event: AnalyticsEvent, properties?: EventProperties): void {
   if (!publicEnv.posthogKey) return;
   if (client) client.capture(event, properties);
-  else if (queue.length < QUEUE_LIMIT) queue.push([event, properties]);
+  else if (queue.length < QUEUE_LIMIT) {
+    queue.push({ event, properties, url: window.location.href, at: new Date() });
+  }
 }
 
 /**
@@ -60,7 +69,7 @@ export function track(event: AnalyticsEvent, properties?: EventProperties): void
  * Decline: back to anonymous counting with no cookies, and any recording stops.
  */
 export function chooseConsent(accept: boolean): void {
-  if (!client) return;
+  if (!client || consent.status === "unavailable") return;
   if (accept) client.opt_in_capturing();
   else client.opt_out_capturing();
   setConsent({ status: accept ? "granted" : "denied", open: false });
@@ -75,14 +84,39 @@ export function openConsentSettings(): void {
 /**
  * Ties this visitor's recordings and events to a lead, so the lead's visits can
  * be found in PostHog by its id. Only with consent: an anonymous visitor stays
- * anonymous. The id is random; no name or email goes to PostHog.
+ * anonymous. The id is random; no name or email goes to PostHog. A second lead
+ * from the same visitor is added to the same person (identify would start a new one).
  */
 export function identifyLead(leadId: string): void {
-  if (client?.get_explicit_consent_status() === "granted") client.identify(leadId);
+  if (client?.get_explicit_consent_status() !== "granted") return;
+  if (client.get_property("$user_state") === "identified") client.alias(leadId);
+  else client.identify(leadId);
 }
 
-/** Team pages are never measured. */
-function isTeamPage(url: unknown): boolean {
+/**
+ * Do Not Track or Global Privacy Control (on by default in Brave), read the way
+ * PostHog reads them with respect_dnt.
+ */
+function browserAsksNotToTrack(): boolean {
+  const nav = navigator as Navigator & { msDoNotTrack?: unknown; globalPrivacyControl?: unknown };
+  const signals = [
+    nav.doNotTrack,
+    nav.msDoNotTrack,
+    (window as { doNotTrack?: unknown }).doNotTrack,
+    nav.globalPrivacyControl,
+  ];
+  return signals.some((value) => [true, "true", 1, "1", "yes"].includes(value as never));
+}
+
+/**
+ * Team pages are never measured or recorded. Recording events carry no page
+ * address, so the page the browser is on decides for them; the admin layout
+ * also blocks its content from recordings (ph-no-capture), for recording data
+ * that is sent only after leaving the admin.
+ */
+function isTeamPage(event: CaptureResult): boolean {
+  if (window.location.pathname.startsWith("/admin")) return true;
+  const url = event.properties.$current_url;
   if (typeof url !== "string") return false;
   try {
     return new URL(url).pathname.startsWith("/admin");
@@ -93,6 +127,30 @@ function isTeamPage(url: unknown): boolean {
 
 // The last part stops at a dot, so a full stop after the address is left as it is.
 const EMAIL = /[^\s@]+@[^\s@]+\.[^\s@.]+/g;
+const hideEmails = (text: string) => text.replace(EMAIL, (address) => "*".repeat(address.length));
+
+/** A copy with every email address in its strings hidden, through arrays and plain objects (not Dates). */
+function withoutEmails(value: unknown): unknown {
+  if (typeof value === "string") return hideEmails(value);
+  if (Array.isArray(value)) return value.map(withoutEmails);
+  if (value && Object.getPrototypeOf(value) === Object.prototype) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, withoutEmails(item)]),
+    );
+  }
+  return value;
+}
+
+/**
+ * The last check before anything leaves the browser: nothing from team pages,
+ * and no email address in any event, wherever a click or a URL picked one up.
+ * Recordings are masked at the source instead (session_recording below).
+ */
+function beforeSend(event: CaptureResult): CaptureResult | null {
+  if (isTeamPage(event)) return null;
+  if (event.event === "$snapshot") return event;
+  return withoutEmails(event) as CaptureResult;
+}
 
 async function load(key: string): Promise<void> {
   const { default: posthog } = await import("posthog-js");
@@ -113,11 +171,11 @@ async function load(key: string): Promise<void> {
     capture_performance: { web_vitals: true, network_timing: false },
     capture_exceptions: false,
     // Recording runs only after "Accept", and only while "Record user sessions" is on in
-    // the project settings. Every input is masked, and inside PRIVATE_TEXT so is any email.
+    // the project settings. Every input is masked, and inside PRIVATE_CLASS so is any email.
     session_recording: {
       maskAllInputs: true,
-      maskTextSelector: PRIVATE_TEXT,
-      maskTextFn: (text) => text.replace(EMAIL, (address) => "*".repeat(address.length)),
+      maskTextSelector: `.${PRIVATE_CLASS}`,
+      maskTextFn: hideEmails,
       recordHeaders: false,
       recordBody: false,
     },
@@ -129,12 +187,14 @@ async function load(key: string): Promise<void> {
     // No feature flags; the project's settings (recording, heatmaps) still load.
     advanced_disable_feature_flags: true,
     respect_dnt: true,
-    before_send: (event) => (event && isTeamPage(event.properties.$current_url) ? null : event),
+    before_send: beforeSend,
   });
   client = posthog;
-  const status = posthog.get_explicit_consent_status();
+  const status = browserAsksNotToTrack() ? "unavailable" : posthog.get_explicit_consent_status();
   setConsent({ status, open: status === "pending" });
-  for (const [event, properties] of queue.splice(0)) posthog.capture(event, properties);
+  for (const { event, properties, url, at } of queue.splice(0)) {
+    posthog.capture(event, { ...properties, $current_url: url }, { timestamp: at });
+  }
 }
 
 /**
