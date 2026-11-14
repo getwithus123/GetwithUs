@@ -14,6 +14,6 @@ export const flags = {
     env.WHATSAPP_TEMPLATE_NAME,
   ),
   turnstile: Boolean(env.TURNSTILE_SECRET_KEY && env.NEXT_PUBLIC_TURNSTILE_SITE_KEY),
-  analytics: Boolean(env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN),
+  analytics: Boolean(env.NEXT_PUBLIC_POSTHOG_KEY),
   integrationsApi: Boolean(env.LEADS_API_KEY),
 } as const;

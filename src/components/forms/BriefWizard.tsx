@@ -11,8 +11,8 @@ import VerifyCodeStep from "@/components/forms/VerifyCodeStep";
 import Skeleton from "@/components/ui/Skeleton";
 import { formCopy } from "@/content/forms";
 import { serviceSlugs } from "@/content/services/catalog";
+import { track } from "@/lib/analytics";
 import { useBriefStore } from "@/stores/brief.store";
-import { trackFormStart } from "@/lib/analytics";
 
 /**
  * A service named in the URL (`/start?service=web-development`, from the
@@ -55,7 +55,21 @@ export default function BriefWizard() {
   const finish = useBriefStore((state) => state.finish);
   const panel = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
-  const formStartFired = useRef(false);
+  const lastStep = useRef<number | null>(null);
+  const counted = useRef(new Set<number>());
+  const started = useRef(false);
+
+  // Each step moved past counts once for the funnel, also after Back and Continue again.
+  // A draft restored at a later step does not count.
+  useEffect(() => {
+    if (!hydrated) return;
+    const from = lastStep.current;
+    if (from !== null && step > from && !counted.current.has(from)) {
+      counted.current.add(from);
+      track("brief_step_completed", { step: from });
+    }
+    lastStep.current = step;
+  }, [hydrated, step]);
 
   // After the first frame, every step change moves focus to the new step's heading.
   useEffect(() => {
@@ -74,7 +88,7 @@ export default function BriefWizard() {
       <Skeleton className="h-11 w-32" />
     </div>
   ) : done ? (
-    <SuccessStep message={formCopy.success.brief} source="brief" />
+    <SuccessStep message={formCopy.success.brief} />
   ) : step === 5 && pending ? (
     <VerifyCodeStep
       leadId={pending.leadId}
@@ -99,10 +113,11 @@ export default function BriefWizard() {
     <div
       ref={panel}
       className="grid gap-10 rounded-panel border border-line bg-card p-6 md:p-10"
+      // The first focus inside the brief counts as starting it, once per page load.
       onFocus={() => {
-        if (formStartFired.current || !hydrated) return;
-        formStartFired.current = true;
-        trackFormStart("brief");
+        if (started.current || !hydrated) return;
+        started.current = true;
+        track("form_started", { form: "brief" });
       }}
     >
       <BriefProgress step={hydrated ? step : 1} done={done} />

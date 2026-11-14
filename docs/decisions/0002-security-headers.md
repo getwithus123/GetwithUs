@@ -10,9 +10,9 @@ The bundled Next.js 16.4 guide (`content-security-policy.md`) says a nonce must 
 
 ## Decision
 
-- All security headers are set once, for every path, in `headers()` in `next.config.ts`. `src/proxy.ts` handles only the admin redirect.
+- All security headers are set once, for every path, in `headers()` in `next.config.ts`. `src/proxy.ts` handles only the admin redirect, and removes cookies from analytics requests before they are forwarded to PostHog.
 - The CSP is static. `script-src` is `'self' 'unsafe-inline'`, because Next.js emits inline scripts for the React Server Components payload and there is no nonce to attach to them. `'unsafe-eval'` is added in development only, because React uses `eval` for dev tooling.
-- Third-party origins are added only when their feature flag is on: Cloudflare Turnstile (`script-src`, `connect-src`, `frame-src`) and Plausible (`script-src`, `connect-src`).
+- Third-party origins are added only when their feature flag is on: Cloudflare Turnstile (`script-src`, `connect-src`, `frame-src`). PostHog needs none: its script and data go through `/gwr` on this origin (rewrites in `next.config.ts`).
 - `frame-src` is `'none'` unless Turnstile is on. `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`.
 - `img-src 'self' data: blob:` and `worker-src 'self' blob:` cover anything the 3D scene creates at runtime. The scene uses no textures, HDRIs, or remote assets.
 - `upgrade-insecure-requests` is added only when `NEXT_PUBLIC_SITE_URL` is HTTPS, so `next dev` and `next start` on plain-HTTP localhost keep working.

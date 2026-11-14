@@ -7,6 +7,8 @@ import CodeInput from "@/components/ui/CodeInput";
 import Field from "@/components/ui/Field";
 import { errorCopy, formCopy } from "@/content/forms";
 import { resendLeadCode, verifyLeadCode } from "@/features/leads/client";
+import { PRIVATE_CLASS, track } from "@/lib/analytics";
+import { cn } from "@/lib/cn";
 import { useCountdown } from "@/hooks/useCountdown";
 
 type VerifyCodeStepProps = {
@@ -59,6 +61,7 @@ export default function VerifyCodeStep({
     const result = await verifyLeadCode(leadId, value);
     if (result.ok) {
       setStatus({ name: "verified" });
+      track("lead_email_verified", { form: subject === "brief" ? "brief" : "contact" });
       // Let the boxes turn green before the success state replaces them.
       window.setTimeout(onVerified, 400);
       return;
@@ -97,7 +100,8 @@ export default function VerifyCodeStep({
   };
 
   return (
-    <form onSubmit={onSubmit} noValidate className="grid gap-6">
+    // PRIVATE_CLASS: the intro repeats the visitor's email, which must not reach analytics.
+    <form onSubmit={onSubmit} noValidate className={cn(PRIVATE_CLASS, "grid gap-6")}>
       {/* Focus lands on the first code box; the intro is its description, so it is read out there. */}
       <h2 className="type-h3">{formCopy.verify.title}</h2>
       <Field

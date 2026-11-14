@@ -1,3 +1,4 @@
+import Analytics from "@/components/analytics/Analytics";
 import UtmCapture from "@/components/forms/UtmCapture";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
@@ -19,6 +20,7 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
       <Footer />
       <WhatsAppFab />
       <UtmCapture />
+      <Analytics />
     </>
   );
 }

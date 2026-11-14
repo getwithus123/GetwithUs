@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ComponentType } from "react";
+import CookieSettingsItem from "@/components/analytics/CookieSettingsItem";
 import { InstagramIcon, LinkedInIcon } from "@/components/icons/BrandIcons";
 import Container from "@/components/ui/Container";
 import Logo from "@/components/ui/Logo";
@@ -115,6 +116,7 @@ export default function Footer() {
                   Terms and conditions
                 </Link>
               </li>
+              <CookieSettingsItem className={linkClasses} />
             </ul>
           </nav>
         </div>

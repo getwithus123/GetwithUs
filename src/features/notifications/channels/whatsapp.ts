@@ -1,5 +1,5 @@
 import { serviceName } from "@/content/services/catalog";
-import { postJson } from "@/features/notifications/channels/http";
+import { postJson } from "@/server/post-json";
 import type { Channel } from "@/features/notifications/types";
 
 /** Graph API version for the WhatsApp Cloud API. Meta supports each version for about two years. */

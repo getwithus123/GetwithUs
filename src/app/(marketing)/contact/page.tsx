@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import AnimatedGif from "@/components/ui/AnimatedGif";
 import DeferredForm from "@/components/forms/DeferredForm";
 import FormPreview from "@/components/forms/FormPreview";
+import TrackedLink from "@/components/layout/TrackedLink";
 import ContactDetails, { hasContactDetails } from "@/components/sections/ContactDetails";
 import PageHero from "@/components/sections/PageHero";
 import ModelStill from "@/components/three/ModelStill";
@@ -205,12 +206,13 @@ export default function ContactPage() {
             {email ? (
               <p className="mt-8 text-sm text-muted">
                 Prefer email?{" "}
-                <a
+                <TrackedLink
+                  kind="email"
                   href={`mailto:${email}`}
                   className="link-draw font-semibold text-accent"
                 >
                   {email}
-                </a>
+                </TrackedLink>
               </p>
             ) : null}
           </div>

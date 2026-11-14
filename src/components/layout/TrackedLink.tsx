@@ -1,32 +1,25 @@
 "use client";
 
-/**
- * A plain anchor that fires a GA4 event on click.
- * Used for email, phone, and WhatsApp links in the footer and contact details.
- * The href and visible label are already public; no personal data is sent.
- */
-
 import type { AnchorHTMLAttributes } from "react";
-import { trackClickEmail, trackClickWhatsApp } from "@/lib/analytics";
-
-type EventKind = "email" | "whatsapp";
+import { track } from "@/lib/analytics";
 
 type TrackedLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
-  kind: EventKind;
+  /** How the visitor is getting in touch, for the `contact_clicked` event. */
+  kind: "email" | "whatsapp";
 };
 
-const HANDLERS: Record<EventKind, () => void> = {
-  email: trackClickEmail,
-  whatsapp: trackClickWhatsApp,
-};
-
+/**
+ * A plain link to our email or WhatsApp that records `contact_clicked` with
+ * the channel. Lets the server components that use it (footer, contact
+ * details, the WhatsApp button) stay server components. Sends no address.
+ */
 export default function TrackedLink({ kind, onClick, ...props }: TrackedLinkProps) {
   return (
     <a
       {...props}
-      onClick={(e) => {
-        HANDLERS[kind]();
-        onClick?.(e);
+      onClick={(event) => {
+        track("contact_clicked", { channel: kind });
+        onClick?.(event);
       }}
     />
   );

@@ -81,7 +81,7 @@ export const aboutPage = {
   updated: "2026-11-06",
   title: `About ${site.name}`,
   description:
-    "GetwithUs is a software development agency in India. Founded by Priyanshu Bansal, Pranav Maheshwari, and Rajat Sisodia. Websites, apps, AI agents, and marketing.",
+    "GetwithUs is a software development agency in India, founded by Priyanshu Bansal, Pranav Maheshwari, and Rajat Sisodia. Websites, apps, AI agents, marketing.",
   /** Shown once the owner writes it; until then the page uses `leadFallback`. */
   lead: "GetwithUs is a software development agency built by three founders who work directly on every project. We build websites, apps, AI agents, and the marketing that fills them.",
   leadFallback: site.footerDescription,

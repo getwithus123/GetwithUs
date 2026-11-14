@@ -86,7 +86,6 @@ The website pricing card is marked `featured` (the dark card) for show; move or 
 | `src/content/legal/privacy.ts:19`  | Legal entity name; registered address                 |
 | `src/content/legal/privacy.ts:23`  | Privacy contact email                                 |
 | `src/content/legal/privacy.ts:114` | Jurisdiction                                          |
-| `src/content/legal/privacy.ts:168` | Analytics: Plausible, or delete the paragraph if none |
 | `src/content/legal/privacy.ts:213` | Hosting provider, for example Vercel                  |
 | `src/content/legal/privacy.ts:214` | Database provider, for example Neon                   |
 | `src/content/legal/privacy.ts:231` | Data processing regions                               |
@@ -138,7 +137,7 @@ Set each in Vercel for Production and Preview (different secrets per environment
 | `SLACK_WEBHOOK_URL`                                                                                 | Optional. Slack app, Incoming Webhooks, Add new webhook ([notifications.md](notifications.md#slack))                                                            |
 | `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_NOTIFY_TO`, `WHATSAPP_TEMPLATE_NAME` | Optional, all four. Meta Business Manager and WhatsApp Manager ([notifications.md](notifications.md#whatsapp-cloud-api))                                        |
 | `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`                                            | Optional, both. Cloudflare dashboard, Turnstile, add a widget for the domain                                                                                    |
-| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`                                                                      | Optional. The domain as registered in Plausible                                                                                                                 |
+| `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_REGION`                                             | Optional. PostHog project key (`phc_...`) and region (`us` or `eu`), Production only. Set the PostHog project settings first ([launch-checklist.md](launch-checklist.md)) |
 | `NEXT_PUBLIC_SCHEDULING_URL`                                                                        | Optional. Your booking link (for example Cal.com or Calendly)                                                                                                   |
 
 Leave `EMAIL_TRANSPORT` unset in Vercel (it defaults to `resend`) and never set `NEXT_PUBLIC_TEST_HOOKS` there.
@@ -281,7 +280,7 @@ Explicitly out of scope for this pass:
 
 Worth considering after launch:
 
-- Field performance data (Vercel Speed Insights or Plausible with Web Vitals) to watch INP and LCP on real devices.
+- Field performance data: PostHog already collects Web Vitals from real visits (`$web_vitals` events); add INP and LCP charts to the "GetwithUs daily" dashboard to watch them on real devices.
 - Linux visual baselines committed from the `playwright` artifact of the first CI run after the redesign.
 - A headless CMS behind the existing content types, if non-developers need to edit copy often.
 - More languages, if the WhatsApp bot and calling agent pages target non-English markets.
