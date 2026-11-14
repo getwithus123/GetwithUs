@@ -77,6 +77,7 @@ export const STATIC_MODELS: ReadonlySet<ModelKey> = new Set(["shield", "legal-do
  * default <Lights>. This prevents double-lighting on prototype-ported models.
  */
 export const OWN_LIGHTS_MODELS: ReadonlySet<ModelKey> = new Set([
+  "web-dev-layers",
   "app-dev-phones",
   "automation-flow",
   "marketing-growth",
