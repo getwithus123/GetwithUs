@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Web development 3D prototype</title>
+<style>
+:root{--bg:#f3f6f9;--ink:#0f1b2d;--mut:#5b6677;--line:#cfdbe3;--teal:#0f5f66;--card:#fff;--p1:#f4f8fa;--p2:#d3e3ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1620;--ink:#eef3f8;--mut:#9aa8b8;--line:#25323f;--teal:#2fb5bf;--card:#142030;--p1:#1b2a3a;--p2:#0f1823}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px 16px}
+h1{font-size:20px;margin:0 0 4px}
+p{margin:0 0 14px;color:var(--mut);font-size:14px}
+.panel{width:100%;max-width:600px;aspect-ratio:4/3;border-radius:28px;border:1px solid var(--line);background:radial-gradient(circle at 30% 20%,var(--p1),var(--p2));overflow:hidden;position:relative}
+.panel::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px;opacity:.7}
+canvas{width:100%;height:100%;display:block;position:relative}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;justify-content:center;align-items:center}
+button{font:inherit;font-size:14px;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+label{font-size:13px;color:var(--mut);display:flex;gap:8px;align-items:center}
+input[type=range]{accent-color:var(--teal)}
+</style>
+</head>
+<body>
+<h1>Web development, 3D prototype</h1>
+<p>Move the pointer over the panel to tilt it.</p>
+<div class="panel" id="panel"></div>
+<div class="bar">
+  <button id="m1" class="on">Exploded layers</button>
+  <button id="m2">Assemble</button>
+  <button id="replay" hidden>Replay</button>
+</div>
+<div class="bar" id="sliderBar"><label>Explode <input id="slider" type="range" min="0" max="1" step="0.01" value="0.55"></label></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var panel=document.getElementById('panel');
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var TEAL=dark?0x2fb5bf:0x0f5f66, INK=dark?0xe8eef4:0x0f1b2d, WHITE=dark?0xdfe8ef:0xffffff, SOFT=dark?0x9aa8b6:0xb7c0c9;
+var renderer;
+try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});}catch(e){panel.textContent='WebGL not available';return;}
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+panel.appendChild(renderer.domElement);
+var scene=new THREE.Scene();
+var cam=new THREE.PerspectiveCamera(30,4/3,0.1,60);cam.position.set(0,0,9);
+scene.add(new THREE.HemisphereLight(0xffffff,0x9fb8c2,0.6));
+var dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(-3,4,8);dl.castShadow=true;
+dl.shadow.mapSize.set(1024,1024);var sc=dl.shadow.camera;sc.left=-5;sc.right=5;sc.top=5;sc.bottom=-5;sc.near=1;sc.far=25;
+dl.shadow.bias=-0.0006;dl.shadow.normalBias=0.02;dl.shadow.radius=4;scene.add(dl);
+var tl=new THREE.PointLight(TEAL,0.5,12);tl.position.set(-3,-2,4);scene.add(tl);
+
+function rr(w,h,r,d){
+  var s=new THREE.Shape(),x=-w/2,y=-h/2;r=Math.min(r,w/2-0.001,h/2-0.001);
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+  var g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelThickness:0.012,bevelSize:0.012,bevelSegments:2,curveSegments:8});
+  g.translate(0,0,-d/2);return g;
+}
+function add(p,w,h,r,d,c,x,y,z,o){
+  o=o||{};
+  var m=new THREE.Mesh(rr(w,h,r,d),new THREE.MeshStandardMaterial({color:c,roughness:0.55,metalness:0,transparent:o.op!=null,opacity:o.op==null?1:o.op,emissive:o.em||0,emissiveIntensity:o.ei||0}));
+  m.castShadow=!o.noCast;m.receiveShadow=true;m.position.set(x,y,z);p.add(m);return m;
+}
+var group=new THREE.Group();scene.add(group);
+var layers=[];
+function layer(za,ze){var g=new THREE.Group();g.userData={za:za,ze:ze};group.add(g);layers.push(g);return g;}
+
+var back=layer(-0.2,-1.6);add(back,4.6,3.5,0.3,0.06,dark?0x2a6670:0x8fc3cb,0,0,0,{op:0.55,noCast:true});
+var win=layer(0,-0.8);
+add(win,4.2,3.2,0.22,0.1,WHITE,0,0,0,{op:0.96});
+add(win,4.0,0.3,0.1,0.02,dark?0x2a3a4a:0xe3eaef,0,1.3,0.07);
+[0xff5f57,0xffbd2e,0x28c840].forEach(function(c,i){
+  var d=new THREE.Mesh(new THREE.SphereGeometry(0.05,16,12),new THREE.MeshStandardMaterial({color:c,roughness:0.3}));
+  d.position.set(-1.85+i*0.16,1.3,0.1);win.add(d);
+});
+var nav=layer(0.1,0.1);
+add(nav,3.6,0.36,0.18,0.07,WHITE,0,0.85,0);
+add(nav,0.2,0.2,0.05,0.03,TEAL,-1.55,0.85,0.05);
+[0.7,1.1,1.5].forEach(function(x){add(nav,0.28,0.06,0.03,0.03,SOFT,x,0.85,0.05);});
+var hero=layer(0.14,0.65);
+add(hero,1.8,0.28,0.08,0.07,INK,-0.95,0.4,0);
+add(hero,1.3,0.28,0.08,0.07,INK,-1.2,0.04,0);
+add(hero,1.7,0.09,0.04,0.04,SOFT,-1.0,-0.4,0);
+add(hero,1.2,0.09,0.04,0.04,SOFT,-1.25,-0.55,0);
+var cta=layer(0.2,1.2);
+add(cta,0.95,0.32,0.16,0.09,TEAL,-1.5,-1.05,0,{em:TEAL,ei:0.3});
+add(cta,0.4,0.07,0.03,0.03,0xffffff,-1.5,-1.05,0.06);
+add(cta,1.0,0.32,0.16,0.05,WHITE,-0.5,-1.05,0);
+[0.25,0.9,1.55].forEach(function(x,i){
+  var c=layer(0.12+i*0.02,0.35+i*0.4);
+  add(c,0.58,1.25,0.12,0.08,WHITE,x,-0.2,0);
+  add(c,0.5,0.55,0.08,0.03,i===1?(dark?0x2f7f89:0x7fc0c8):(dark?0x2a3a4a:0xd2e6ea),x,0.12,0.05);
+  add(c,0.4,0.07,0.03,0.03,INK,x-0.03,-0.35,0.05);
+  add(c,0.3,0.06,0.03,0.03,SOFT,x-0.08,-0.5,0.05);
+});
+var badge=layer(0.2,1.9);
+add(badge,0.85,0.5,0.15,0.09,WHITE,1.45,1.3,0);
+var cv=document.createElement('canvas');cv.width=256;cv.height=128;
+var cx=cv.getContext('2d');cx.fillStyle=dark?'#2fb5bf':'#0f5f66';cx.font='bold 76px ui-monospace,Menlo,Consolas,monospace';cx.textAlign='center';cx.textBaseline='middle';cx.fillText('</>',128,68);
+var tx=new THREE.CanvasTexture(cv);
+var lab=new THREE.Mesh(new THREE.PlaneGeometry(0.7,0.35),new THREE.MeshBasicMaterial({map:tx,transparent:true}));
+lab.position.set(1.45,1.3,0.075);badge.add(lab);
+
+group.rotation.set(-0.12,0.45,0);
+var mode=1,mx=0,my=0,startT=performance.now(),slider=document.getElementById('slider');
+function ease(x){return 1-Math.pow(1-x,3);}
+function bounce(x){return x<1?ease(x)+Math.sin(x*Math.PI)*0.07:1;}
+function update(now){
+  var t=(now-startT)/1000;
+  layers.forEach(function(g,i){
+    var u=g.userData,z=u.za,y=0;
+    if(mode===1){
+      var k=reduce?0.3:parseFloat(slider.value);
+      z=u.za+(u.ze-u.za)*k;
+      if(!reduce)y=Math.sin(now/900+i*0.8)*0.03*k;
+    }else{
+      var p=reduce?1:Math.max(0,Math.min(1,(t-i*0.3)/0.9));
+      y=(1-bounce(p))*5;
+      if(!reduce&&t>6){var q=Math.min(1,t-6);y+=q*q*5;}
+    }
+    g.position.set(0,y,z);
+  });
+  if(mode===2&&t>7)startT=now;
+  group.rotation.y+=(0.45+mx*0.28-group.rotation.y)*0.08;
+  group.rotation.x+=(-0.12+my*0.16-group.rotation.x)*0.08;
+}
+function size(){var w=panel.clientWidth,h=panel.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+size();addEventListener('resize',size);
+panel.addEventListener('pointermove',function(e){var r=panel.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-0.5)*2;my=-((e.clientY-r.top)/r.height-0.5)*2;});
+panel.addEventListener('pointerleave',function(){mx=0;my=0;});
+var vis=true;new IntersectionObserver(function(en){vis=en[0].isIntersecting;}).observe(panel);
+var last=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  if(!vis||now-last<33)return;last=now;
+  update(now);renderer.render(scene,cam);
+}
+requestAnimationFrame(frame);
+function setMode(n){
+  mode=n;startT=performance.now();
+  m1.className=n===1?'on':'';m2.className=n===2?'on':'';
+  document.getElementById('sliderBar').hidden=n!==1;replay.hidden=n!==2;
+}
+var m1=document.getElementById('m1'),m2=document.getElementById('m2'),replay=document.getElementById('replay');
+m1.onclick=function(){setMode(1);};m2.onclick=function(){setMode(2);};
+replay.onclick=function(){startT=performance.now();};
+})();
+</script>
+</body>
+</html>

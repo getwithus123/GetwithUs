@@ -55,13 +55,13 @@ const SERVICE_GIFS: Partial<Record<ServiceSlug, {
 
 /** Each service's signature model in the page header. */
 const MODELS: Record<ServiceSlug, ModelKey> = {
-  "web-development": "glass-browser",
-  "app-development": "phone-screens",
-  "agentic-automation": "node-graph",
-  "whatsapp-bot": "phone-bubbles",
-  "calling-agent": "handset-rings",
-  "digital-marketing": "funnel",
-  "custom-software": "server-hub",
+  "web-development":    "web-dev-layers",
+  "app-development":    "app-dev-phones",
+  "agentic-automation": "automation-flow",
+  "whatsapp-bot":       "whatsapp-bot-3d",
+  "calling-agent":      "calling-agent-3d",
+  "digital-marketing":  "marketing-growth",
+  "custom-software":    "software-cloud",
 };
 
 /** A section of the page body with its heading. */

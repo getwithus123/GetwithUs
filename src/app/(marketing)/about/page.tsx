@@ -106,7 +106,7 @@ export default function AboutPage() {
             </Button>
           </>
         }
-        visual={<WebGLModel model="about-cube" still={<ModelStill model="about-cube" />} />}
+        visual={<WebGLModel model="about-studio" still={<ModelStill model="about-studio" />} label="GetwithUs studio card with team avatars, values, timeline and a greeting bubble" />}
       />
 
       {/* Our story */}

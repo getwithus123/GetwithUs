@@ -91,7 +91,7 @@ export default function ContactPage() {
             </Button>
           ) : undefined
         }
-        visual={<WebGLModel model="paper-plane" still={<ModelStill model="paper-plane" />} />}
+        visual={<WebGLModel model="contact-message" still={<ModelStill model="contact-message" />} label="A contact form being filled, a paper plane flying to an inbox, and a reply card appearing" />}
       />
 
       {/* Form + sidebar */}

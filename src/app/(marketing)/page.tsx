@@ -1,5 +1,6 @@
 import CtaSection from "@/components/cta/CtaSection";
 import CodeSection from "@/components/home/CodeSection";
+import GetwithusOverviewSection from "@/components/home/GetwithusOverviewSection";
 import HomeFaq from "@/components/home/HomeFaq";
 import HomeHero from "@/components/home/HomeHero";
 import Industries from "@/components/home/Industries";
@@ -42,6 +43,7 @@ export default function HomePage() {
       <Industries />
       <SelectedWork />
       <HomeFaq />
+      <GetwithusOverviewSection />
       <CtaSection />
     </>
   );

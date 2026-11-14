@@ -48,7 +48,7 @@ export function readModelPalette(): ModelPalette {
   return Object.fromEntries(entries) as ModelPalette;
 }
 
-type ModelSettings = { palette: ModelPalette; still: boolean };
+type ModelSettings = { palette: ModelPalette; still: boolean; quality: "high" | "medium" | "low" };
 
 export const ModelContext = createContext<ModelSettings | null>(null);
 
@@ -61,6 +61,11 @@ function useModelSettings(): ModelSettings {
 /** The current theme's colours; models re-render with new ones when the theme changes. */
 export function useModelPalette(): ModelPalette {
   return useModelSettings().palette;
+}
+
+/** The current quality tier. */
+export function useModelQuality(): "high" | "medium" | "low" {
+  return useModelSettings().quality;
 }
 
 /**

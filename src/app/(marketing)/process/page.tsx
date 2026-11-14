@@ -157,7 +157,7 @@ export default function ProcessPage() {
             </Button>
           </>
         }
-        visual={<WebGLModel model="process-path" still={<ModelStill model="process-path" />} />}
+        visual={<WebGLModel model="process-steps" still={<ModelStill model="process-steps" />} label="Four project stages  - Discover, Scope, Build, Launch  - connected on a rising staircase" />}
       />
 
       <StatStrip />

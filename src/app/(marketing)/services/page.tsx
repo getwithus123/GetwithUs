@@ -40,8 +40,9 @@ export default function ServicesPage() {
         }
         visual={
           <WebGLModel
-            model="services-turntable"
-            still={<ModelStill model="services-turntable" />}
+            model="services-hub"
+            still={<ModelStill model="services-hub" />}
+            label="Five service lines connected to one way of working"
           />
         }
       />

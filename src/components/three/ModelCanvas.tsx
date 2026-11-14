@@ -15,7 +15,7 @@ import {
   readModelPalette,
   type ModelPalette,
 } from "@/components/three/models/context";
-import { MODEL_VIEWS, type ModelKey, type ModelProps } from "@/components/three/models/keys";
+import { MODEL_VIEWS, OWN_LIGHTS_MODELS, type ModelKey, type ModelProps } from "@/components/three/models/keys";
 import { THEME_EVENT } from "@/lib/theme";
 import { useSceneStore, type Quality } from "@/stores/scene.store";
 
@@ -103,6 +103,7 @@ export default function ModelCanvas({
   return (
     <Canvas
       dpr={TIERS[quality].dpr}
+      shadows={TIERS[quality].shadows ? "soft" : false}
       frameloop="demand"
       gl={{ antialias: quality !== "low", alpha: true, powerPreference: "high-performance" }}
       camera={{
@@ -118,8 +119,8 @@ export default function ModelCanvas({
         });
       }}
     >
-      <ModelContext value={{ palette, still }}>
-        <Lights palette={palette} />
+      <ModelContext value={{ palette, still, quality }}>
+        {OWN_LIGHTS_MODELS.has(model) ? null : <Lights palette={palette} />}
         <Driver active={active} still={still} palette={palette} onReady={onReady} />
         <Model {...modelProps} />
       </ModelContext>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digital marketing 3D prototype</title>
+<style>
+:root{--bg:#f3f6f9;--ink:#0f1b2d;--mut:#5b6677;--line:#cfdbe3;--teal:#0f5f66;--card:#fff;--p1:#f4f8fa;--p2:#d3e3ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1620;--ink:#eef3f8;--mut:#9aa8b8;--line:#25323f;--teal:#2fb5bf;--card:#142030;--p1:#1b2a3a;--p2:#0f1823}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px 16px}
+h1{font-size:20px;margin:0 0 4px}
+p{margin:0 0 14px;color:var(--mut);font-size:14px}
+.panel{width:100%;max-width:600px;aspect-ratio:4/3;border-radius:28px;border:1px solid var(--line);background:radial-gradient(circle at 30% 20%,var(--p1),var(--p2));overflow:hidden;position:relative}
+.panel::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px;opacity:.7}
+canvas{width:100%;height:100%;display:block;position:relative}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;justify-content:center;align-items:center}
+button{font:inherit;font-size:14px;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+label{font-size:13px;color:var(--mut);display:flex;gap:8px;align-items:center}
+input[type=range]{accent-color:var(--teal)}
+</style>
+</head>
+<body>
+<h1>Digital marketing, 3D prototype</h1>
+<p>Reach grows, the trend climbs, and engagement lands. Move the pointer to tilt.</p>
+<div class="panel" id="panel"></div>
+<div class="bar">
+  <button id="run" class="on">Replay growth</button>
+  <label>Explode <input id="slider" type="range" min="0" max="1" step="0.01" value="0.5"></label>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var panel=document.getElementById('panel');
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var TEAL=dark?0x2fb5bf:0x0f5f66, INK=dark?0xe8eef4:0x0f1b2d, WHITE=dark?0xdfe8ef:0xffffff, SOFT=dark?0x9aa8b6:0xb7c0c9, TINT=dark?0x3a6a72:0x8fc3cb;
+var renderer;
+try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});}catch(e){panel.textContent='WebGL not available';return;}
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+panel.appendChild(renderer.domElement);
+var scene=new THREE.Scene();
+var cam=new THREE.PerspectiveCamera(30,4/3,0.1,60);cam.position.set(0,0,10);
+scene.add(new THREE.HemisphereLight(0xffffff,0x9fb8c2,0.6));
+var dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(-3,4,8);dl.castShadow=true;
+dl.shadow.mapSize.set(1024,1024);var sc=dl.shadow.camera;sc.left=-5;sc.right=5;sc.top=5;sc.bottom=-5;sc.near=1;sc.far=25;
+dl.shadow.bias=-0.0006;dl.shadow.normalBias=0.02;dl.shadow.radius=4;scene.add(dl);
+var tl=new THREE.PointLight(TEAL,0.5,12);tl.position.set(-3,-2,4);scene.add(tl);
+
+function rr(w,h,r,d){
+  var s=new THREE.Shape(),x=-w/2,y=-h/2;r=Math.min(r,w/2-0.001,h/2-0.001);
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+  var g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelThickness:0.012,bevelSize:0.012,bevelSegments:2,curveSegments:8});
+  g.translate(0,0,-d/2);return g;
+}
+function mat(c,o){o=o||{};return new THREE.MeshStandardMaterial({color:c,roughness:0.5,metalness:0,transparent:o.op!=null,opacity:o.op==null?1:o.op,emissive:o.em||0,emissiveIntensity:o.ei||0});}
+function put(p,geo,m,x,y,z,noCast){var o=new THREE.Mesh(geo,m);o.castShadow=!noCast;o.receiveShadow=true;o.position.set(x,y,z);p.add(o);return o;}
+function add(p,w,h,r,d,c,x,y,z,o){o=o||{};var m=put(p,rr(w,h,r,d),mat(c,o),x,y,z,o.noCast);if(o.rot)m.rotation.z=o.rot;return m;}
+function shapeMesh(pts,depth,c){var s=new THREE.Shape();pts.forEach(function(p,i){i?s.lineTo(p[0],p[1]):s.moveTo(p[0],p[1]);});return new THREE.Mesh(new THREE.ExtrudeGeometry(s,{depth:depth,bevelEnabled:false}),mat(c));}
+var root=new THREE.Group();scene.add(root);
+add(root,6.0,3.9,0.3,0.06,TINT,0,0.05,-0.5,{op:0.5,noCast:true});
+var nodes=[];
+function node(x,y,za,ze){var g=new THREE.Group();g.position.set(x,y,za);g.userData={x:x,y:y,za:za,ze:ze};root.add(g);nodes.push(g);return g;}
+
+// chart card
+var CX=-0.7,CY=-0.1;
+var card=node(CX,CY,0.1,0.3);
+add(card,3.2,2.4,0.2,0.08,WHITE,0,0,0);
+add(card,0.9,0.12,0.05,0.03,INK,-0.9,0.95,0.05);
+add(card,0.6,0.07,0.03,0.03,SOFT,-1.05,0.75,0.05);
+add(card,0.14,0.14,0.07,0.03,TEAL,1.3,0.95,0.05);
+[-0.45,-0.05,0.35].forEach(function(y){add(card,2.8,0.015,0.007,0.01,SOFT,0,y,0.045,{op:0.5});});
+// bars
+var H=[0.35,0.5,0.45,0.75,0.95,1.25],bars=[];
+var bn=node(CX,CY,0.14,0.7);
+var bg=rr(0.26,1,0.09,0.1);bg.translate(0,0.5,0);
+H.forEach(function(h,i){bars.push(put(bn,bg,mat(i===5?TEAL:TINT,i===5?{em:TEAL,ei:0.12}:{}),-1.2+i*0.46,-0.85,0.05));});
+// trend line
+var tn=node(CX,CY,0.16,1.1);
+var pts=H.map(function(h,i){return new THREE.Vector3(-1.2+i*0.46,-0.85+h+0.2,0.1);});
+var trend=new THREE.CatmullRomCurve3(pts);
+put(tn,new THREE.TubeGeometry(trend,40,0.03,8,false),mat(TEAL,{em:TEAL,ei:0.15}),0,0,0);
+var head=shapeMesh([[0,0.11],[-0.09,-0.06],[0.09,-0.06]],0.04,TEAL);head.position.copy(pts[5]);head.position.x+=0.03;head.rotation.z=-0.99;head.castShadow=true;tn.add(head);
+var pulse=put(tn,new THREE.SphereGeometry(0.08,16,12),mat(0xffffff,{em:TEAL,ei:0.9}),0,0,0.1,true);pulse.visible=false;
+// notification chip
+var chip=node(-1.7,1.45,0.2,1.3);
+add(chip,1.3,0.4,0.2,0.08,WHITE,0,0,0);
+var up=shapeMesh([[0,0.1],[-0.09,-0.06],[0.09,-0.06]],0.04,TEAL);up.position.set(-0.45,0,0.05);up.castShadow=true;chip.add(up);
+add(chip,0.55,0.07,0.03,0.03,INK,0.12,0.06,0.05);add(chip,0.4,0.06,0.03,0.03,SOFT,0.05,-0.07,0.05);
+// social post
+var soc=node(1.9,0.8,0.15,0.9);
+add(soc,1.3,1.15,0.16,0.08,WHITE,0,0,0);
+add(soc,0.26,0.26,0.13,0.04,TEAL,-0.42,0.38,0.05);
+add(soc,0.5,0.07,0.03,0.03,INK,0.05,0.42,0.05);add(soc,0.36,0.06,0.03,0.03,SOFT,0.0,0.3,0.05);
+add(soc,1.1,0.5,0.1,0.04,TINT,0,-0.05,0.05);
+var hs=new THREE.Shape(),hx=0,hy=0;
+hs.moveTo(hx+0.025,hy+0.025);hs.bezierCurveTo(hx+0.025,hy+0.025,hx+0.02,hy,hx,hy);hs.bezierCurveTo(hx-0.03,hy,hx-0.03,hy+0.035,hx-0.03,hy+0.035);hs.bezierCurveTo(hx-0.03,hy+0.055,hx-0.01,hy+0.077,hx+0.025,hy+0.095);hs.bezierCurveTo(hx+0.06,hy+0.077,hx+0.08,hy+0.055,hx+0.08,hy+0.035);hs.bezierCurveTo(hx+0.08,hy+0.035,hx+0.08,hy,hx+0.05,hy);hs.bezierCurveTo(hx+0.035,hy,hx+0.025,hy+0.025,hx+0.025,hy+0.025);
+var heartG=new THREE.ExtrudeGeometry(hs,{depth:0.03,bevelEnabled:false});heartG.translate(-0.025,-0.0475,0);
+var heart=put(soc,heartG,mat(TEAL,{em:TEAL,ei:0.2}),-0.42,-0.42,0.06);heart.scale.setScalar(2.4);
+add(soc,0.45,0.06,0.03,0.03,SOFT,0.05,-0.42,0.05);
+// target card
+var tgt=node(1.9,-0.75,0.15,0.6);
+add(tgt,1.3,1.0,0.16,0.08,WHITE,0,0,0);
+put(tgt,new THREE.TorusGeometry(0.32,0.035,10,40),mat(SOFT),-0.33,0,0.05);
+put(tgt,new THREE.TorusGeometry(0.2,0.035,10,40),mat(TINT),-0.33,0,0.05);
+put(tgt,new THREE.SphereGeometry(0.08,16,12),mat(TEAL,{em:TEAL,ei:0.25}),-0.33,0,0.07);
+add(tgt,0.4,0.07,0.03,0.03,INK,0.32,0.08,0.05);add(tgt,0.3,0.06,0.03,0.03,SOFT,0.27,-0.08,0.05);
+
+var arrivals=[[tn,3.1],[chip,3.3],[soc,3.5],[tgt,3.7]];
+root.rotation.set(-0.1,-0.28,0);
+var mx=0,my=0,runStart=performance.now(),slider=document.getElementById('slider');
+function ease(x){return 1-Math.pow(1-x,3);}
+function sm(x){return x*x*(3-2*x);}
+function update(now){
+  var t=(now-runStart)/1000;
+  if(!reduce&&t>6.2){runStart=now;t=0;}
+  var k=reduce?0.3:parseFloat(slider.value);
+  nodes.forEach(function(g,i){
+    var u=g.userData,s=1;
+    if(!reduce)arrivals.forEach(function(a){if(a[0]===g){var dt=t-a[1];if(dt>=0&&dt<0.45)s=1+0.1*(1-dt/0.45);}});
+    g.scale.setScalar(s);
+    g.position.set(u.x,u.y+(reduce?0:Math.sin(now/900+i*0.9)*0.025*k),u.za+(u.ze-u.za)*k);
+  });
+  bars.forEach(function(b,i){
+    var p=reduce?1:Math.max(0,Math.min(1,(t-i*0.15)/0.7));
+    b.scale.y=Math.max(0.001,H[i]*ease(p));
+  });
+  var pp=(t-1.8)/1.3;
+  if(reduce||pp<0||pp>1)pulse.visible=false;else{pulse.visible=true;pulse.position.copy(trend.getPoint(sm(pp)));}
+  var hd=t-3.5,hs2=2.4;
+  if(!reduce&&hd>=0&&hd<0.6)hs2=2.4*(1+0.5*Math.sin(hd/0.6*Math.PI));
+  heart.scale.setScalar(hs2);
+  root.rotation.y+=(-0.28+mx*0.28-root.rotation.y)*0.08;
+  root.rotation.x+=(-0.1+my*0.16-root.rotation.x)*0.08;
+}
+function size(){var w=panel.clientWidth,h=panel.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+size();addEventListener('resize',size);
+panel.addEventListener('pointermove',function(e){var r=panel.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-0.5)*2;my=-((e.clientY-r.top)/r.height-0.5)*2;});
+panel.addEventListener('pointerleave',function(){mx=0;my=0;});
+var vis=true;new IntersectionObserver(function(en){vis=en[0].isIntersecting;}).observe(panel);
+var last=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  if(!vis||now-last<33)return;last=now;
+  update(now);renderer.render(scene,cam);
+}
+requestAnimationFrame(frame);
+document.getElementById('run').onclick=function(){runStart=performance.now();};
+})();
+</script>
+</body>
+</html>

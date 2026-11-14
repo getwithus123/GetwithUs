@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calling agent 3D prototype</title>
+<style>
+:root{--bg:#eef3f6;--ink:#0f1b2d;--line:#cfdbe3;--g1:#f4f8fa;--g2:#d3e3ea;--dot:#cfdbe3;--teal:#0f5f66;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b121a;--ink:#e8eef4;--line:#25323f;--g1:#1b2a3a;--g2:#0f1823;--dot:#25323f;--teal:#2fb5bf}}
+:root[data-theme="dark"]{--bg:#0b121a;--ink:#e8eef4;--line:#25323f;--g1:#1b2a3a;--g2:#0f1823;--dot:#25323f;--teal:#2fb5bf}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;box-sizing:border-box}
+#panel{position:relative;width:min(100%,760px);aspect-ratio:4/3;border-radius:28px;border:1px solid var(--line);background:radial-gradient(circle at 30% 20%,var(--g1),var(--g2));overflow:hidden}
+#panel::before{content:"";position:absolute;inset:0;background:radial-gradient(var(--dot) 1px,transparent 1px) 0 0/22px 22px;opacity:.7}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ctl{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center}
+button{font:inherit;color:#fff;background:var(--teal);border:0;border-radius:999px;padding:9px 18px;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+input[type=range]{accent-color:var(--teal);width:180px}
+</style></head><body>
+<div id="panel" role="img" aria-label="AI calling agent: an incoming call becomes a voice wave, the agent answers, books a meeting and logs a summary"></div>
+<div class="ctl">
+  <label>Explode <input id="k" type="range" min="0" max="1" step="0.01" value="0.5"></label>
+  <button id="run" type="button">Replay call</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const PAL={light:{teal:'#0f5f66',ink:'#0f1b2d',white:'#ffffff',soft:'#b7c0c9',tint:'#8fc3cb',pure:'#ffffff'},
+dark:{teal:'#2fb5bf',ink:'#e8eef4',white:'#dfe8ef',soft:'#9aa8b6',tint:'#3a6a72',pure:'#ffffff'}};
+const mq=matchMedia('(prefers-color-scheme: dark)'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const dark=()=>{const t=document.documentElement.dataset.theme;return t?t==='dark':mq.matches};
+const panel=document.getElementById('panel'),slider=document.getElementById('k');
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+panel.appendChild(renderer.domElement);
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(30,4/3,.1,100);cam.position.set(0,0,10);
+scene.add(new THREE.HemisphereLight(0xffffff,0x9fb8c2,.6));
+const dl=new THREE.DirectionalLight(0xffffff,.6);dl.position.set(-3,4,8);dl.castShadow=true;
+Object.assign(dl.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:1,far:25});
+dl.shadow.mapSize.set(1024,1024);dl.shadow.bias=-.0006;dl.shadow.normalBias=.02;dl.shadow.radius=4;scene.add(dl);
+const pl=new THREE.PointLight(0x0f5f66,.5,12);pl.position.set(-3,-2,4);scene.add(pl);
+const root=new THREE.Group();root.rotation.set(-.1,-.3,0);scene.add(root);
+
+const mats=[],gc={};let drawn=false;
+function rg(w,h,r,d){const key=[w,h,r,d]+'';if(gc[key])return gc[key];r=Math.min(r,w/2,h/2);
+const x=-w/2,y=-h/2,s=new THREE.Shape();s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+const g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelThickness:.012,bevelSize:.012,bevelSegments:2,curveSegments:8});
+g.translate(0,0,-d/2);return gc[key]=g}
+function mat(k,e=0,o=1){const m=new THREE.MeshStandardMaterial({color:PAL.light[k],roughness:.5,metalness:0,transparent:o<1,opacity:o});
+if(e){m.emissive=new THREE.Color(PAL.light.teal);m.emissiveIntensity=e}m.userData={k,e};mats.push(m);return m}
+function rr(p,w,h,r,d,k,x,y,z,e,o,rz,cast=true){const m=new THREE.Mesh(rg(w,h,r,d),mat(k,e,o));
+m.position.set(x,y,z);if(rz)m.rotation.z=rz;m.castShadow=cast;m.receiveShadow=true;p.add(m);return m}
+function theme(){const p=dark()?PAL.dark:PAL.light;mats.forEach(m=>{m.color.set(p[m.userData.k]);if(m.userData.e)m.emissive.set(p.teal)});pl.color.set(p.teal);drawn=false}
+
+rr(root,6,3.9,.3,.06,'tint',0,.05,-.5,0,.5,0,false);
+
+const nodes=[],glows=[],wave=[];
+function node(x,y,za,ze,arr,build){const g=new THREE.Group();g.position.set(x,y,za);root.add(g);build(g);nodes.push({g,x,y,za,ze,arr})}
+// 0 incoming call
+node(-2.2,.2,.1,.9,0,g=>{rr(g,1.4,1.5,.2,.08,'white',0,0,0);rr(g,.5,.5,.25,.08,'teal',0,.35,.05,.15);
+rr(g,.07,.28,.03,.04,'pure',0,.35,.1,0,.8);rr(g,.14,.14,.07,.04,'pure',-.1,.45,.1);
+rr(g,.7,.07,.03,.03,'ink',0,-.1,.05);rr(g,.5,.06,.03,.03,'soft',0,-.24,.05);
+rr(g,.45,.22,.11,.05,'teal',-.3,-.52,.05);rr(g,.45,.22,.11,.05,'soft',.3,-.52,.05)});
+// 1 voice wave
+node(0,.9,.1,1.0,.6,g=>{rr(g,1.5,.9,.16,.08,'white',0,0,0);
+[.25,.5,.7,.45,.6,.35,.2].forEach((h,i)=>wave.push({m:rr(g,.1,h,.05,.04,i%2?'tint':'teal',-.54+i*.18,0,.05),i}))});
+// 2 AI agent
+node(0,-.9,.1,1.3,1.3,g=>{rr(g,.9,.7,.22,.1,'white',0,0,0);rr(g,.14,.14,.07,.04,'teal',-.2,.05,.06,.2);rr(g,.14,.14,.07,.04,'teal',.2,.05,.06,.2);
+rr(g,.3,.05,.025,.03,'soft',0,-.18,.06);rr(g,.12,.3,.06,.06,'teal',-.52,0,0,.15);rr(g,.12,.3,.06,.06,'teal',.52,0,0,.15);
+rr(g,.3,.05,.025,.04,'teal',.4,-.28,.04)});
+// 3 calendar booking
+node(2.1,.7,.1,.9,2.1,g=>{rr(g,1.2,.95,.16,.08,'white',0,0,0);rr(g,1,.2,.08,.04,'teal',0,.3,.05,.15);
+[[-.25,.0,'tint'],[.25,.0,'tint'],[-.25,-.28,'tint'],[.25,-.28,'teal']].forEach(([x,y,k])=>rr(g,.4,.2,.06,.04,k,x,y,.05))});
+// 4 summary
+node(2.1,-1,.1,1.5,2.1,g=>{rr(g,1.3,.55,.16,.08,'white',0,0,0);
+glows.push(rr(g,.26,.26,.13,.05,'teal',-.45,0,.05,.25));rr(g,.12,.04,.02,.03,'pure',-.48,-.015,.09,0,-.8);rr(g,.2,.04,.02,.03,'pure',-.41,.02,.09,0,.8);
+rr(g,.55,.07,.03,.03,'ink',.2,.08,.05);rr(g,.4,.06,.03,.03,'soft',.13,-.08,.05)});
+
+const V=(x,y)=>new THREE.Vector3(x,y,-.3);
+const CV=[[[-1.5,.5],[.4,0],[-.75,.9],[-.4,0]],[[-1.5,-.2],[.4,0],[-.5,-.9],[-.4,0]],[[0,.45],[0,-.3],[0,-.5],[0,.3]],
+[[.5,-.85],[.4,0],[1.5,.5],[-.4,0]],[[.5,-1],[.4,0],[1.45,-1],[-.4,0]]];
+const WIN=[[0,.6],[0,.6],[.7,.6],[1.4,.7],[1.4,.7]],LOOP=4.5,pulses=[],curves=[];
+CV.forEach(([a,ta,b,tb])=>{const p0=V(...a),p1=V(...b);
+const c=new THREE.CubicBezierCurve3(p0,p0.clone().add(new THREE.Vector3(ta[0],ta[1],0)),p1.clone().add(new THREE.Vector3(tb[0],tb[1],0)),p1);
+curves.push(c);const t=new THREE.Mesh(new THREE.TubeGeometry(c,32,.028,8,false),mat('soft'));t.receiveShadow=true;root.add(t);
+const s=new THREE.Mesh(new THREE.SphereGeometry(.075,16,12),mat('teal',.9));s.visible=false;root.add(s);pulses.push(s)});
+
+function size(){const w=panel.clientWidth,h=panel.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();drawn=false}
+new ResizeObserver(size).observe(panel);
+let mx=0,my=0,vis=true,last=0,run0=performance.now(),firstSeen=false;
+addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2},{passive:true});
+slider.addEventListener('input',()=>drawn=false);
+document.getElementById('run').onclick=()=>run0=performance.now();
+new IntersectionObserver(([e])=>{vis=e.isIntersecting;if(vis&&!firstSeen){firstSeen=true;run0=performance.now()}}).observe(panel);
+mq.addEventListener('change',theme);theme();size();
+
+const smooth=x=>x*x*(3-2*x);
+function frame(now){requestAnimationFrame(frame);if(!vis||now-last<33)return;last=now;
+if(reduce&&drawn)return;
+const k=reduce?.3:+slider.value;let t=reduce?-1:(now-run0)/1000;if(t>LOOP){run0=now;t=0}
+if(!reduce){root.rotation.y+=(-.3+mx*.28-root.rotation.y)*.08;root.rotation.x+=(-.1+my*.16-root.rotation.x)*.08}
+nodes.forEach((n,i)=>{n.g.position.z=n.za+(n.ze-n.za)*k;n.g.position.y=n.y+(reduce?0:Math.sin(now/900+i*.9)*.025*k);
+const dt=t-n.arr;n.g.scale.setScalar(t>=0&&dt>=0&&dt<=.45?1+.12*(1-dt/.45):1)});
+const talk=t>=.6&&t<=2.1;wave.forEach(w=>w.m.scale.y=talk?1+.35*Math.sin(now/180+w.i*1.1):1);
+pulses.forEach((s,i)=>{const p=(t-WIN[i][0])/WIN[i][1];s.visible=t>=0&&p>=0&&p<=1;if(s.visible)s.position.copy(curves[i].getPoint(smooth(p)))});
+const gd=t-2.1;glows.forEach(l=>l.material.emissiveIntensity=.25+(t>=0&&gd>=0&&gd<=.8?.7*(1-gd/.8):0));
+renderer.render(scene,cam);drawn=true}
+requestAnimationFrame(frame);
+</script></body></html>

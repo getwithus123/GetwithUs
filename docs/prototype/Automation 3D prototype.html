@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Automation 3D prototype</title>
+<style>
+:root{--bg:#f3f6f9;--ink:#0f1b2d;--mut:#5b6677;--line:#cfdbe3;--teal:#0f5f66;--card:#fff;--p1:#f4f8fa;--p2:#d3e3ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1620;--ink:#eef3f8;--mut:#9aa8b8;--line:#25323f;--teal:#2fb5bf;--card:#142030;--p1:#1b2a3a;--p2:#0f1823}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;padding:20px 16px}
+h1{font-size:20px;margin:0 0 4px}
+p{margin:0 0 14px;color:var(--mut);font-size:14px}
+.panel{width:100%;max-width:600px;aspect-ratio:4/3;border-radius:28px;border:1px solid var(--line);background:radial-gradient(circle at 30% 20%,var(--p1),var(--p2));overflow:hidden;position:relative}
+.panel::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px;opacity:.7}
+canvas{width:100%;height:100%;display:block;position:relative}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;justify-content:center;align-items:center}
+button{font:inherit;font-size:14px;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+label{font-size:13px;color:var(--mut);display:flex;gap:8px;align-items:center}
+input[type=range]{accent-color:var(--teal)}
+</style>
+</head>
+<body>
+<h1>Automation system, 3D prototype</h1>
+<p>A trigger fires, a condition branches, actions run, and the result lands. Move the pointer to tilt.</p>
+<div class="panel" id="panel"></div>
+<div class="bar">
+  <button id="run" class="on">Run workflow</button>
+  <label>Explode <input id="slider" type="range" min="0" max="1" step="0.01" value="0.5"></label>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var panel=document.getElementById('panel');
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+var TEAL=dark?0x2fb5bf:0x0f5f66, INK=dark?0xe8eef4:0x0f1b2d, WHITE=dark?0xdfe8ef:0xffffff, SOFT=dark?0x9aa8b6:0xb7c0c9, TINT=dark?0x3a6a72:0x8fc3cb;
+var renderer;
+try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});}catch(e){panel.textContent='WebGL not available';return;}
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+panel.appendChild(renderer.domElement);
+var scene=new THREE.Scene();
+var cam=new THREE.PerspectiveCamera(30,4/3,0.1,60);cam.position.set(0,0,10);
+scene.add(new THREE.HemisphereLight(0xffffff,0x9fb8c2,0.6));
+var dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(-3,4,8);dl.castShadow=true;
+dl.shadow.mapSize.set(1024,1024);var sc=dl.shadow.camera;sc.left=-5;sc.right=5;sc.top=5;sc.bottom=-5;sc.near=1;sc.far=25;
+dl.shadow.bias=-0.0006;dl.shadow.normalBias=0.02;dl.shadow.radius=4;scene.add(dl);
+var tl=new THREE.PointLight(TEAL,0.5,12);tl.position.set(-3,-2,4);scene.add(tl);
+
+function rr(w,h,r,d){
+  var s=new THREE.Shape(),x=-w/2,y=-h/2;r=Math.min(r,w/2-0.001,h/2-0.001);
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);
+  s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
+  s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+  var g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelThickness:0.012,bevelSize:0.012,bevelSegments:2,curveSegments:8});
+  g.translate(0,0,-d/2);return g;
+}
+function mat(c,o){o=o||{};return new THREE.MeshStandardMaterial({color:c,roughness:0.5,metalness:0,transparent:o.op!=null,opacity:o.op==null?1:o.op,emissive:o.em||0,emissiveIntensity:o.ei||0});}
+function add(p,w,h,r,d,c,x,y,z,o){
+  o=o||{};var m=new THREE.Mesh(rr(w,h,r,d),mat(c,o));
+  m.castShadow=!o.noCast;m.receiveShadow=true;m.position.set(x,y,z);if(o.rot)m.rotation.z=o.rot;p.add(m);return m;
+}
+var root=new THREE.Group();scene.add(root);
+var base=new THREE.Group();root.add(base);
+add(base,6.0,3.9,0.3,0.06,TINT,0,0.05,-0.5,{op:0.5,noCast:true});
+
+var nodes=[];
+function node(x,y,za,ze){var g=new THREE.Group();g.position.set(x,y,za);g.userData={x:x,y:y,za:za,ze:ze,pop:0};root.add(g);nodes.push(g);return g;}
+// trigger
+var T=node(-2.2,0.5,0.1,0.9);
+var tm=add(T,1.1,0.7,0.16,0.1,TEAL,0,0,0,{em:TEAL,ei:0.15});
+var bs=new THREE.Shape();[[0.06,0.22],[-0.1,-0.02],[0,-0.02],[-0.06,-0.22],[0.1,0.03],[0,0.03]].forEach(function(p,i){i?bs.lineTo(p[0],p[1]):bs.moveTo(p[0],p[1]);});
+var bolt=new THREE.Mesh(new THREE.ExtrudeGeometry(bs,{depth:0.03,bevelEnabled:false}),mat(0xffffff));bolt.position.set(-0.25,0,0.06);bolt.castShadow=true;T.add(bolt);
+add(T,0.4,0.08,0.03,0.03,0xffffff,0.2,0.08,0.06);add(T,0.28,0.06,0.03,0.03,0xffffff,0.14,-0.08,0.06,{op:0.7});
+// condition
+var C=node(-0.7,0.5,0.1,0.5);
+add(C,0.72,0.72,0.14,0.1,WHITE,0,0,0,{rot:Math.PI/4});
+add(C,0.2,0.2,0.05,0.04,TEAL,0,0,0.07,{rot:Math.PI/4});
+// actions
+var A1=node(0.9,1.2,0.1,1.25);
+add(A1,1.1,0.6,0.14,0.08,WHITE,0,0,0);
+add(A1,0.28,0.28,0.09,0.04,TEAL,-0.35,0,0.05);add(A1,0.14,0.04,0.01,0.02,0xffffff,-0.35,0,0.08);
+add(A1,0.5,0.07,0.03,0.03,INK,0.18,0.07,0.05);add(A1,0.36,0.06,0.03,0.03,SOFT,0.11,-0.08,0.05);
+var A2=node(0.9,-0.2,0.1,0.8);
+add(A2,1.1,0.6,0.14,0.08,WHITE,0,0,0);
+add(A2,0.28,0.28,0.14,0.04,TINT,-0.35,0,0.05);
+add(A2,0.5,0.07,0.03,0.03,INK,0.18,0.07,0.05);add(A2,0.36,0.06,0.03,0.03,SOFT,0.11,-0.08,0.05);
+// data
+var D=node(-0.7,-1.2,0.1,0.35);
+add(D,0.9,0.55,0.14,0.08,WHITE,0,0,0);
+[0.14,0,-0.14].forEach(function(y,i){add(D,0.55-i*0.08,0.08,0.04,0.04,i===0?TEAL:TINT,-0.05,y,0.05);});
+// output
+var O=node(2.35,0.5,0.1,1.5);
+var om=add(O,0.76,0.76,0.38,0.12,TEAL,0,0,0,{em:TEAL,ei:0.2});
+add(O,0.14,0.05,0.02,0.03,0xffffff,-0.08,-0.05,0.07,{rot:-Math.PI/4});
+add(O,0.28,0.05,0.02,0.03,0xffffff,0.05,0.02,0.07,{rot:Math.PI/4});
+
+// connectors on the back plane
+var Z=-0.3;
+function P3(x,y){return new THREE.Vector3(x,y,Z);}
+function conn(a,ta,b,tb){return new THREE.CubicBezierCurve3(a,a.clone().add(ta),b.clone().add(tb),b);}
+var curves=[
+ [conn(P3(-1.65,0.5),new THREE.Vector3(0.3,0,0),P3(-1.07,0.5),new THREE.Vector3(-0.3,0,0)),0,0.7,C],
+ [conn(P3(-0.33,0.5),new THREE.Vector3(0.4,0,0),P3(0.35,1.2),new THREE.Vector3(-0.4,0,0)),0.8,0.7,A1],
+ [conn(P3(-0.33,0.5),new THREE.Vector3(0.4,0,0),P3(0.35,-0.2),new THREE.Vector3(-0.4,0,0)),0.8,0.7,A2],
+ [conn(P3(-0.7,0.13),new THREE.Vector3(0,-0.3,0),P3(-0.7,-0.92),new THREE.Vector3(0,0.3,0)),0.8,0.7,D],
+ [conn(P3(1.45,1.2),new THREE.Vector3(0.4,0,0),P3(1.97,0.5),new THREE.Vector3(-0.4,0,0)),1.7,0.7,O],
+ [conn(P3(1.45,-0.2),new THREE.Vector3(0.4,0,0),P3(1.97,0.5),new THREE.Vector3(-0.4,0,0)),1.7,0.7,O]
+];
+var pulses=[];
+curves.forEach(function(c){
+  var tube=new THREE.Mesh(new THREE.TubeGeometry(c[0],32,0.028,8,false),mat(SOFT));
+  tube.receiveShadow=true;base.add(tube);
+  var p=new THREE.Mesh(new THREE.SphereGeometry(0.075,16,12),mat(TEAL,{em:TEAL,ei:0.9}));
+  p.visible=false;base.add(p);pulses.push(p);
+});
+var arrivals=[[T,0],[C,0.7],[A1,1.5],[A2,1.5],[D,1.5],[O,2.4]];
+
+root.rotation.set(-0.1,-0.28,0);
+var mx=0,my=0,runStart=performance.now(),slider=document.getElementById('slider');
+function ease(x){return x*x*(3-2*x);}
+function update(now){
+  var t=(now-runStart)/1000;
+  if(!reduce&&t>5){runStart=now;t=0;}
+  var k=reduce?0.3:parseFloat(slider.value);
+  nodes.forEach(function(g,i){
+    var u=g.userData;
+    var s=1;
+    if(!reduce)arrivals.forEach(function(a){if(a[0]===g){var dt=t-a[1];if(dt>=0&&dt<0.45)s=1+0.12*(1-dt/0.45);}});
+    g.scale.setScalar(s);
+    g.position.set(u.x,u.y+(reduce?0:Math.sin(now/900+i*0.9)*0.025*k),u.za+(u.ze-u.za)*k);
+  });
+  var odt=t-2.4;om.material.emissiveIntensity=reduce?0.2:(odt>=0&&odt<0.8?0.2+0.7*(1-odt/0.8):0.2);
+  curves.forEach(function(c,i){
+    var p=(t-c[1])/c[2];
+    if(reduce||p<0||p>1){pulses[i].visible=false;return;}
+    pulses[i].visible=true;pulses[i].position.copy(c[0].getPoint(ease(p)));
+  });
+  root.rotation.y+=(-0.28+mx*0.28-root.rotation.y)*0.08;
+  root.rotation.x+=(-0.1+my*0.16-root.rotation.x)*0.08;
+}
+function size(){var w=panel.clientWidth,h=panel.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+size();addEventListener('resize',size);
+panel.addEventListener('pointermove',function(e){var r=panel.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-0.5)*2;my=-((e.clientY-r.top)/r.height-0.5)*2;});
+panel.addEventListener('pointerleave',function(){mx=0;my=0;});
+var vis=true;new IntersectionObserver(function(en){vis=en[0].isIntersecting;}).observe(panel);
+var last=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  if(!vis||now-last<33)return;last=now;
+  update(now);renderer.render(scene,cam);
+}
+requestAnimationFrame(frame);
+document.getElementById('run').onclick=function(){runStart=performance.now();};
+})();
+</script>
+</body>
+</html>
