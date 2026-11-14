@@ -25,7 +25,9 @@ function pickQuality(): Quality {
   const cores = navigator.hardwareConcurrency || 4;
   const saveData = (navigator as NavigatorWithConnection).connection?.saveData === true;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion || saveData || (mobile && cores < 6)) return "low";
+  // Low only for explicit accessibility/data-saver prefs, or very old devices (<=2 cores).
+  if (reduceMotion || saveData || cores <= 2) return "low";
+  // High on capable desktops; medium everywhere else including modern mobiles.
   if (!mobile && cores >= 8 && window.devicePixelRatio <= 2) return "high";
   return "medium";
 }
